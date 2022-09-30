@@ -13,11 +13,20 @@ const actNum = '700002839'
   for (let i = 0; i < options.length; i++) {
     await initCookie($, i)
 
-    console.log(`${$.accountName}获取活动信息......`)
+    console.log(`${$.accountName}获取活动资格......`)
+    const initRet0 = await mbactFunc($, 'entitle/preconditions', actNum)
+    if (!initRet0) {
+      $.msg += `获取活动资格失败\n`
+      console.log(`获取活动资格失败`, initRet0)
+      continue
+    }
+
+
+    console.log(`${$.accountName}查询可抽奖次数......`)
     const initRet = await mbactFunc($, 'checkEntitleAccount', actNum)
     if (!initRet) {
-      $.msg += `活动查询失败\n`
-      console.log(`活动查询失败`, initRet)
+      $.msg += `查询可抽奖次数失败\n`
+      console.log(`查询可抽奖次数失败`, initRet)
       continue
     }
     if (initRet.surplusCount > 0) {
