@@ -177,7 +177,8 @@ function combineMessage2(data) {
   if (data.success != '0' || !data.data) {
     return ''
   }
-  const billInfo = data.data.billInfo
+  const billData = data.data
+  const billInfo = billData.billInfo
   const feeList = billInfo.feeDetailInfo
 
   // let message = `${$.phone}: \n`
@@ -200,7 +201,8 @@ function combineMessage2(data) {
       }
     }
   }
-  message += `共计: ${billInfo.actualPay}${billInfo.unit}`
+  message += `共计: ${billInfo.actualPay}${billInfo.unit}\n`
+  message += `余额: ${billData.accountBalance}元\n`
 
   return message
 }
