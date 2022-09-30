@@ -1,4 +1,5 @@
 /*
+http://wap.js.10086.cn/nact/resource/2539/html/index.html?shareToken=dQEWCORLKHrkeV2QtW/TUg==&rm=ydc
 江苏移动_攒油兑好礼
 cron:25 35 10 * * *
 */

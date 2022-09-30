@@ -1,4 +1,5 @@
 /*
+http://wap.js.10086.cn/rec/iGKs?shareToken=dQEWCORLKHrkeV2QtW/TUg==&rm=ydc
 江苏移动_砸金蛋
 cron:45 15 9 5 * *
 */

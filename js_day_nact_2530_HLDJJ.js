@@ -1,4 +1,5 @@
 /*
+http://wap.js.10086.cn/nact/resource/2530/html/index.html?shareToken=dQEWCORLKHrkeV2QtW/TUg==&rm=ydc
 江苏移动_好礼大集结，天天有惊喜
 cron:25 30 10 * * *
 */

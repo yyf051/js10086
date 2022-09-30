@@ -1,4 +1,5 @@
 /*
+https://wap.js.10086.cn/nact/resource/2269/html/index.html?rm=ydc
 江苏移动_抽奖天天乐
 cron:40 0 9 * * *
 */

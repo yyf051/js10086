@@ -1,4 +1,5 @@
 /*
+http://wap.js.10086.cn/mb_nact/new/act-front/cj/cj020/main.html?actNum=7000152043gnqwc&rm=ydc
 江苏移动_欢度佳节幸运大转盘
 cron:10 20 10 1-7 10 ?
 */
