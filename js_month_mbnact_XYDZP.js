@@ -17,7 +17,7 @@ const actionNum = '700001833'
   // for (let i = 1; i < 2; i++) {
     await initCookie($, i)
 
-    const preRet = await mbactFunc($, '/entitle/preconditions', actionNum)
+    const preRet = await mbactFunc($, 'entitle/preconditions', actionNum)
     if (!preRet) {
       continue
     } else if (!preRet.qualified) {

@@ -16,7 +16,7 @@ const actionNum = '700000764'
     await initCookie($, i)
 
     // 1. 查询资格条件
-    const preRet = await mbactFunc($, '/entitle/preconditions', actionNum)
+    const preRet = await mbactFunc($, 'entitle/preconditions', actionNum)
     if (!preRet) {
       continue
     } else if (!preRet.qualified) {
