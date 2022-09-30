@@ -1,6 +1,6 @@
 /*
 江苏移动_欢度佳节幸运大转盘
-cron:10 20 10 1-7 10 ? *
+cron:10 20 10 1-7 10 ?
 */
 const Env = require('./01Env')
 const { options, initCookie } = require('./01js10086_common')
