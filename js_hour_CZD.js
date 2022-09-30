@@ -1,3 +1,7 @@
+/**
+ * 江苏移动_查账单
+ * cron:11 41 8-22 * * *
+ */
 const Env = require('./01Env')
 const { initCookie } = require('./01js10086_common2')
 const BrowserFinger = require('./function/BrowserFinger')
