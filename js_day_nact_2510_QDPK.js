@@ -1,3 +1,7 @@
+/*
+江苏移动_签到PK
+cron:25 20 10 * * *
+*/
 const Env = require('./01Env')
 const { options, encryptedPhone, initCookie } = require('./01js10086_common')
 const { nactFunc } = require('./01js10086_nact')

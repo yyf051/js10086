@@ -1,3 +1,7 @@
+/*
+江苏移动_幸运扭蛋机
+cron:45 45 9 5 * *
+*/
 const Env = require('./01Env')
 const $ = new Env('江苏移动_幸运扭蛋机')
 

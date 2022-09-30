@@ -1,3 +1,7 @@
+/*
+江苏移动_开宝箱赢好礼
+cron:40 10 9 * * *
+*/
 const Env = require('./01Env')
 const { options, initCookie } = require('./01js10086_common')
 // const { nactFunc } = require('./01js10086_nact')

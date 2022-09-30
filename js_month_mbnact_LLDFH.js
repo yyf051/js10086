@@ -1,3 +1,7 @@
+/*
+江苏移动_流量大富豪
+cron:45 55 8 5 * *
+*/
 const Env = require('./01Env')
 const { options, initCookie } = require('./01js10086_common')
 const { mbactFunc } = require('./01js10086_mbnact')

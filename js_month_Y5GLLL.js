@@ -1,3 +1,7 @@
+/*
+江苏移动_用5G领流量
+cron:45 55 9 5 * *
+*/
 const Env = require('./01Env')
 const $ = new Env('江苏移动_用5G领流量')
 

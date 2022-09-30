@@ -1,3 +1,7 @@
+/*
+江苏移动_流量大富翁
+cron:45 35 9 4-9 * *
+*/
 const Env = require('./01Env')
 const $ = new Env('江苏移动_流量大富翁')
 

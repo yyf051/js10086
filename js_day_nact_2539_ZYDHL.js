@@ -1,3 +1,7 @@
+/*
+江苏移动_攒油兑好礼
+cron:25 35 10 * * *
+*/
 const Env = require('./01Env')
 const { options, initCookie } = require('./01js10086_common')
 const { nactFunc } = require('./01js10086_nact')

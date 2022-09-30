@@ -1,3 +1,7 @@
+/*
+江苏移动_砸金蛋
+cron:45 15 9 5 * *
+*/
 const Env = require('./01Env')
 const { ua, options, initCookie } = require('./01js10086_common')
 const { mbactFunc } = require('./01js10086_mbnact')

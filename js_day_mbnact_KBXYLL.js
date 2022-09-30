@@ -1,3 +1,7 @@
+/*
+江苏移动_开宝箱赢流量
+cron:0 30 8 * * *
+*/
 const Env = require('./01Env')
 const { options, initCookie } = require('./01js10086_common')
 const { mbactFunc } = require('./01js10086_mbnact')

@@ -1,3 +1,7 @@
+/*
+江苏移动_好礼大集结，天天有惊喜
+cron:25 30 10 * * *
+*/
 const Env = require('./01Env')
 const { options, initCookie } = require('./01js10086_common')
 const { nactFunc } = require('./01js10086_nact')

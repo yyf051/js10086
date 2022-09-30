@@ -1,3 +1,7 @@
+/*
+江苏移动_幸运大转盘
+cron:45 5 9 5 * *
+*/
 const Env = require('./01Env')
 const { options, initCookie } = require('./01js10086_common')
 const { mbactFunc } = require('./01js10086_mbnact')

@@ -1,3 +1,7 @@
+/*
+江苏移动_专区页面
+cron:0 50 8 * * *
+*/
 const Env = require('./01Env')
 const { options, initCookie } = require('./01js10086_common')
 const { mbactFunc } = require('./01js10086_mbnact')

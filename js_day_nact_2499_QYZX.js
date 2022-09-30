@@ -1,3 +1,7 @@
+/*
+江苏移动_权益中心
+cron:25 5 10 * * *
+*/
 const Env = require('./01Env')
 const $ = new Env('江苏移动_权益中心')
 

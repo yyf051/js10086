@@ -1,8 +1,7 @@
-/**
- * 抽1G，每月执行
- * 
- */
-
+/*
+江苏移动_抽1GB
+cron:45 35 8 5 * *
+*/
 const Env = require('./01Env')
 const { options, initCookie } = require('./01js10086_common')
 const { mbactFunc } = require('./01js10086_mbnact')

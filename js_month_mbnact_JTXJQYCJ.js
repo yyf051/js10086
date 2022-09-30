@@ -1,3 +1,7 @@
+/*
+江苏移动_家庭星级权益抽奖
+cron:45 45 8 5 * *
+*/
 const Env = require('./01Env')
 const { options, initCookie } = require('./01js10086_common')
 const { mbactFunc } = require('./01js10086_mbnact')

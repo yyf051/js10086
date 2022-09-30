@@ -1,3 +1,7 @@
+/*
+江苏移动_E豆小店
+cron:40 30 9 * * *
+*/
 const Env = require('./01Env')
 const { options, initCookie } = require('./01js10086_common')
 const { nactFunc } = require('./01js10086_nact')
