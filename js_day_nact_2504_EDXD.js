@@ -90,6 +90,7 @@ async function turntable() {
     return
   }
 
+  // 可以抽3次，但没必要，只有第一次才有流量
   for (var i = 0; i < 1; i++) {
     await $.wait(2000)
     await doLottery()
