@@ -43,9 +43,9 @@ const $ = new Env('江苏移动_每日签到')
       console.log(`${$.phone}无需补签isSignSupplu=${resultObj.isSignSupplu}，currentFreeChance=${resultObj.currentFreeChance}，monthSignCnt=${resultObj.monthSignCnt}，today=${resultObj.today}`)
     }
 
-    if (resultObj.indexHasFullSign) {
+    /*if (resultObj.indexHasFullSign) {
       await indexHasFullSign()
-    }
+    }*/
 
     await $.wait(10000)
     console.log()
@@ -195,7 +195,7 @@ async function doSignSupply() {
   }
 }
 
-async function indexHasFullSign() {
+/*async function indexHasFullSign() {
   const today = (new Date()).getDate()
   const hour = (new Date()).getHours()
 
@@ -208,8 +208,8 @@ async function indexHasFullSign() {
     $.msg += `未到12点，无法领取\n`
     return
   }
-
-  // const params = 'reqUrl=act2510&method=doSignSupply&operType=1&actCode=2510&extendParams=&ywcheckcode=&mywaytoopen='
-  // const resultObj = await nactFunc($, params)
-
-}
+  if (today == 9) {
+    const params = 'reqUrl=act2510&method=doSignSupply&operType=1&actCode=2510&extendParams=&ywcheckcode=&mywaytoopen='
+    await nactFunc($, params)
+  }
+}*/
