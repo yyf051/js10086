@@ -59,15 +59,7 @@ async function initIndexTasks() {
     for (let i = 0; i < resultObj.tasksCfg.length; i++) {
       const task = resultObj.tasksCfg[i]
       if (okTaskIds.indexOf(task.taskId) == -1) {
-        if (task.url.indexOf('https://wap.js.10086.cn/nact/resource/') > -1) {
-          const actNo = task.url.substring('https://wap.js.10086.cn/nact/resource/'.length).split('/')[0]
-          await turntable(task.taskId, task.taskName, actNo)
-          $.msg += '\n'
-        // } else if (task.url.indexOf('https://wap.js.10086.cn/vw/navbar/') > -1) {
-        //   const actNo = task.url.substring('https://wap.js.10086.cn/nact/resource/'.length).split('/')[0]
-        //   await turntable(task.taskId, task.taskName, actNo)
-        //   $.msg += '\n'
-        } else if (task.taskId == 'kq_task_01') {
+        if (task.taskId == 'kq_task_01') {
           await execCouponTask(task.taskId)
         } else if (task.taskId == 'act_task04') {
           await execSpecialTask(task.taskId,  task.taskName, 'LLSD')
@@ -75,6 +67,16 @@ async function initIndexTasks() {
           await execSpecialTask(task.taskId,  task.taskName, 'HYCSNEW')
         } else if (task.taskId == 'act_task_06') {
           await execMLLYTask(task.taskId,  task.taskName, '2510')
+        } else if (task.taskId == 'act_task_03') {
+          await turntable(task.taskId, task.taskName, '2135', 'initIndexPage')
+        } else if (task.url.indexOf('https://wap.js.10086.cn/nact/resource/') > -1) {
+          const actNo = task.url.substring('https://wap.js.10086.cn/nact/resource/'.length).split('/')[0]
+          await turntable(task.taskId, task.taskName, actNo)
+          $.msg += '\n'
+        // } else if (task.url.indexOf('https://wap.js.10086.cn/vw/navbar/') > -1) {
+        //   const actNo = task.url.substring('https://wap.js.10086.cn/nact/resource/'.length).split('/')[0]
+        //   await turntable(task.taskId, task.taskName, actNo)
+        //   $.msg += '\n'
         } else {
           console.log(`任务信息：${JSON.stringify(task)}`)
         }
@@ -182,12 +184,12 @@ async function execCouponTask (taskId) {
 /**
  * 执行E豆任务
  */
-async function turntable(taskId, taskName, actNo) {
+async function turntable(taskId, taskName, actNo, methodName = 'turntable') {
   await $.wait(2000)
   $.isDirectReturnResultObj = true
   console.log(`${$.phone}执行E豆任务：${taskName}......`)
   $.msg += `执行E豆任务：${taskName}......\n`
-  const params = `reqUrl=act${actNo}&method=turntable&actCode=${actNo}&extendParams=thass%3D1%26task2510Id%3D${taskId}%26task2510Status%3D0&ywcheckcode=&mywaytoopen=`
+  const params = `reqUrl=act${actNo}&method=${methodName}&actCode=${actNo}&extendParams=thass%3D1%26task2510Id%3D${taskId}%26task2510Status%3D0&ywcheckcode=&mywaytoopen=`
   const resultObj = await nactFunc($, params)
 
   await $.wait(8000)
