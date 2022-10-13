@@ -34,7 +34,7 @@ function serialize(params) {
   return ret && ret.substr(1)
 }
 
-function nactFunc (vm, params) {
+function nactFunc (vm, params, isDirectReturnResultObj = false, isLog = false) {
   return new Promise((resolve, reject) => {
     try {
       const options = {
@@ -43,15 +43,15 @@ function nactFunc (vm, params) {
         // body: vm.body
         body: serialize(params)
       }
-      if (vm.isLog) console.log('执行参数', options)
+      // if (vm.isLog || isLog) console.log('执行参数', options)
       vm.post(options, async (err, resp, data) => {
         console.log()
-        if (vm.isLog) console.log(`${params.actCode}_${params.method}返回结果：${data}`)
+        if (vm.isLog || isLog) console.log(`${params.actCode}_${params.method}返回结果：${data}`)
         if (err) throw new Error(err)
         data = JSON.parse(data)
         if (data && data.success) {
           const resultObj = data.resultObj
-          if (vm.isDirectReturnResultObj) {
+          if (vm.isDirectReturnResultObj || isDirectReturnResultObj) {
             // 直接返回结果
             return resolve(resultObj)
           }
@@ -60,13 +60,13 @@ function nactFunc (vm, params) {
           if (!resultObj.isApp) {
             message += `${params.actCode}_${params.method}非APP使用;\n`
           } else if (resultObj.errorCode) {
-            if (resultObj.openLog) {
-              // 流量大富翁有这个字段
-              console.log(`${vm.accountName}resultObj.openLog的结果是${JSON.stringify(resultObj.openLog)}\n`)
-              ret = resultObj
-            } else {
+            // if (resultObj.openLog) {
+            //   // 流量大富翁有这个字段
+            //   console.log(`${vm.accountName}resultObj.openLog的结果是${JSON.stringify(resultObj.openLog)}\n`)
+            //   ret = resultObj
+            // } else {
               message += `查询信息失败, ${resultObj.errorMsg || data.resultMsg};\n`
-            }
+            // }
           } else {
             // console.log(`${vm.accountName}正常返回结果\n`)
             ret = resultObj

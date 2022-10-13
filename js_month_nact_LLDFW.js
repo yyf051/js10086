@@ -1,4 +1,5 @@
 /*
+http://wap.js.10086.cn/nact/resource/2335/html/index.html?shareToken=dQEWCORLKHrkeV2QtW/TUg==&rm=ydc
 江苏移动_流量大富翁
 cron:45 35 9 4-9 * *
 */
@@ -12,6 +13,7 @@ const { nactFunc } = require('./01js10086_nact')
   $.msg = ''
   for (let i = 0; i < options.length; i++) {
     await initCookie($, i)
+    $.isLog = true
     await doActivity()
     
     console.log()
@@ -28,27 +30,56 @@ const { nactFunc } = require('./01js10086_nact')
 
 
 /*{
-  "userMobile": "152****0683",
-  "isApp": true,
-  "loginStatus": "1",
-  "stock": 41038,
-  "yzmStatus": false
-}
-{
-  "userMobile": "152****0683",
-  "errorCode": "-2335006",
-  "isApp": true,
-  "loginStatus": "1",
-  "openLog": {
-    "fAreaNum": "20",
-    "fCh": "0321",
-    "fChance": "1",
-    "fChannel": "isapp",
-    "fExpand1": "0",
-    "fIsOpen": "1",
-    "fMobile": "15251300683",
-    "fTime": "20220311165028742"
-  }
+  "continue": true,
+  "errorCode": "",
+  "resultCode": "1",
+  "resultCom": {
+    "cityNo": "20",
+    "ch": "01",
+    "webmobile": "45463-55396-4875-25703",
+    "appmobile": "FDA76A4EF6C1BC8628207F7A0C5F32B8",
+    "mobile": "",
+    "bdmobile": "32d607468"
+  },
+  "resultObj": {
+    "userMobile": "136****7864",
+    "isApp": true,
+    "loginStatus": "1",
+    "stock": 457591,
+    "yzmStatus": false
+  },
+  "success": true
+}*/
+/*{
+  "continue": true,
+  "errorCode": "",
+  "resultCode": "1",
+  "resultCom": {
+    "cityNo": "20",
+    "ch": "0321",
+    "webmobile": "1875-59138-5002-33078",
+    "appmobile": "CB03BA4E2D1DF5CC2B69ABC3C9F51306",
+    "mobile": "",
+    "bdmobile": "3375d2766"
+  },
+  "resultMsg": "当日已开通业务",
+  "resultObj": {
+    "userMobile": "138****3702",
+    "errorCode": "-2335006",
+    "isApp": true,
+    "loginStatus": "1",
+    "openLog": {
+      "fAreaNum": "20",
+      "fCh": "0321",
+      "fChance": "4",
+      "fChannel": "isapp",
+      "fExpand1": "0",
+      "fIsOpen": "1",
+      "fMobile": "13813753702",
+      "fTime": "20221013151044027"
+    }
+  },
+  "success": true
 }*/
 async function doActivity () {
   console.log(`${$.accountName}获取活动信息......`)
@@ -60,54 +91,70 @@ async function doActivity () {
     "ywcheckcode": "",
     "mywaytoopen": ""
   }
-  const resultObj = await nactFunc($, params)
+  let resultObj = await nactFunc($, params, true)
   if (!resultObj) {
     // $.msg += `未查询到活动信息...`
     return
   }
-  let ret = -1
+  if (resultObj.yzmStatus) {
+    $.msg += '需要验证码登录，跳过...\n'
+    console.log(`${$.accountName} 需要验证码登录，跳过...`)
+    return
+  }
+
+  let message
+  if (resultObj.stock > 1) {
+    message = `金币库存充足： ${resultObj.stock}  `
+    console.log(message)
+    $.msg += message
+    await openBusiness()
+    
+    // 领取金币之后重新查询结果
+    resultObj = await nactFunc($, params, true)
+  }
+
+
   if (resultObj.errorCode && resultObj.openLog) {
+    // 已领取过金币，进行抽奖
     if (resultObj.openLog.fChance > 0) {
       message = `已领取机会，还剩余${resultObj.openLog.fChance}次抽奖;`
-      ret = resultObj.openLog.fChance
-    } else {
-      message = `没有抽奖机会了~~`
-    }
-  } else if (resultObj.stock > 2) {
-    message = `可以参与领奖；`
-    ret = 0
-  } else {
-    message = `标记位=${ret}，没有机会了;`
-  }
-  $.msg += message + '\n'
-  console.log(`${$.accountName} ${message}`)
-
-  if (ret == 0) {
-    const openBusinessResult = await openBusiness()
-    await $.wait(2000)
-    if (openBusinessResult) {
-      const f = await doLottery()
-      if (f) {
-        await $.wait(2000)
-        await doLottery()
-      }
-    }
-  } else if (ret < 0) {
-    // console.log(`标记位=${ret}，没有机会了\n`)
-  } else {
-    for (let i = 0; i < ret; i++) {
+      console.log(message)
+      $.msg += message
       await doLottery()
+    } else {
+      message = `今日抽奖机会已用完，明天再来吧~~`
+      console.log(message)
+      $.msg += message
     }
+  } else {
+    message = `未查询到openLog，没有机会~~`
+    console.log(message)
+    $.msg += message
   }
 }
 
 /*{
-  "addSucess": "addSucess",
-  "userMobile": "152****0683",
-  "isApp": true,
-  "loginStatus": "1"
+  "continue": true,
+  "errorCode": "",
+  "resultCode": "1",
+  "resultCom": {
+    "cityNo": "20",
+    "ch": "0321",
+    "webmobile": "53655-43108-4885-25697",
+    "appmobile": "FDA76A4EF6C1BC8628207F7A0C5F32B8",
+    "mobile": "",
+    "bdmobile": "32d607468"
+  },
+  "resultObj": {
+    "addSucess": "addSucess",
+    "userMobile": "136****7864",
+    "loginStatus": "1"
+  },
+  "success": true
 }*/
 async function openBusiness () {
+  await $.wait(5000)
+  
   const params = {
     "reqUrl": "act2335",
     "method": "openBusiness",
@@ -119,7 +166,7 @@ async function openBusiness () {
     "ywcheckcode": "",
     "mywaytoopen": ""
   }
-  const resultObj = await nactFunc($, params)
+  const resultObj = await nactFunc($, params, true)
   const r = resultObj.addSucess == 'addSucess'
   if (r) {
     $.msg += `抽奖机会领取成功，进行抽奖......\n`
@@ -132,16 +179,53 @@ async function openBusiness () {
 }
 
 /*{
-  "userMobile": "152****0683",
-  "leftChance": 1,
-  "awardCode": "GIFT_LL_2335_001_1888",
-  "isApp": true,
-  "loginStatus": "1",
-  "awardName": "1888MB通用流量",
-  "flow": "7971",
-  "isWin": true
+  "continue": true,
+  "errorCode": "",
+  "resultCode": "1",
+  "resultCom": {
+    "cityNo": "20",
+    "ch": "0321",
+    "webmobile": "5971-30466-5023-33078",
+    "appmobile": "CB03BA4E2D1DF5CC2B69ABC3C9F51306",
+    "mobile": "",
+    "bdmobile": "3375d2766"
+  },
+  "resultObj": {
+    "userMobile": "138****3702",
+    "leftChance": 3,
+    "awardCode": "GIFT_LL_2335_001_random_01",
+    "loginStatus": "1",
+    "awardName": "642MB通用流量",
+    "flow": "642",
+    "isWin": true
+  },
+  "success": true
+}*/
+
+/*{
+  "continue": true,
+  "errorCode": "",
+  "resultCode": "1",
+  "resultCom": {
+    "cityNo": "20",
+    "ch": "0321",
+    "webmobile": "53655-26724-5102-25703",
+    "appmobile": "FDA76A4EF6C1BC8628207F7A0C5F32B8",
+    "mobile": "",
+    "bdmobile": "32d607468"
+  },
+  "resultMsg": "无抽奖机会",
+  "resultObj": {
+    "userMobile": "136****7864",
+    "errorCode": "-2335010",
+    "loginStatus": "1"
+  },
+  "success": true
 }*/
 async function doLottery () {
+
+  await $.wait(6000)
+
   const params = {
     "reqUrl": "act2335",
     "method": "doLottery",
@@ -151,13 +235,16 @@ async function doLottery () {
     "ywcheckcode": "",
     "mywaytoopen": ""
   }
-  const resultObj = await nactFunc($, params)
+  const resultObj = await nactFunc($, params, true)
     
   let ret = false
-  if (resultObj.isApp) {
-    $.msg += `${resultObj.awardName}\n`
-    console.log(`${resultObj.awardName}\n`)
+  if (resultObj.isWin) {
+    let message = `${resultObj.awardName}\n`
+    console.log(message)
+    $.msg += message
     ret = resultObj.leftChance > 0
   }
-  return ret
+  if (ret) {
+    await doLottery()
+  }
 }
