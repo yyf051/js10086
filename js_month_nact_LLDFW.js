@@ -97,16 +97,14 @@ async function doActivity () {
     return
   }
   if (resultObj.yzmStatus) {
-    $.msg += '需要验证码登录，跳过...\n'
-    console.log(`${$.accountName} 需要验证码登录，跳过...`)
+    concatMsg('需要验证码登录，跳过...')
     return
   }
 
   let message
   if (resultObj.stock > 1) {
     message = `金币库存充足： ${resultObj.stock}  `
-    console.log(message)
-    $.msg += message
+    concatMsg(message)
     await openBusiness()
     
     // 领取金币之后重新查询结果
@@ -118,18 +116,15 @@ async function doActivity () {
     // 已领取过金币，进行抽奖
     if (resultObj.openLog.fChance > 0) {
       message = `已领取机会，还剩余${resultObj.openLog.fChance}次抽奖;`
-      console.log(message)
-      $.msg += message
+      concatMsg(message)
       await doLottery()
     } else {
       message = `今日抽奖机会已用完，明天再来吧~~`
-      console.log(message)
-      $.msg += message
+      concatMsg(message)
     }
   } else {
     message = `未查询到openLog，没有机会~~`
-    console.log(message)
-    $.msg += message
+    concatMsg(message)
   }
 }
 
@@ -168,13 +163,13 @@ async function openBusiness () {
   }
   const resultObj = await nactFunc($, params, true)
   const r = resultObj.addSucess == 'addSucess'
+  let message;
   if (r) {
-    $.msg += `抽奖机会领取成功，进行抽奖......\n`
-    console.log(`抽奖机会领取成功，进行抽奖......\n`)
+    message = `抽奖机会领取成功，进行抽奖......`
   } else {
-    $.msg += `抽奖机会领取失败......，抽奖结果如下：${JSON.stringify(resultObj)}\n`
-    console.log(`抽奖机会领取失败......，抽奖结果如下：${JSON.stringify(resultObj)}\n`)
+    message = `抽奖机会领取失败......，抽奖结果如下：${JSON.stringify(resultObj)}\n`
   }
+  concatMsg(message)
   return r
 }
 
@@ -239,12 +234,15 @@ async function doLottery () {
     
   let ret = false
   if (resultObj.isWin) {
-    let message = `${resultObj.awardName}\n`
-    console.log(message)
-    $.msg += message
+    concatMsg(resultObj.awardName)
     ret = resultObj.leftChance > 0
   }
   if (ret) {
     await doLottery()
   }
+}
+
+function concatMsg(message) {
+  $.msg += `${message}\n`
+  console.log(message)
 }
