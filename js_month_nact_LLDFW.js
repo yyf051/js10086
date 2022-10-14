@@ -1,7 +1,7 @@
 /*
 http://wap.js.10086.cn/nact/resource/2335/html/index.html?shareToken=dQEWCORLKHrkeV2QtW/TUg==&rm=ydc
 江苏移动_流量大富翁
-cron:45 35 9 4-9 * *
+cron:45 35 7 3-12 * *
 */
 const Env = require('./01Env')
 const $ = new Env('江苏移动_流量大富翁')
