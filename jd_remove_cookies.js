@@ -9,7 +9,7 @@ const { clientId, clientSecret } = require('./conf/globalConfig').qlClient
 
 const domain = 'http://192.168.100.156:5701'
 const loginUrl = `${domain}/open/auth/token?client_id=${clientId}&client_secret=${clientSecret}`
-const getJdCookiesUrl = `${domain}/open/envs?searchValue=JD_COOKIE&t=${(new Date()).getTime()}`
+const getJdCookiesUrl = `${domain}/open/envs?searchValue=app_open&t=${(new Date()).getTime()}`
 let authorization
 const deleteJdCookiesUrl = `${domain}/open/envs?t=${(new Date()).getTime()}`
 
