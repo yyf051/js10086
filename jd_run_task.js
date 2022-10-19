@@ -45,7 +45,7 @@ taskName = taskName.split("@@")[0]
 
 
     // process.env.jd_repo_pull = null
-    replaceInFile('/ql/config/config.sh', '');
+    // replaceInFile('/ql/config/config.sh', '');
     console.log('运行成功')
 
 })()
