@@ -2,11 +2,11 @@
 江苏移动_权益中心
 cron:25 5 10 * * *
 */
-const Env = require('./01Env')
+const Env = require('./function/01Env')
 const $ = new Env('江苏移动_权益中心')
 
-const { options, initCookie } = require('./01js10086_common')
-const { nactFunc } = require('./01js10086_nact')
+const { options, initCookie } = require('./function/01js10086_common')
+const { nactFunc } = require('./function/01js10086_nact')
 
 
 !(async () => {

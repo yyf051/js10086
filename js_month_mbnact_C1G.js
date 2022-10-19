@@ -2,9 +2,9 @@
 江苏移动_抽1GB
 cron:45 35 8 5 * *
 */
-const Env = require('./01Env')
-const { options, initCookie } = require('./01js10086_common')
-const { mbactFunc } = require('./01js10086_mbnact')
+const Env = require('./function/01Env')
+const { options, initCookie } = require('./function/01js10086_common')
+const { mbactFunc } = require('./function/01js10086_mbnact')
 
 const $ = new Env('江苏移动_抽1GB')
 const actionNum = '700001898'

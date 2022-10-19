@@ -3,9 +3,9 @@ http://wap.js.10086.cn/rec/iGKs?shareToken=dQEWCORLKHrkeV2QtW/TUg==&rm=ydc
 江苏移动_砸金蛋
 cron:45 15 9 5 * *
 */
-const Env = require('./01Env')
-const { ua, options, initCookie } = require('./01js10086_common')
-const { mbactFunc } = require('./01js10086_mbnact')
+const Env = require('./function/01Env')
+const { ua, options, initCookie } = require('./function/01js10086_common')
+const { mbactFunc } = require('./function/01js10086_mbnact')
 
 const $ = new Env('江苏移动_砸金蛋')
 const actNum = '700002839'

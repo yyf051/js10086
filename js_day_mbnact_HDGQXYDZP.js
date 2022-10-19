@@ -3,9 +3,9 @@ http://wap.js.10086.cn/mb_nact/new/act-front/cj/cj020/main.html?actNum=700015204
 江苏移动_欢度佳节幸运大转盘
 cron:10 20 10 1-7 10 ?
 */
-const Env = require('./01Env')
-const { options, initCookie } = require('./01js10086_common')
-const { mbactFunc } = require('./01js10086_mbnact')
+const Env = require('./function/01Env')
+const { options, initCookie } = require('./function/01js10086_common')
+const { mbactFunc } = require('./function/01js10086_mbnact')
 
 const $ = new Env('江苏移动_欢度佳节幸运大转盘')
 !(async () => {

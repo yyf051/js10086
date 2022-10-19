@@ -2,9 +2,9 @@
 江苏移动_签到任务
 cron:25 25 10 * * *
 */
-const Env = require('./01Env')
-const { options, encryptedPhone, initCookie } = require('./01js10086_common')
-const { nactFunc } = require('./01js10086_nact')
+const Env = require('./function/01Env')
+const { options, encryptedPhone, initCookie } = require('./function/01js10086_common')
+const { nactFunc } = require('./function/01js10086_nact')
 
 const $ = new Env('江苏移动_签到任务')
 

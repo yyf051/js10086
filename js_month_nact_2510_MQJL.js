@@ -1,10 +1,10 @@
 /*
 江苏移动_满签奖励
-cron:25 55 7 * * *
+cron:25 55 7 2,3 * *
 */
-const Env = require('./01Env')
-const { options, encryptedPhone, initCookie } = require('./01js10086_common')
-const { nactFunc } = require('./01js10086_nact')
+const Env = require('./function/01Env')
+const { options, encryptedPhone, initCookie } = require('./function/01js10086_common')
+const { nactFunc } = require('./function/01js10086_nact')
 
 const $ = new Env('江苏移动_满签奖励')
 

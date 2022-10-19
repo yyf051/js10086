@@ -2,9 +2,9 @@
 江苏移动_幸运大转盘
 cron:45 5 9 5 * *
 */
-const Env = require('./01Env')
-const { options, initCookie } = require('./01js10086_common')
-const { mbactFunc } = require('./01js10086_mbnact')
+const Env = require('./function/01Env')
+const { options, initCookie } = require('./function/01js10086_common')
+const { mbactFunc } = require('./function/01js10086_mbnact')
 
 // https://wap.js.10086.cn/mb_nact/new/act-front/cj/cj019/main.html?actNum=700001833
 

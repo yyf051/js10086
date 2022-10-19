@@ -1,6 +1,6 @@
-const Env = require('./01Env')
-const { options, initCookie } = require('./01js10086_common')
-const { mbactFunc } = require('./01js10086_mbnact')
+const Env = require('./function/01Env')
+const { options, initCookie } = require('./function/01js10086_common')
+const { mbactFunc } = require('./function/01js10086_mbnact')
 
 const $ = new Env('江苏移动_点亮心级服务')
 const action = 'RWCJ00000116'

@@ -3,11 +3,11 @@ http://wap.js.10086.cn/nact/resource/2335/html/index.html?shareToken=dQEWCORLKHr
 江苏移动_流量大富翁
 cron:45 35 7 3-12 * *
 */
-const Env = require('./01Env')
+const Env = require('./function/01Env')
 const $ = new Env('江苏移动_流量大富翁')
 
-const { options, initCookie } = require('./01js10086_common')
-const { nactFunc } = require('./01js10086_nact')
+const { options, initCookie } = require('./function/01js10086_common')
+const { nactFunc } = require('./function/01js10086_nact')
 
 !(async () => {
   $.msg = ''

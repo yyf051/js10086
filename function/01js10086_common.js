@@ -1,4 +1,4 @@
-const Env = require('./01Env')
+const Env = require('./function/01Env')
 let $ = new Env()
 
 const config = require('./config')

@@ -2,9 +2,9 @@
 江苏移动_家庭星级权益抽奖
 cron:45 45 8 5 * *
 */
-const Env = require('./01Env')
-const { options, initCookie } = require('./01js10086_common')
-const { mbactFunc } = require('./01js10086_mbnact')
+const Env = require('./function/01Env')
+const { options, initCookie } = require('./function/01js10086_common')
+const { mbactFunc } = require('./function/01js10086_mbnact')
 
 // https://wap.js.10086.cn/mb_nact/new/act-front/cj/cj016/main.html?actNum=700001296
 

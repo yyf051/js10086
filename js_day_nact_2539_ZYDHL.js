@@ -3,9 +3,9 @@ http://wap.js.10086.cn/nact/resource/2539/html/index.html?shareToken=dQEWCORLKHr
 江苏移动_攒油兑好礼
 cron:25 35 10 * * *
 */
-const Env = require('./01Env')
-const { options, initCookie } = require('./01js10086_common')
-const { nactFunc } = require('./01js10086_nact')
+const Env = require('./function/01Env')
+const { options, initCookie } = require('./function/01js10086_common')
+const { nactFunc } = require('./function/01js10086_nact')
 
 const $ = new Env('江苏移动_攒油兑好礼')
 !(async () => {

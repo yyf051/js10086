@@ -2,10 +2,10 @@
 江苏移动_用5G领流量
 cron:45 55 9 5 * *
 */
-const Env = require('./01Env')
+const Env = require('./function/01Env')
 const $ = new Env('江苏移动_用5G领流量')
 
-const { ua, options, initCookie } = require('./01js10086_common')
+const { ua, options, initCookie } = require('./function/01js10086_common')
 
 !(async () => {
   $.msg = ''

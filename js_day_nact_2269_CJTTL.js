@@ -3,9 +3,9 @@ https://wap.js.10086.cn/nact/resource/2269/html/index.html?rm=ydc
 江苏移动_抽奖天天乐
 cron:40 0 9 * * *
 */
-const Env = require('./01Env')
-const { options, initCookie } = require('./01js10086_common')
-const { nactFunc } = require('./01js10086_nact')
+const Env = require('./function/01Env')
+const { options, initCookie } = require('./function/01js10086_common')
+const { nactFunc } = require('./function/01js10086_nact')
 
 const $ = new Env('江苏移动_抽奖天天乐')
 !(async () => {

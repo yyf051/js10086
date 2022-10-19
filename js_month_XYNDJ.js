@@ -2,10 +2,10 @@
 江苏移动_幸运扭蛋机
 cron:45 45 9 5 * *
 */
-const Env = require('./01Env')
+const Env = require('./function/01Env')
 const $ = new Env('江苏移动_幸运扭蛋机')
 
-const { ua, options, initCookie } = require('./01js10086_common')
+const { ua, options, initCookie } = require('./function/01js10086_common')
 
 !(async () => {
   $.msg = ''

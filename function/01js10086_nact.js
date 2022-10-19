@@ -1,4 +1,4 @@
-const { ua, options } = require('./01js10086_common')
+const { ua, options } = require('./function/01js10086_common')
 
 const url = `https://wap.js.10086.cn/nact/action.do`
 
