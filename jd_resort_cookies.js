@@ -3,7 +3,7 @@
  *cron:9 13 * * *
  */
 
-const $ = new Env("移动JD_COOKIE")
+const $ = new Env("【HW】重排序CK")
 const axios = require('axios')
 const { clientId, clientSecret } = require('./conf/globalConfig').qlClient
 

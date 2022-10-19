@@ -3,7 +3,7 @@
  *cron:2 13 * * *
  */
 
-const $ = new Env("删除所有JD_COOKIE")
+const $ = new Env("【HW】删除COOKIE")
 const axios = require('axios')
 const { clientId, clientSecret } = require('./conf/globalConfig').qlClient
 

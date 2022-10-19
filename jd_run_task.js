@@ -3,7 +3,7 @@
  *cron:1 1 1 1 1 1
  */
 
-const $ = new Env("运行拉库命令")
+const $ = new Env("【HW】运行任务")
 const axios = require('axios')
 const {readFile, writeFile, promises: fsPromises} = require('fs')
 const { clientId, clientSecret } = require('./conf/globalConfig').qlClient
