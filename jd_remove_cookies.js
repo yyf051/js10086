@@ -1,6 +1,6 @@
 /*
- *【HW】删除所有JD_COOKIE
- *cron:0 11 13 * * *
+ *【HW】删除COOKIE
+ *cron:2 13 * * *
  */
 
 const $ = new Env("删除所有JD_COOKIE")

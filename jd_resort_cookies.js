@@ -1,6 +1,6 @@
 /*
  *【HW】重排序CK
- *cron:18 13 * * * *
+ *cron:9 13 * * *
  */
 
 const $ = new Env("移动JD_COOKIE")
