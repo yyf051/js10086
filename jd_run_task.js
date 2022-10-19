@@ -6,17 +6,19 @@
 const $ = new Env("运行拉库命令")
 const axios = require('axios')
 const {readFile, writeFile, promises: fsPromises} = require('fs')
+const { clientId, clientSecret } = require('./conf/globalConfig').qlClient
 
 const domain = 'http://192.168.100.156:5701'
-const loginUrl = `${domain}/open/auth/token?client_id=ix7uuI-WxIF2&client_secret=xrRVU2WUzjRYgu_07sKOR7Av`
+const loginUrl = `${domain}/open/auth/token?client_id=${clientId}&client_secret=${clientSecret}`
 const runTaskUrl = `${domain}/open/crons/run?t=${(new Date()).getTime()}`
 let authorization
 
-const taskName = process.env.jd_repo_pull || ''
+let taskName = process.env.jd_repo_pull || ''
 if (taskName === '') {
     console.log('未传递任务名称')
     return
 }
+taskName = taskName.split("@@")[0]
 
 !(async () => {
     const token = await getQinglongToken()
@@ -96,7 +98,7 @@ function getTaskByName(name) {
 
     const url = `${domain}/open/crons?searchValue=${encodeURIComponent(name)}&t=${(new Date()).getTime()}`
     return new Promise((resolve) => {
-        $.get({ url }, (error, response, data) => {
+        $.get({ url, headers: {"Authorization": authorization} }, (error, response, data) => {
             try {
                 if (error) {
                     console.log(`${JSON.stringify(error)}`)
