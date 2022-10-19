@@ -1,4 +1,4 @@
-const BrowserFinger = require('./function/BrowserFinger')
+const BrowserFinger = require('./BrowserFinger')
 
 function getSetCookie (resp) {
   let c = ''

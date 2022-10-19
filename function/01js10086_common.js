@@ -1,7 +1,7 @@
-const Env = require('./function/01Env')
+const Env = require('./01Env')
 let $ = new Env()
 
-const config = require('./config')
+const config = require('./conf/config')
 
 const ua = config && config.ua
 

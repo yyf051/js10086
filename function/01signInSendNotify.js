@@ -1,6 +1,6 @@
 /* eslint-disable eqeqeq */
 const $ = new env('发送通知')
-const { QYWX_CONF } = require('./config')
+const { QYWX_CONF } = require('../conf/config')
 
 const timeout = 15000 // 超时时间(单位毫秒)
 const QYWX_AM = QYWX_CONF
