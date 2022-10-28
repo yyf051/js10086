@@ -2,30 +2,22 @@
  *【HW】删除COOKIE
  *cron:2 13 * * *
  */
-
 const $ = new Env("【HW】删除COOKIE")
 const axios = require('axios')
-const { clientId, clientSecret } = require('./conf/globalConfig').qlClient
-
-const domain = 'http://192.168.100.156:5701'
-const loginUrl = `${domain}/open/auth/token?client_id=${clientId}&client_secret=${clientSecret}`
+const domain = require('./conf/globalConfig').qingLongHost
 const getJdCookiesUrl = `${domain}/open/envs?searchValue=app_open&t=${(new Date()).getTime()}`
-let authorization
 const deleteJdCookiesUrl = `${domain}/open/envs?t=${(new Date()).getTime()}`
 
+const { getAuthorization } = require('./function/qinglong')
+const authorization = getAuthorization()
+if (!authorization) {
+    console.log('Error!, 未获取到青龙Token')
+    return
+}
+
 !(async () => {
-
-    const token = await getQinglongToken()
-    if (token === 'failed') {
-        return
-    }
-    
-    console.log(JSON.stringify(token))
-    authorization = token.data.token_type + ' ' + token.data.token
-    console.log(authorization)
-
     const jdCookies = await getJdCookies()
-    if (token === 'failed') {
+    if (jdCookies === 'failed') {
         return
     } else if (!jdCookies || jdCookies.length == 0) {
         console.log('不存在JD_COOKIE，结束')
@@ -47,26 +39,6 @@ const deleteJdCookiesUrl = `${domain}/open/envs?t=${(new Date()).getTime()}`
     .finally(() => {
         $.done();
     })
-
-
-function getQinglongToken() {
-    return new Promise((resolve) => {
-        $.get({ url: loginUrl }, (error, response, data) => {
-            try {
-                if (error) {
-                    console.log(`${JSON.stringify(error)}`)
-                    console.log(`${$.name} getQinglongToken API请求失败`)
-                    resolve('failed')
-                } else {
-                    resolve(JSON.parse(data))
-                }
-            } catch (e) {
-                $.logErr(e, response)
-                resolve('failed')
-            }
-        })
-    })
-}
 
 function getJdCookies() {
     return new Promise((resolve) => {

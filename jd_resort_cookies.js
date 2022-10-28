@@ -2,26 +2,20 @@
  *【HW】重排序CK
  *cron:9 13 * * *
  */
-
 const $ = new Env("【HW】重排序CK")
 const axios = require('axios')
-const { clientId, clientSecret } = require('./conf/globalConfig').qlClient
-
-const domain = 'http://192.168.100.156:5701'
-const loginUrl = `${domain}/open/auth/token?client_id=${clientId}&client_secret=${clientSecret}`
+const domain = require('./conf/globalConfig').qingLongHost
 const getJdCookiesUrl = `${domain}/open/envs?searchValue=app_open&t=${(new Date()).getTime()}`
-let authorization
+
+
+const { getAuthorization } = require('./function/qinglong')
+const authorization = getAuthorization()
+if (!authorization) {
+    console.log('Error!, 未获取到青龙Token')
+    return
+}
 
 !(async () => {
-
-    const token = await getQinglongToken()
-    if (token === 'failed') {
-        return
-    }
-    
-    console.log(JSON.stringify(token))
-    authorization = token.data.token_type + ' ' + token.data.token
-    console.log(authorization)
 
     const jdCookies = await getJdCookies()
     if (jdCookies === 'failed') {
@@ -30,7 +24,7 @@ let authorization
         console.log('不存在JD_COOKIE，结束')
         return
     }
-    // $.log('jdCookies:', JSON.stringify(jdCookies), '')
+
     const cks = jdCookies.data
     for (let i = cks.length - 1; i >= 0; i--) {
         const ck = cks[i]
@@ -49,25 +43,6 @@ let authorization
         $.done();
     })
 
-
-function getQinglongToken() {
-    return new Promise((resolve) => {
-        $.get({ url: loginUrl }, (error, response, data) => {
-            try {
-                if (error) {
-                    console.log(`${JSON.stringify(error)}`)
-                    console.log(`${$.name} getQinglongToken API请求失败`)
-                    resolve('failed')
-                } else {
-                    resolve(JSON.parse(data))
-                }
-            } catch (e) {
-                $.logErr(e, response)
-                resolve('failed')
-            }
-        })
-    })
-}
 
 function getJdCookies() {
     return new Promise((resolve) => {

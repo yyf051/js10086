@@ -2,16 +2,17 @@
  * 【HW】运行任务
  *cron:1 1 1 1 1 1
  */
-
 const $ = new Env("【HW】运行任务")
 const axios = require('axios')
-const {readFile, writeFile, promises: fsPromises} = require('fs')
-const { clientId, clientSecret } = require('./conf/globalConfig').qlClient
-
-const domain = 'http://192.168.100.156:5701'
-const loginUrl = `${domain}/open/auth/token?client_id=${clientId}&client_secret=${clientSecret}`
+const domain = require('./conf/globalConfig').qingLongHost
 const runTaskUrl = `${domain}/open/crons/run?t=${(new Date()).getTime()}`
-let authorization
+
+const { getAuthorization } = require('./function/qinglong')
+const authorization = getAuthorization()
+if (!authorization) {
+    console.log('Error!, 未获取到青龙Token')
+    return
+}
 
 let taskName = process.env.jd_repo_pull || ''
 if (taskName === '') {
@@ -21,15 +22,6 @@ if (taskName === '') {
 taskName = taskName.split("@@")[0]
 
 !(async () => {
-    const token = await getQinglongToken()
-    if (token === 'failed') {
-        return
-    }
-    
-    console.log(JSON.stringify(token), '\n')
-    authorization = token.data.token_type + ' ' + token.data.token
-    console.log(authorization, '\n')
-
 
     const tasks = await getTaskByName(taskName)
     if (tasks === 'failed') {
@@ -37,15 +29,12 @@ taskName = taskName.split("@@")[0]
     }
 
     const taskIds = tasks.map(e => e.id)
-    if (taskIds.length > 3) {
-        console.log('任务超过3，不执行')
+    if (taskIds.length != 1) {
+        console.log('任务不唯一，不执行')
         return
     }
     await runTask(taskIds)
 
-
-    // process.env.jd_repo_pull = null
-    // replaceInFile('/ql/config/config.sh', '');
     console.log('运行成功')
 
 })()
@@ -55,43 +44,6 @@ taskName = taskName.split("@@")[0]
     .finally(() => {
         $.done();
     })
-
-async function replaceInFile(filename, replacement) {
-  try {
-    const name = `/export jd_repo_pull=\\"${taskName}\\"/gi`
-    // console.log(name)
-
-    const contents = await fsPromises.readFile(filename, 'utf-8');
-    // console.log(contents)
-
-    const replaced = contents.replaceAll(taskName, replacement);
-    // console.log(replaced)
-
-    await fsPromises.writeFile(filename, replaced);
-  } catch (err) {
-    console.log(err);
-  }
-}
-
-
-function getQinglongToken() {
-    return new Promise((resolve) => {
-        $.get({ url: loginUrl }, (error, response, data) => {
-            try {
-                if (error) {
-                    console.log(`${JSON.stringify(error)}`)
-                    console.log(`${$.name} getQinglongToken API请求失败`)
-                    resolve('failed')
-                } else {
-                    resolve(JSON.parse(data))
-                }
-            } catch (e) {
-                $.logErr(e, response)
-                resolve('failed')
-            }
-        })
-    })
-}
 
 
 function getTaskByName(name) {
