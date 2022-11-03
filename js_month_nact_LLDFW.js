@@ -14,7 +14,11 @@ const { nactFunc } = require('./function/01js10086_nact')
   for (let i = 0; i < options.length; i++) {
     await initCookie($, i)
     $.isLog = true
-    await doActivity()
+    const ret = await doActivity()
+    if (ret === 'nochance') {
+      // 当日无机会，结束后续运行
+      break
+    }
     
     console.log()
     $.msg += `\n\n`
@@ -125,6 +129,7 @@ async function doActivity () {
   } else {
     message = `未查询到openLog，没有机会~~`
     concatMsg(message)
+    return 'nochance'
   }
 }
 
