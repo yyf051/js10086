@@ -49,14 +49,15 @@ Cache.hset = function(key, field, value) {
 async function hget(key, field) {
     let doc = await new Promise((resolve) => {
         client.hget(key, field, function(err, res) {
+            console.log('hget', res)
             return resolve(res)
         })
     })
-    return JSON.parse(doc)
+    return doc && JSON.parse(doc)
 }
 
-Cache.hget = async (key) => {
-    return await hget(key)
+Cache.hget = async (key, field) => {
+    return await hget(key, field)
 }
 
 Cache.expire = function(key, time) {
