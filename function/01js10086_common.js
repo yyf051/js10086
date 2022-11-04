@@ -2,12 +2,12 @@ const Env = require('./01Env')
 let $ = new Env()
 
 const config = require('../conf/config')
-
 const ua = config && config.ua
-
 const encryptedPhone = config && config.encryptedPhone
-
 const options = config && config.options
+
+const cache = require('./function/cache')
+const cacheKey = 'ChinaMobileCK'
 
 function getSetCookie (resp) {
   let c = ''
@@ -177,9 +177,21 @@ function setConstCookie (ck = '') {
   return ck
 }
 
+async function getCacheCookie(phone) {
+  return await cache.hget(cacheKey, phone)
+}
 
 function initCookie(vm, i) {
   return new Promise(async (resolve) => {
+
+    // 先从redis中获取ck
+    const cacheCK = getCacheCookie(vm.phone)
+    if (cacheCK) {
+      vm.setCookie = cacheCK
+      return true
+    }
+
+    // 没找到则重新获取CK
     await vm.wait(5000)
     let success = false
     try {
@@ -204,6 +216,13 @@ function initCookie(vm, i) {
       ])
       vm.setCookie += cks.join('')
       vm.setCookie += setConstCookie()
+
+      console.log('缓存ck: ', vm.setCookie)
+      cache.hset(cacheKey, vm.phone, vm.setCookie)
+      const seconds = 60 * 60 * 60 // 1过期
+      console.log('超时秒数：', seconds)
+      cache.expire(cacheKey, seconds)
+
       success = true
     } catch (e) {
       console.log('登录失败', e)
