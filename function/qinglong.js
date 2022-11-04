@@ -1,10 +1,10 @@
-const globalConfig = require('./conf/globalConfig')
+const globalConfig = require('../conf/globalConfig')
 const { clientId, clientSecret } = globalConfig.qlClient
 
 const domain = globalConfig.qingLongHost
 const loginUrl = `${domain}/open/auth/token?client_id=${clientId}&client_secret=${clientSecret}`
 
-const cache = require('./function/cache')
+const cache = require('./cache')
 const cacheKey = 'QINGLONG_TOKEN'
 
 
