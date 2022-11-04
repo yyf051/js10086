@@ -11,16 +11,12 @@ function Cache() {}
 
 Cache.client = client
 
-let get = async (key) => {
-    console.log(key)
-    let doc = await new Promise((resolve) => {
+const get = (key) => {
+    return new Promise((resolve) => {
         client.get(key, function(err, res) {
-            //console.log(err, res)
-            return resolve(res)
+            resolve(JSON.parse(res))
         })
     })
-    //console.log(doc)
-    return JSON.parse(doc)
 }
 
 Cache.set = function(key, value) {
@@ -32,8 +28,8 @@ Cache.set = function(key, value) {
     })
 }
 
-Cache.get = async (key) => {
-    return await get(key)
+Cache.get = (key) => {
+    return get(key)
 }
 
 
@@ -46,18 +42,16 @@ Cache.hset = function(key, field, value) {
     })
 }
 
-async function hget(key, field) {
-    let doc = await new Promise((resolve) => {
+function hget(key, field) {
+    return new Promise((resolve) => {
         client.hget(key, field, function(err, res) {
-            console.log('hget', res)
-            return resolve(res)
+            resolve(res && JSON.parse(res))
         })
     })
-    return doc && JSON.parse(doc)
 }
 
-Cache.hget = async (key, field) => {
-    return await hget(key, field)
+Cache.hget = (key, field) => {
+    return hget(key, field)
 }
 
 Cache.expire = function(key, time) {

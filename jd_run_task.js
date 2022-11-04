@@ -8,11 +8,7 @@ const domain = require('./conf/globalConfig').qingLongHost
 const runTaskUrl = `${domain}/open/crons/run?t=${(new Date()).getTime()}`
 
 const { getAuthorization } = require('./function/qinglong')
-const authorization = getAuthorization()
-if (!authorization) {
-    console.log('Error!, 未获取到青龙Token')
-    return
-}
+let authorization
 
 let taskName = process.env.jd_repo_pull || ''
 if (taskName === '') {
@@ -22,6 +18,11 @@ if (taskName === '') {
 taskName = taskName.split("@@")[0]
 
 !(async () => {
+    authorization = await getAuthorization()
+    if (!authorization) {
+        console.log('Error!, 未获取到青龙Token')
+        return
+    }
 
     const tasks = await getTaskByName(taskName)
     if (tasks === 'failed') {

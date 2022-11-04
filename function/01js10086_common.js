@@ -177,57 +177,55 @@ function setConstCookie (ck = '') {
   return ck
 }
 
-async function getCacheCookie(phone) {
-  return await cache.hget(cacheKey, phone)
+function getCacheCookie(phone) {
+  return new Promise(async (resolve) => {
+    const cckk = await cache.hget(cacheKey, phone)
+    cache.client.quit()
+    resolve(cckk)
+  })
 }
 
 function initCookie(vm, i) {
   return new Promise(async (resolve) => {
-
-    // 先从redis中获取ck
-    const cacheCK = getCacheCookie(vm.phone)
-    if (cacheCK) {
-      vm.setCookie = cacheCK
-      return true
-    }
-
-    // 没找到则重新获取CK
-    await vm.wait(5000)
-    let success = false
+    // await vm.wait(5000)
     try {
-      $ = vm
-      if (i == undefined) {
-        i = vm.index
-      }
+      if (i == undefined) i = vm.index
       vm.ua = ua[i]
       vm.phone = options[i].headers['LC-PN']
       vm.accountName = `账号${vm.phone}`
       vm.msg += `<font size="5">${vm.phone}</font>\n`
       console.log(`${vm.accountName}获取JSESSIONID......`)
-      vm.setCookie = await recall()
-      if (!vm.setCookie) {
-        console.log(`${vm.accountName}第二次获取JSESSIONID......`)
+
+      // 先从redis中获取ck
+      const cacheCK = await getCacheCookie(vm.phone)
+      if (cacheCK) {
+        console.log('获取缓存成功')
+        vm.setCookie = cacheCK
+      } else {
+        // 没找到则重新获取CK
         vm.setCookie = await recall()
+        if (!vm.setCookie) {
+          console.log(`${vm.accountName}第二次获取JSESSIONID......`)
+          vm.setCookie = await recall()
+        }
+        console.log(`${vm.accountName}获取Cookie......`)
+        const cks = await Promise.all([
+          getCookie(options[i], vm.setCookie),
+          getExtendCookie3(vm.setCookie)
+        ])
+        vm.setCookie += cks.join('')
+        vm.setCookie += setConstCookie()
+
+        console.log('缓存ck: ', vm.setCookie)
+        cache.hset(cacheKey, vm.phone, vm.setCookie)
+        const seconds = 60 * 60 * 60 // 1过期
+        console.log('超时秒数：', seconds)
+        cache.expire(cacheKey, seconds)
       }
-      console.log(`${vm.accountName}获取Cookie......`)
-      const cks = await Promise.all([
-        getCookie(options[i], vm.setCookie),
-        getExtendCookie3(vm.setCookie)
-      ])
-      vm.setCookie += cks.join('')
-      vm.setCookie += setConstCookie()
 
-      console.log('缓存ck: ', vm.setCookie)
-      cache.hset(cacheKey, vm.phone, vm.setCookie)
-      const seconds = 60 * 60 * 60 // 1过期
-      console.log('超时秒数：', seconds)
-      cache.expire(cacheKey, seconds)
-
-      success = true
+      resolve(true)
     } catch (e) {
       console.log('登录失败', e)
-    } finally {
-      resolve(success)
     }
   })
 }

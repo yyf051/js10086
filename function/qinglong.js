@@ -1,3 +1,5 @@
+const axios = require('axios')
+
 const globalConfig = require('../conf/globalConfig')
 const { clientId, clientSecret } = globalConfig.qlClient
 
@@ -23,7 +25,7 @@ const getAuthorization = async () => {
 
             cache.set(cacheKey, authorization)
 
-            const seconds = token.data.expire - (new Date()).getTime() / 1000 - 10 * 60
+            const seconds = parseInt(token.data.expiration - (new Date()).getTime() / 1000 - 10 * 60)
             console.log('超时秒数：', seconds)
             cache.expire(cacheKey, seconds)
         } else {
@@ -40,8 +42,8 @@ const getAuthorization = async () => {
 }
 
 
-function getQinglongToken() {
-    return new Promise((resolve) => {
+async function getQinglongToken() {
+    /*return new Promise((resolve) => {
         $.get({ url: loginUrl }, (error, response, data) => {
             try {
                 if (error) {
@@ -56,7 +58,16 @@ function getQinglongToken() {
                 resolve('failed')
             }
         })
-    })
+    })*/
+    const opts = {
+        url: loginUrl,
+        method: 'get'
+    }
+    console.log(JSON.stringify(opts))
+    return await axios(opts).then(res => {
+        console.log(res && res.data)
+        return res.data
+    }).catch(error => error)
 }
 
 module.exports = {

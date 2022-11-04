@@ -7,15 +7,15 @@ const axios = require('axios')
 const domain = require('./conf/globalConfig').qingLongHost
 const getJdCookiesUrl = `${domain}/open/envs?searchValue=app_open&t=${(new Date()).getTime()}`
 
-
 const { getAuthorization } = require('./function/qinglong')
-const authorization = getAuthorization()
-if (!authorization) {
-    console.log('Error!, 未获取到青龙Token')
-    return
-}
+let authorization
 
 !(async () => {
+    authorization = await getAuthorization()
+    if (!authorization) {
+        console.log('Error!, 未获取到青龙Token')
+        return
+    }
 
     const jdCookies = await getJdCookies()
     if (jdCookies === 'failed') {
