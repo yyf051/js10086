@@ -6,7 +6,7 @@ const ua = config && config.ua
 const encryptedPhone = config && config.encryptedPhone
 const options = config && config.options
 
-const cache = require('./function/cache')
+const cache = require('./cache')
 const cacheKey = 'ChinaMobileCK'
 
 function getSetCookie (resp) {
