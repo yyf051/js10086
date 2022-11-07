@@ -218,7 +218,7 @@ function initCookie(vm, i) {
 
         console.log('缓存ck: ', vm.setCookie)
         cache.hset(cacheKey, vm.phone, vm.setCookie)
-        const seconds = 60 * 60 * 60 // 1过期
+        const seconds = 60 * 60 // 1过期
         console.log('超时秒数：', seconds)
         cache.expire(cacheKey, seconds)
       }
