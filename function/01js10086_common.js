@@ -180,7 +180,6 @@ function setConstCookie (ck = '') {
 function getCacheCookie(phone) {
   return new Promise(async (resolve) => {
     const cckk = await cache.hget(cacheKey, phone)
-    cache.client.quit()
     resolve(cckk)
   })
 }
@@ -222,6 +221,8 @@ function initCookie(vm, i) {
         console.log('超时秒数：', seconds)
         cache.expire(cacheKey, seconds)
       }
+      
+      cache.client.quit()
 
       resolve(true)
     } catch (e) {
