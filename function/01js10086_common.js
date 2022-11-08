@@ -183,6 +183,7 @@ async function getMobieCK(opt) {
   
   try {
     const phone = opt.headers['LC-PN']
+    console.log(`Current phone: ${phone}`)
 
     const cache = new Cache(client)
     let setCookie = await cache.hget(cacheKey, phone)
@@ -197,7 +198,7 @@ async function getMobieCK(opt) {
     }
     return setCookie
   } catch (x) {
-    console.log(`获取Cookie失败！`)
+    console.log(`获取Cookie失败！${x}`)
   } finally {
     client.quit()
   }
