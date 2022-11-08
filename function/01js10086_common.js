@@ -234,6 +234,8 @@ async function getMobieCK(phone, loginBody) {
       const seconds = 60 * 60 // 1h过期
       // console.log('超时秒数：', seconds)
       cache.expire(cacheKey, seconds)
+    } else{
+      console.log(`从缓存中获取ck`)
     }
     return setCookie
   } catch (x) {
