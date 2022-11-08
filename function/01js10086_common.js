@@ -189,7 +189,8 @@ function initCookie(vm, i) {
 
       // 先从redis中获取ck
       let cacheCK
-      if (vm.client && (cacheCK = await cache.hget(cacheKey, vm.phone))) {
+      let cache 
+      if (vm.client && (cache = new Cache(vm.client)) && (cacheCK = await cache.hget(cacheKey, vm.phone))) {
         console.log('获取缓存成功')
         vm.setCookie = cacheCK
       } else {
@@ -207,11 +208,13 @@ function initCookie(vm, i) {
         vm.setCookie += cks.join('')
         vm.setCookie += setConstCookie()
 
-        console.log('缓存ck: ', vm.setCookie)
-        cache.hset(cacheKey, vm.phone, vm.setCookie)
-        const seconds = 60 * 60 // 1过期
-        console.log('超时秒数：', seconds)
-        cache.expire(cacheKey, seconds)
+        if (cache) {
+          console.log('缓存ck: ', vm.setCookie)
+          cache.hset(cacheKey, vm.phone, vm.setCookie)
+          const seconds = 60 * 60 // 1h过期
+          console.log('超时秒数：', seconds)
+          cache.expire(cacheKey, seconds)
+        }
       }
 
       resolve(true)
