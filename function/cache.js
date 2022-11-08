@@ -1,10 +1,10 @@
 let client 
 
 function Cache(c) {
+    client = c
     client.on("error", function(err) {
         console.log(err)
     })
-    client = c
 }
 
 const get = (key) => {
