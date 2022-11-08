@@ -1,7 +1,7 @@
 /*
 江苏移动_开宝箱赢流量
 cron:0 30 8 * * *
-enabled:false
+enabled=false
 */
 const Env = require('./function/01Env')
 const { options, getMobieCK } = require('./function/01js10086_common')
