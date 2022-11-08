@@ -8,7 +8,22 @@ const BrowserFinger = require('./function/BrowserFinger')
 
 const $ = new Env('江苏移动_查话费')
 
-const accounts = require('./conf/globalConfig').accounts
+const accounts = [{
+  phone: '13813753702',
+  password: 'ZrRfdOj5CCc%3D'
+}, {
+  phone: '15251300683',
+  password: 'qDcHZjiDryg%3D'
+}, {
+  phone: '13646197864',
+  password: 'J19hktL8%2Brk%3D'
+}, {
+  phone: '13584630864',
+  password: 'J19hktL8%2Brk%3D'
+}, {
+  phone: '15851276468',
+  password: '%2BJJhefIfe0c%3D'
+}]
 
 
 !(async () => {

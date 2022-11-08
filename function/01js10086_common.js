@@ -172,17 +172,56 @@ function setConstCookie (ck = '') {
   return ck
 }
 
+const redisConfig = {
+  host: 'nas.hermanwu.zt',
+  port: 36379,
+  password: 'abc123__'
+}
 const redis = require("ioredis")
 const config = require('../conf/globalConfig').redisConfig
 const cacheKey = 'ChinaMobileCK'
 const initCache = require('./cache')
 
-async function getMobieCK(opt) {
+const loginUrl = 'https://wap.js.10086.cn/jsmccClient/action.dox'
 
+const defaultHeader = {
+  'Host': 'wap.js.10086.cn',
+  'LC-PN': '13813753702',
+  'version': '8.4.9',
+  'Accept': '*/*',
+  'LC-IFS': 'login_lnNew',
+  'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+  'Accept-Language': 'en-us',
+  'hgvhv': '891DaDB4FbED634EF0AF498F6EE6005F89',
+  'platform': 'iphone',
+  'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:2.0.1) Gecko/20100101 Firefox/4.0.1',
+  'jailBreak': '0',
+  'LC-SYSVERSION': '12.0',
+  'device': 'iPhone 8',
+  'appchannel': 'App Store',
+  'carrier': ''
+}
+
+const getOption(phone, body) {
+  return {
+    'url': loginUrl,
+    'headers': {
+      ...defaultHeader,
+      'LC-PN': phone
+    },
+    'body': `appBodyParam=${body}`
+  }
+}
+
+async function getMobieCK(phone, loginBody) {
+
+  // 获取登陆参数
+  const opt = getOption(phone, loginBody)
+
+  // redis 
   const client = redis.createClient(config)
-  
   try {
-    const phone = opt.headers['LC-PN']
+    // const phone = opt.headers['LC-PN']
     console.log(`Current phone: ${phone}`)
 
     const cache = initCache(client)

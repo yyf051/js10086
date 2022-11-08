@@ -8,11 +8,20 @@ const { nactFunc } = require('./function/01js10086_nact')
 
 const $ = new Env('江苏移动_每日签到')
 
+const js10086 = require('./function/js10086')
+const cookiesArr = []
+Object.keys(js10086).forEach((item) => {
+  cookiesArr.push(js10086[item])
+})
+
 
 !(async () => {
   $.msg = ''
-  for (let i = 0; i < options.length; i++) {
-    $.phone = options[i].headers['LC-PN']
+  for (let i = 0; i < cookiesArr.length; i++) {
+    $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
+    const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
+    console.log(`env: ${$.phone}, ${bodyParam}`)
+
     console.log(`${$.phone}获取Cookie：`)
     $.setCookie = await getMobieCK(options[i])
     

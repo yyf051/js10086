@@ -1,9 +1,9 @@
 /* eslint-disable eqeqeq */
 const $ = new env('发送通知')
-const { QYWX_CONF } = require('../conf/config')
+// const { QYWX_CONF } = require('../conf/config')
 
 const timeout = 15000 // 超时时间(单位毫秒)
-const QYWX_AM = QYWX_CONF
+const QYWX_AM = process.env.QYWX_CONF
 
 async function sendNotify (text, desp, strsummary = '') {
   // console.log(`开始发送通知...`)
