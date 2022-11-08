@@ -202,7 +202,7 @@ const defaultHeader = {
   'carrier': ''
 }
 
-const getOption(phone, body) {
+const getOption = (phone, body) => {
   return {
     'url': loginUrl,
     'headers': {
