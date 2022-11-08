@@ -175,25 +175,32 @@ function setConstCookie (ck = '') {
 const redis = require("ioredis")
 const config = require('../conf/globalConfig').redisConfig
 const cacheKey = 'ChinaMobileCK'
+const Cache = require('./cache')
 
 async function getMobieCK(opt) {
-  const phone = opt.headers['LC-PN']
 
   const client = redis.createClient(config)
+  
+  try {
+    const phone = opt.headers['LC-PN']
 
-  const cache = new Cache(client)
-  let setCookie = await cache.hget(cacheKey, phone)
-  if (!setCookie) {
-    setCookie = await initCookie(opt)
+    const cache = new Cache(client)
+    let setCookie = await cache.hget(cacheKey, phone)
+    if (!setCookie) {
+      setCookie = await initCookie(opt)
 
-    console.log('请求并缓存ck: ', setCookie)
-    cache.hset(cacheKey, phone, setCookie)
-    const seconds = 60 * 60 // 1h过期
-    console.log('超时秒数：', seconds)
-    cache.expire(cacheKey, seconds)
+      console.log('请求并缓存ck: ', setCookie)
+      cache.hset(cacheKey, phone, setCookie)
+      const seconds = 60 * 60 // 1h过期
+      console.log('超时秒数：', seconds)
+      cache.expire(cacheKey, seconds)
+    }
+    return setCookie
+  } catch (x) {
+    console.log(`获取Cookie失败！`)
+  } finally {
+    client.quit()
   }
-  client.quit()
-  return setCookie
 }
 
 
