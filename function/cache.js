@@ -1,10 +1,13 @@
-let client 
+let client
+const oc = {}
 
-function Cache(c) {
+const Cache = (c) => {
     client = c
     client.on("error", function(err) {
         console.log(err)
     })
+
+    return oc
 }
 
 const get = (key) => {
@@ -15,7 +18,7 @@ const get = (key) => {
     })
 }
 
-Cache.set = function(key, value) {
+oc.set = function(key, value) {
     value = JSON.stringify(value)
     return client.set(key, value, function(err) {
         if (err) {
@@ -24,12 +27,12 @@ Cache.set = function(key, value) {
     })
 }
 
-Cache.get = (key) => {
+oc.get = (key) => {
     return get(key)
 }
 
 
-Cache.hset = function(key, field, value) {
+oc.hset = function(key, field, value) {
     value = JSON.stringify(value)
     return client.hset(key, field, value, function(err) {
         if (err) {
@@ -46,11 +49,11 @@ function hget(key, field) {
     })
 }
 
-Cache.hget = (key, field) => {
+oc.hget = (key, field) => {
     return hget(key, field)
 }
 
-Cache.expire = function(key, time) {
+oc.expire = function(key, time) {
     return client.expire(key, time)
 }
 

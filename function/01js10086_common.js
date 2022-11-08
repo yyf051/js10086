@@ -175,7 +175,7 @@ function setConstCookie (ck = '') {
 const redis = require("ioredis")
 const config = require('../conf/globalConfig').redisConfig
 const cacheKey = 'ChinaMobileCK'
-const Cache = require('./cache')
+const initCache = require('./cache')
 
 async function getMobieCK(opt) {
 
@@ -185,7 +185,7 @@ async function getMobieCK(opt) {
     const phone = opt.headers['LC-PN']
     console.log(`Current phone: ${phone}`)
 
-    const cache = new Cache(client)
+    const cache = initCache(client)
     let setCookie = await cache.hget(cacheKey, phone)
     if (!setCookie) {
       setCookie = await initCookie(opt)
