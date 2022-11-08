@@ -4,22 +4,34 @@ http://wap.js.10086.cn/mb_nact/new/act-front/cj/cj020/main.html?actNum=700015204
 cron:10 20 10 1-7 10 ?
 */
 const Env = require('./function/01Env')
-const { options, initCookie } = require('./function/01js10086_common')
+const { options, getMobieCK } = require('./function/01js10086_common')
 const { mbactFunc } = require('./function/01js10086_mbnact')
 
 const $ = new Env('江苏移动_欢度佳节幸运大转盘')
+
+const js10086 = require('./function/js10086')
+const cookiesArr = []
+Object.keys(js10086).forEach((item) => {
+  cookiesArr.push(js10086[item])
+})
+
 !(async () => {
   $.msg = ''
-  for (let i = 0; i < options.length; i++) {
-    await initCookie($, i)
-
-    // https://wap.js.10086.cn/mb_nact/new/yxwap/entitle/preconditions?actNum=7000152043gnqwc8&_t=1647156676735
-    console.log(`${$.accountName}检查参与资格......`)
-    const conditionRet = await mbactFunc($, 'entitle/preconditions', '7000152043gnqwc8')
-    if (!conditionRet) {
+  for (let i = 0; i < cookiesArr.length; i++) {
+    const cookie = cookiesArr[i]
+    $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
+    const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
+    
+    vm.msg += `<font size="5">${$.phone}</font>\n`
+    // console.log(`env: ${$.phone}, ${bodyParam}`)
+    if (!$.phone || !bodyParam) {
+      $.msg += `登陆参数配置不正确\n`
       continue
     }
 
+    console.log(`${$.phone}获取Cookie：`)
+    $.setCookie = await getMobieCK($.phone, bodyParam)
+    
     console.log(`${$.accountName}检查参与状态......`)
     const initRet = await mbactFunc($, 'checkEntitleAccount', '7000152043gnqwc8')
     if (!initRet) {
