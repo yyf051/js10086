@@ -3,46 +3,23 @@
 cron:25 15 10 * * *
 */
 const Env = require('./function/01Env')
-const { options, encryptedPhone, initCookie } = require('./function/01js10086_common')
+const { options, getMobieCK } = require('./function/01js10086_common')
 const { nactFunc } = require('./function/01js10086_nact')
 
 const $ = new Env('江苏移动_每日签到')
 
-const redis = require("ioredis")
-const config = require('./conf/globalConfig').redisConfig
-const cacheKey = 'ChinaMobileCK'
-
-async function getMobieCK(opt) {
-  const phone = opt.headers['LC-PN']
-
-  const client = redis.createClient(config)
-
-  const cache = new Cache(client)
-  let setCookie = await cache.hget(cacheKey, phone)
-  if (!setCookie) {
-    setCookie = await initCookie(opt)
-
-    console.log('请求并缓存ck: ', setCookie)
-    cache.hset(cacheKey, phone, setCookie)
-    const seconds = 60 * 60 // 1h过期
-    console.log('超时秒数：', seconds)
-    cache.expire(cacheKey, seconds)
-  }
-  client.quit()
-  return setCookie
-}
 
 !(async () => {
   $.msg = ''
   for (let i = 0; i < options.length; i++) {
+    $.phone = options[i].headers['LC-PN']
+    console.log(`${$.phone}获取Cookie：`)
     $.setCookie = await getMobieCK(options[i])
-    $.ua = '' // TODO 
     
     const resultObj = await initIndexPage()
     if (resultObj && !resultObj.isSignToday) {
       await doSign()
     }
-    // console.log(JSON.stringify(resultObj))
 
     //每个月的补签卡只能领5个
     if (resultObj && !resultObj.isGetFreeChance && resultObj.totalFreeChance < 5) {
@@ -67,10 +44,6 @@ async function getMobieCK(opt) {
       $.msg += `无需补签isSignSupplu=${resultObj.isSignSupplu}，currentFreeChance=${resultObj.currentFreeChance}，monthSignCnt=${resultObj.monthSignCnt}，today=${resultObj.today}\n`
       console.log(`${$.phone}无需补签isSignSupplu=${resultObj.isSignSupplu}，currentFreeChance=${resultObj.currentFreeChance}，monthSignCnt=${resultObj.monthSignCnt}，today=${resultObj.today}`)
     }
-
-    /*if (resultObj.indexHasFullSign) {
-      await indexHasFullSign()
-    }*/
 
     await $.wait(10000)
     console.log()
@@ -219,22 +192,3 @@ async function doSignSupply() {
     }
   }
 }
-
-/*async function indexHasFullSign() {
-  const today = (new Date()).getDate()
-  const hour = (new Date()).getHours()
-
-  if (today > 5) {
-    console.log(`${$.phone}今日非1-5号，满签奖励留到下月领取`)
-    $.msg += `今日非1-5号，满签奖励留到下月领取\n`
-    return
-  } else if (today == 1 && hour < 12) {
-    console.log(`${$.phone}未到12点，无法领取`)
-    $.msg += `未到12点，无法领取\n`
-    return
-  }
-  if (today == 9) {
-    const params = 'reqUrl=act2510&method=doSignSupply&operType=1&actCode=2510&extendParams=&ywcheckcode=&mywaytoopen='
-    await nactFunc($, params)
-  }
-}*/
