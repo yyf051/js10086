@@ -4,15 +4,34 @@ http://wap.js.10086.cn/nact/resource/2335/html/index.html?shareToken=dQEWCORLKHr
 cron:45 35 7 3-12 * *
 */
 const Env = require('./function/01Env')
+const { options, getMobieCK } = require('./function/01js10086_common')
+const { nactFunc } = require('./function/01js10086_nact')
+
 const $ = new Env('江苏移动_流量大富翁')
 
-const { options, initCookie } = require('./function/01js10086_common')
-const { nactFunc } = require('./function/01js10086_nact')
+const js10086 = require('./function/js10086')
+const cookiesArr = []
+Object.keys(js10086).forEach((item) => {
+  cookiesArr.push(js10086[item])
+})
 
 !(async () => {
   $.msg = ''
-  for (let i = 0; i < options.length; i++) {
-    await initCookie($, i)
+  for (let i = 0; i < cookiesArr.length; i++) {
+    const cookie = cookiesArr[i]
+    $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
+    const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
+    
+    $.msg += `<font size="5">${$.phone}</font>\n`
+    // console.log(`env: ${$.phone}, ${bodyParam}`)
+    if (!$.phone || !bodyParam) {
+      $.msg += `登陆参数配置不正确\n`
+      continue
+    }
+
+    console.log(`${$.phone}获取Cookie：`)
+    $.setCookie = await getMobieCK($.phone, bodyParam)
+    
     $.isLog = true
     const ret = await doActivity()
     if (ret === 'nochance') {
