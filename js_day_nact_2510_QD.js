@@ -18,6 +18,7 @@ Object.keys(js10086).forEach((item) => {
 !(async () => {
   $.msg = ''
   for (let i = 0; i < cookiesArr.length; i++) {
+    const cookie = cookiesArr[i]
     $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
     const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
     console.log(`env: ${$.phone}, ${bodyParam}`)
