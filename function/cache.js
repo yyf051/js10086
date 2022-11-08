@@ -1,15 +1,11 @@
-const redis = require("redis")
-const config = require('../conf/globalConfig').redisConfig
+let client 
 
-let client = redis.createClient(config)
-
-client.on("error", function(err) {
-    console.log(err)
-})
-
-function Cache() {}
-
-Cache.client = client
+function Cache(c) {
+    client.on("error", function(err) {
+        console.log(err)
+    })
+    client = c
+}
 
 const get = (key) => {
     return new Promise((resolve) => {

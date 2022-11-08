@@ -6,7 +6,7 @@ const ua = config && config.ua
 const encryptedPhone = config && config.encryptedPhone
 const options = config && config.options
 
-const cache = require('./cache')
+const Cache = require('./cache')
 const cacheKey = 'ChinaMobileCK'
 
 function getSetCookie (resp) {
@@ -177,16 +177,8 @@ function setConstCookie (ck = '') {
   return ck
 }
 
-function getCacheCookie(phone) {
-  return new Promise(async (resolve) => {
-    const cckk = await cache.hget(cacheKey, phone)
-    resolve(cckk)
-  })
-}
-
 function initCookie(vm, i) {
   return new Promise(async (resolve) => {
-    // await vm.wait(5000)
     try {
       if (i == undefined) i = vm.index
       vm.ua = ua[i]
@@ -196,8 +188,8 @@ function initCookie(vm, i) {
       console.log(`${vm.accountName}获取JSESSIONID......`)
 
       // 先从redis中获取ck
-      const cacheCK = await getCacheCookie(vm.phone)
-      if (cacheCK) {
+      let cacheCK
+      if (vm.client && (cacheCK = await cache.hget(cacheKey, vm.phone))) {
         console.log('获取缓存成功')
         vm.setCookie = cacheCK
       } else {
@@ -221,8 +213,6 @@ function initCookie(vm, i) {
         console.log('超时秒数：', seconds)
         cache.expire(cacheKey, seconds)
       }
-      
-      cache.client.quit()
 
       resolve(true)
     } catch (e) {

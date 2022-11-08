@@ -8,6 +8,10 @@ const { nactFunc } = require('./function/01js10086_nact')
 
 const $ = new Env('江苏移动_每日签到')
 
+const redis = require("ioredis")
+const config = require('./conf/globalConfig').redisConfig
+$.client = redis.createClient(config)
+
 !(async () => {
   $.msg = ''
   for (let i = 0; i < options.length; i++) {
@@ -58,6 +62,7 @@ const $ = new Env('江苏移动_每日签到')
   await $.sendNotify($.name, "签到失败，手动检查...")
 }).finally(() => {
   $.done()
+  $.client.quit()
 })
 
 /**
