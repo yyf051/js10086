@@ -21,10 +21,14 @@ Object.keys(js10086).forEach((item) => {
     const cookie = cookiesArr[i]
     $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
     const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
-    console.log(`env: ${$.phone}, ${bodyParam}`)
+    // console.log(`env: ${$.phone}, ${bodyParam}`)
+    if (!$.phone || !bodyParam) {
+      $.msg += `登陆参数配置不正确\n`
+      continue
+    }
 
     console.log(`${$.phone}获取Cookie：`)
-    $.setCookie = await getMobieCK(options[i])
+    $.setCookie = await getMobieCK($.phone, bodyParam)
     
     const resultObj = await initIndexPage()
     if (resultObj && !resultObj.isSignToday) {
