@@ -1,5 +1,8 @@
+const { options } = require('../conf/config')
+
 const Env = require('./01Env')
 let $ = new Env()
+
 
 function getSetCookie (resp) {
   let c = ''
@@ -221,5 +224,5 @@ function initCookie(opt) {
 }
 
 module.exports = {
-  initCookie
+  options, getMobieCK
 }
