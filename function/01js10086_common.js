@@ -1,14 +1,6 @@
 const Env = require('./01Env')
 let $ = new Env()
 
-const config = require('../conf/config')
-const ua = config && config.ua
-const encryptedPhone = config && config.encryptedPhone
-const options = config && config.options
-
-const Cache = require('./cache')
-const cacheKey = 'ChinaMobileCK'
-
 function getSetCookie (resp) {
   let c = ''
   for (const ck of resp['headers']['set-cookie']) {
@@ -177,47 +169,26 @@ function setConstCookie (ck = '') {
   return ck
 }
 
-function initCookie(vm, i) {
+function initCookie(opt) {
   return new Promise(async (resolve) => {
     try {
-      if (i == undefined) i = vm.index
-      vm.ua = ua[i]
-      vm.phone = options[i].headers['LC-PN']
-      vm.accountName = `账号${vm.phone}`
-      vm.msg += `<font size="5">${vm.phone}</font>\n`
-      console.log(`${vm.accountName}获取JSESSIONID......`)
+      const accountName = `账号${opt.headers['LC-PN']}`
+      console.log(`${accountName}获取JSESSIONID......`)
 
-      // 先从redis中获取ck
-      let cacheCK
-      let cache 
-      if (vm.client && (cache = new Cache(vm.client)) && (cacheCK = await cache.hget(cacheKey, vm.phone))) {
-        console.log('获取缓存成功')
-        vm.setCookie = cacheCK
-      } else {
-        // 没找到则重新获取CK
-        vm.setCookie = await recall()
-        if (!vm.setCookie) {
-          console.log(`${vm.accountName}第二次获取JSESSIONID......`)
-          vm.setCookie = await recall()
-        }
-        console.log(`${vm.accountName}获取Cookie......`)
-        const cks = await Promise.all([
-          getCookie(options[i], vm.setCookie),
-          getExtendCookie3(vm.setCookie)
-        ])
-        vm.setCookie += cks.join('')
-        vm.setCookie += setConstCookie()
-
-        if (cache) {
-          console.log('缓存ck: ', vm.setCookie)
-          cache.hset(cacheKey, vm.phone, vm.setCookie)
-          const seconds = 60 * 60 // 1h过期
-          console.log('超时秒数：', seconds)
-          cache.expire(cacheKey, seconds)
-        }
+      let setCookie = await recall()
+      if (!setCookie) {
+        console.log(`${accountName}第二次获取JSESSIONID......`)
+        setCookie = await recall()
       }
+      console.log(`${accountName}获取Cookie......`)
+      const cks = await Promise.all([
+        getCookie(opt, setCookie),
+        getExtendCookie3(setCookie)
+      ])
+      setCookie += cks.join('')
+      setCookie += setConstCookie()
 
-      resolve(true)
+      resolve(setCookie)
     } catch (e) {
       console.log('登录失败', e)
     }
@@ -225,7 +196,5 @@ function initCookie(vm, i) {
 }
 
 module.exports = {
-  ua, options, encryptedPhone,
-  enter, recall, 
-  getExtendCookie1, getExtendCookie2, getExtendCookie3, getCookie, setConstCookie, initCookie
+  initCookie
 }

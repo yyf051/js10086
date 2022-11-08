@@ -10,13 +10,34 @@ const $ = new Env('江苏移动_每日签到')
 
 const redis = require("ioredis")
 const config = require('./conf/globalConfig').redisConfig
-$.client = redis.createClient(config)
+const cacheKey = 'ChinaMobileCK'
+
+async function getMobieCK(opt) {
+  const phone = opt.headers['LC-PN']
+
+  const client = redis.createClient(config)
+
+  const cache = new Cache(client)
+  let setCookie = await cache.hget(cacheKey, phone)
+  if (!setCookie) {
+    setCookie = await initCookie(opt)
+
+    console.log('请求并缓存ck: ', setCookie)
+    cache.hset(cacheKey, phone, setCookie)
+    const seconds = 60 * 60 // 1h过期
+    console.log('超时秒数：', seconds)
+    cache.expire(cacheKey, seconds)
+  }
+  client.quit()
+  return setCookie
+}
 
 !(async () => {
   $.msg = ''
   for (let i = 0; i < options.length; i++) {
-    $.index = i
-    await initCookie($, i)
+    $.setCookie = await getMobieCK(options[i])
+    $.ua = '' // TODO 
+    
     const resultObj = await initIndexPage()
     if (resultObj && !resultObj.isSignToday) {
       await doSign()
@@ -62,7 +83,6 @@ $.client = redis.createClient(config)
   await $.sendNotify($.name, "签到失败，手动检查...")
 }).finally(() => {
   $.done()
-  $.client.quit()
 })
 
 /**
