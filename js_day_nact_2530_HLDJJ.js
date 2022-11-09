@@ -33,8 +33,6 @@ Object.keys(js10086).forEach((item) => {
     $.setCookie = await getMobieCK($.phone, bodyParam)
     
     // $.isLog = true
-    console.log($.phone)
-    $.msg += `<font size="5">${$.phone}</font>\n`
     await initIndexPage()
     
     console.log()
@@ -61,6 +59,11 @@ async function initIndexPage() {
     return
   }
 
+  if (ret.unReceiveSignRecord) {
+    // 首次进入，超级抽奖
+    await doSuperLottery()
+  }
+
   const chance = ret.chance
   if (chance && chance > 0) {
     console.log(`存在抽奖${chance}机会，进行抽奖`)
@@ -71,7 +74,6 @@ async function initIndexPage() {
   }
 
   const finishTaskIds = await checkSign(ret.doTaskList)
-  // console.log(3, finishTaskIds)
 
   await execTasks(ret.taskList, finishTaskIds)
 
@@ -83,22 +85,22 @@ async function initIndexPage() {
  * 检查打卡
  */
 async function checkSign(doTaskList) {
-  let canSign = !doTaskList || doTaskList.length == 0
-  // console.log(1, canSign, doTaskList)
-  if (!canSign) {
-    const signTask = doTaskList.filter(e => {
-      return e.taskId == 0
-    })
-    canSign = !signTask || signTask.length == 0
-    // console.log(2, canSign, signTask)
-  }
+  // let canSign = !doTaskList || doTaskList.length == 0
+  // // console.log(1, canSign, doTaskList)
+  // if (!canSign) {
+  //   const signTask = doTaskList.filter(e => {
+  //     return e.taskId == 0
+  //   })
+  //   canSign = !signTask || signTask.length == 0
+  //   // console.log(2, canSign, signTask)
+  // }
 
-  if (canSign) {
-    await doTask(0, '每天打卡', 0)
-  }
+  // if (canSign) {
+  //   await doTask(0, '每天打卡', 0)
+  // }
 
-  console.log(`今日已打卡，无需打卡`)
-  $.msg += `今日已打卡，无需打卡\n`
+  // console.log(`今日已打卡，无需打卡`)
+  // $.msg += `今日已打卡，无需打卡\n`
 
   const tasks = doTaskList || []
   return tasks.flatMap(e => e.taskId)
@@ -109,7 +111,7 @@ async function checkSign(doTaskList) {
  * 执行任务
  */
 async function execTasks(taskList, finishTaskIds) {
-  if (finishTaskIds.length - taskList.length == 1) {
+  if (finishTaskIds.length == taskList.length) {
     console.log(`今日任务均已完成，无需执行`)
     $.msg += `今日任务均已完成，无需执行\n`
   }
@@ -148,6 +150,24 @@ async function doTask(taskId, taskName, taskType) {
  */
 async function doLottery() {
   const params = `reqUrl=act2530&method=doLottery&operType=1&actCode=2530&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
+  const ret = await nactFunc($, params)
+  
+  if (!ret) {
+    return
+  }
+
+  console.log(`抽奖成功，获得奖励：${ret.awardName}`)
+  $.msg += `抽奖成功，获得奖励：${ret.awardName}\n`
+
+  await $.wait(2000)
+}
+
+
+/**
+ * 超级抽奖
+ */
+async function doSuperLottery() {
+  const params = `reqUrl=act2530&method=doSuperLottery&operType=1&actCode=2530&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
   const ret = await nactFunc($, params)
   
   if (!ret) {

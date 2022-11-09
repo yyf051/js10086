@@ -32,8 +32,6 @@ Object.keys(js10086).forEach((item) => {
     $.setCookie = await getMobieCK($.phone, bodyParam)
     
     // $.isLog = true
-    console.log($.phone)
-    $.msg += `<font size="5">${$.phone}</font>\n`
     await initIndexPage()
     
     console.log()
