@@ -19,11 +19,16 @@ const get = (key) => {
 }
 
 oc.set = function(key, value) {
-    value = JSON.stringify(value)
-    return client.set(key, value, function(err) {
-        if (err) {
-            console.error(err)
-        }
+    return new Promise((resolve) => {
+        value = JSON.stringify(value)
+        client.set(key, value, function(err) {
+            if (err) {
+                console.error(err)
+                resolve(false)
+            } else {
+                resolve(true)
+            }
+        })
     })
 }
 
@@ -33,11 +38,16 @@ oc.get = (key) => {
 
 
 oc.hset = function(key, field, value) {
-    value = JSON.stringify(value)
-    return client.hset(key, field, value, function(err) {
-        if (err) {
-            console.error(err)
-        }
+    return new Promise((resolve) => {
+        value = JSON.stringify(value)
+        client.hset(key, field, value, function(err) {
+            if (err) {
+                console.error(err)
+                resolve(false)
+            } else {
+                resolve(true)
+            }
+        })
     })
 }
 
@@ -54,7 +64,10 @@ oc.hget = (key, field) => {
 }
 
 oc.expire = function(key, time) {
-    return client.expire(key, time)
+    return new Promise((resolve) => {
+        client.expire(key, time)
+        resolve(true)
+    })
 }
 
 module.exports = Cache
