@@ -4,7 +4,6 @@ cron:40 10 9 * * *
 */
 const Env = require('./function/01Env')
 const { options, getMobieCK } = require('./function/01js10086_common')
-const { nactFunc } = require('./function/01js10086_nact')
 
 const $ = new Env('江苏移动_开宝箱赢好礼')
 
