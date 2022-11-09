@@ -3,28 +3,46 @@
 cron:40 30 9 * * *
 */
 const Env = require('./function/01Env')
-const { options, initCookie } = require('./function/01js10086_common')
+const { options, getMobieCK } = require('./function/01js10086_common')
 const { nactFunc } = require('./function/01js10086_nact')
 
 const $ = new Env('江苏移动_E豆小店')
-!(async () => {
-  $.message = ''
-  for (let i = 0; i < options.length; i++) {
-  // for (let i = 0; i < 1; i++) {
-    await initCookie($, i)
 
+const js10086 = require('./function/js10086')
+const cookiesArr = []
+Object.keys(js10086).forEach((item) => {
+  cookiesArr.push(js10086[item])
+})
+
+!(async () => {
+  $.msg = ''
+  for (let i = 0; i < cookiesArr.length; i++) {
+    const cookie = cookiesArr[i]
+    $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
+    const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
+    
+    $.msg += `<font size="5">${$.phone}</font>\n`
+    // console.log(`env: ${$.phone}, ${bodyParam}`)
+    if (!$.phone || !bodyParam) {
+      $.msg += `登陆参数配置不正确\n`
+      continue
+    }
+
+    console.log(`${$.phone}获取Cookie：`)
+    $.setCookie = await getMobieCK($.phone, bodyParam)
+    
     // $.isLog = true
     console.log($.phone)
-    $.message += `<font size="5">${$.phone}</font>\n`
+    $.msg += `<font size="5">${$.phone}</font>\n`
     await initIndexPage()
     
     console.log()
-    $.message += `\n\n`
+    $.msg += `\n\n`
     await $.wait(10000)
   }
 
-  console.log(`通知内容：\n\n`, $.message)
-  await $.sendNotify($.name, $.message)
+  console.log(`通知内容：\n\n`, $.msg)
+  await $.sendNotify($.name, $.msg)
 })().catch((e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
 }).finally(() => {
@@ -56,19 +74,19 @@ async function obtainVideo(shipin) {
   if (count < 5) {
     const left = 5 - count
     console.log(`看视频得E豆剩余次数：${left}`)
-    $.message += `看视频得E豆剩余次数：${left}\n`
+    $.msg += `看视频得E豆剩余次数：${left}\n`
     for (let i = 0; i < left; i++) {
 
       const params = `reqUrl=act2504&method=obtainVideo&actCode=2504&extendParams=&ywcheckcode=&mywaytoopen=`
       await nactFunc($, params)
       console.log(`看视频${i+1} 已完成`)
-      $.message += `看视频${i+1} 已完成\n`
+      $.msg += `看视频${i+1} 已完成\n`
 
       await $.wait(30000)
     }
   } else {
     console.log(`看视频得E豆 今日已完成`)
-    $.message += `看视频得E豆 今日已完成\n`
+    $.msg += `看视频得E豆 今日已完成\n`
     return
   }
 }
@@ -86,7 +104,7 @@ async function turntable() {
     return
   } else if (turnRet.choujiangnum <= 0) {
     console.log(`今日已无抽奖机会`)
-    $.message += `今日已无抽奖机会\n`
+    $.msg += `今日已无抽奖机会\n`
     return
   }
 
@@ -106,13 +124,13 @@ async function doLottery() {
     return
   } else if(ret.awardType == '1') {
     console.log(`抽奖成功，获得奖励：${ret.prizelog}`)
-    $.message += `抽奖成功，获得奖励：${ret.prizelog}\n`
+    $.msg += `抽奖成功，获得奖励：${ret.prizelog}\n`
   } else if(ret.awardType == '11') {
     console.log(`抽奖成功，获得奖励：${ret.prizelog}`)
-    $.message += `抽奖成功，获得奖励：${ret.prizelog}\n`
+    $.msg += `抽奖成功，获得奖励：${ret.prizelog}\n`
   } else {
     console.log(`抽奖结果：${JSON.stringify(ret)}`)
-    $.message += `抽奖结果：${JSON.stringify(ret)}\n`
+    $.msg += `抽奖结果：${JSON.stringify(ret)}\n`
   }
 
   await $.wait(2000)

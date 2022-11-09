@@ -3,16 +3,34 @@
 cron:40 50 9 5-9 * *
 */
 const Env = require('./function/01Env')
-const { options, initCookie } = require('./function/01js10086_common')
+const { options, getMobieCK } = require('./function/01js10086_common')
 const { nactFunc } = require('./function/01js10086_nact')
 
 const $ = new Env('江苏移动_天天翻好礼')
+
+const js10086 = require('./function/js10086')
+const cookiesArr = []
+Object.keys(js10086).forEach((item) => {
+  cookiesArr.push(js10086[item])
+})
+
 !(async () => {
   $.msg = ''
-  for (let i = 0; i < options.length; i++) {
-  // for (let i = 0; i < 1; i++) {
-    await initCookie($, i)
+  for (let i = 0; i < cookiesArr.length; i++) {
+    const cookie = cookiesArr[i]
+    $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
+    const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
+    
+    $.msg += `<font size="5">${$.phone}</font>\n`
+    // console.log(`env: ${$.phone}, ${bodyParam}`)
+    if (!$.phone || !bodyParam) {
+      $.msg += `登陆参数配置不正确\n`
+      continue
+    }
 
+    console.log(`${$.phone}获取Cookie：`)
+    $.setCookie = await getMobieCK($.phone, bodyParam)
+    
     // $.isLog = true
     console.log(`${$.phone}获取活动信息......`)
     const params = 'reqUrl=act2473&method=initIndexPage&operType=1&actCode=2473&extendParams=&ywcheckcode=&mywaytoopen='

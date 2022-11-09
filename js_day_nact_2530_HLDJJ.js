@@ -4,27 +4,46 @@ http://wap.js.10086.cn/nact/resource/2530/html/index.html?shareToken=dQEWCORLKHr
 cron:25 30 10 * * *
 */
 const Env = require('./function/01Env')
-const { options, initCookie } = require('./function/01js10086_common')
+const { getMobieCK } = require('./function/01js10086_common')
 const { nactFunc } = require('./function/01js10086_nact')
 
 const $ = new Env('江苏移动_好礼大集结，天天有惊喜')
-!(async () => {
-  $.message = ''
-  for (let i = 0; i < options.length; i++) {
-    await initCookie($, i)
 
+const js10086 = require('./function/js10086')
+const cookiesArr = []
+Object.keys(js10086).forEach((item) => {
+  cookiesArr.push(js10086[item])
+})
+
+!(async () => {
+  $.msg = ''
+  for (let i = 0; i < cookiesArr.length; i++) {
+    const cookie = cookiesArr[i]
+    $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
+    const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
+    
+    $.msg += `<font size="5">${$.phone}</font>\n`
+    // console.log(`env: ${$.phone}, ${bodyParam}`)
+    if (!$.phone || !bodyParam) {
+      $.msg += `登陆参数配置不正确\n`
+      continue
+    }
+
+    console.log(`${$.phone}获取Cookie：`)
+    $.setCookie = await getMobieCK($.phone, bodyParam)
+    
     // $.isLog = true
     console.log($.phone)
-    $.message += `<font size="5">${$.phone}</font>\n`
+    $.msg += `<font size="5">${$.phone}</font>\n`
     await initIndexPage()
     
     console.log()
-    $.message += `\n\n`
+    $.msg += `\n\n`
     await $.wait(10000)
   }
 
-  console.log(`通知内容：\n\n`, $.message)
-  await $.sendNotify($.name, $.message)
+  console.log(`通知内容：\n\n`, $.msg)
+  await $.sendNotify($.name, $.msg)
 })().catch((e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
 }).finally(() => {
@@ -45,7 +64,7 @@ async function initIndexPage() {
   const chance = ret.chance
   if (chance && chance > 0) {
     console.log(`存在抽奖${chance}机会，进行抽奖`)
-    $.message += `存在抽奖${chance}机会，进行抽奖\n`
+    $.msg += `存在抽奖${chance}机会，进行抽奖\n`
     for (let i = 0; i < chance; i++) {
       await doLottery()
     }
@@ -79,7 +98,7 @@ async function checkSign(doTaskList) {
   }
 
   console.log(`今日已打卡，无需打卡`)
-  $.message += `今日已打卡，无需打卡\n`
+  $.msg += `今日已打卡，无需打卡\n`
 
   const tasks = doTaskList || []
   return tasks.flatMap(e => e.taskId)
@@ -92,7 +111,7 @@ async function checkSign(doTaskList) {
 async function execTasks(taskList, finishTaskIds) {
   if (finishTaskIds.length - taskList.length == 1) {
     console.log(`今日任务均已完成，无需执行`)
-    $.message += `今日任务均已完成，无需执行\n`
+    $.msg += `今日任务均已完成，无需执行\n`
   }
 
   for (let i = 0; i < taskList.length; i++) {
@@ -117,7 +136,7 @@ async function doTask(taskId, taskName, taskType) {
   }
 
   console.log(`已完成任务：${taskName}，进行抽奖`)
-  $.message += `已完成任务：${taskName}，进行抽奖\n`
+  $.msg += `已完成任务：${taskName}，进行抽奖\n`
   await $.wait(5000)
 
   await doLottery()
@@ -136,7 +155,7 @@ async function doLottery() {
   }
 
   console.log(`抽奖成功，获得奖励：${ret.awardName}`)
-  $.message += `抽奖成功，获得奖励：${ret.awardName}\n`
+  $.msg += `抽奖成功，获得奖励：${ret.awardName}\n`
 
   await $.wait(2000)
 }

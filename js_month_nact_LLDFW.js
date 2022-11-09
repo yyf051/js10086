@@ -4,7 +4,7 @@ http://wap.js.10086.cn/nact/resource/2335/html/index.html?shareToken=dQEWCORLKHr
 cron:45 35 7 3-12 * *
 */
 const Env = require('./function/01Env')
-const { options, getMobieCK } = require('./function/01js10086_common')
+const { getMobieCK } = require('./function/01js10086_common')
 const { nactFunc } = require('./function/01js10086_nact')
 
 const $ = new Env('江苏移动_流量大富翁')

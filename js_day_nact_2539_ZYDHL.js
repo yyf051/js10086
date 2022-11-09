@@ -4,28 +4,46 @@ http://wap.js.10086.cn/nact/resource/2539/html/index.html?shareToken=dQEWCORLKHr
 cron:25 35 10 * * *
 */
 const Env = require('./function/01Env')
-const { options, initCookie } = require('./function/01js10086_common')
+const { getMobieCK } = require('./function/01js10086_common')
 const { nactFunc } = require('./function/01js10086_nact')
 
 const $ = new Env('江苏移动_攒油兑好礼')
-!(async () => {
-  $.message = ''
-  // for (let i = 1; i < 2; i++) {
-  for (let i = 0; i < options.length; i++) {
-    await initCookie($, i)
 
+const js10086 = require('./function/js10086')
+const cookiesArr = []
+Object.keys(js10086).forEach((item) => {
+  cookiesArr.push(js10086[item])
+})
+
+!(async () => {
+  $.msg = ''
+  for (let i = 0; i < cookiesArr.length; i++) {
+    const cookie = cookiesArr[i]
+    $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
+    const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
+    
+    $.msg += `<font size="5">${$.phone}</font>\n`
+    // console.log(`env: ${$.phone}, ${bodyParam}`)
+    if (!$.phone || !bodyParam) {
+      $.msg += `登陆参数配置不正确\n`
+      continue
+    }
+
+    console.log(`${$.phone}获取Cookie：`)
+    $.setCookie = await getMobieCK($.phone, bodyParam)
+    
     // $.isLog = true
     console.log($.phone)
-    $.message += `<font size="5">${$.phone}</font>\n`
+    $.msg += `<font size="5">${$.phone}</font>\n`
     await initIndexPage()
     
     console.log()
-    $.message += `\n`
+    $.msg += `\n`
     await $.wait(10000)
   }
 
-  console.log(`通知内容：\n\n`, $.message)
-  await $.sendNotify($.name, $.message)
+  console.log(`通知内容：\n\n`, $.msg)
+  await $.sendNotify($.name, $.msg)
 })().catch((e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
 }).finally(() => {
@@ -48,7 +66,7 @@ async function initIndexPage() {
     await checkSign()
   } else {
     console.log(`今日已签到`)
-    // $.message += `今日已签到\n`
+    // $.msg += `今日已签到\n`
   }
   let finishTaskIds = ['1']
   const tasks = ret.doTaskList || []
@@ -74,13 +92,13 @@ async function getOils() {
   const oilList = ret.oilList
   if (oilList && oilList.length > 0) {
     console.log(`存在油滴${oilList.length}个，进行获取`)
-    // $.message += `存在油滴${oilList.length}个，进行获取\n`
+    // $.msg += `存在油滴${oilList.length}个，进行获取\n`
     for (let i = 0; i < oilList.length; i++) {
       await getTemporaryOil(oilList[i].oil, oilList[i].getType)
     }
   }
   console.log(`当前总油滴${$.myOil}个`)
-  $.message += `当前总油滴${$.myOil}个\n`
+  $.msg += `当前总油滴${$.myOil}个\n`
 }
 
 
@@ -98,7 +116,7 @@ async function checkSign() {
 async function execTasks(taskList, finishTaskIds) {
   if (finishTaskIds.length == taskList.length) {
     console.log(`今日任务均已完成，无需执行`)
-    $.message += `今日任务均已完成，无需执行\n`
+    $.msg += `今日任务均已完成，无需执行\n`
   }
   // console.log(finishTaskIds)
   for (let i = 0; i < taskList.length; i++) {
@@ -124,7 +142,7 @@ async function doTask(taskId, taskName) {
   }
 
   console.log(`已完成任务：${taskName}`)
-  // $.message += `已完成任务：${taskName}\n`
+  // $.msg += `已完成任务：${taskName}\n`
   await $.wait(5000)
 }
 
@@ -142,7 +160,7 @@ async function getTemporaryOil(oil, getType) {
 
   $.myOil += Number.parseInt(oil)
   console.log(`领${oil}滴油成功`)
-  $.message += `领${oil}滴油成功;`
+  $.msg += `领${oil}滴油成功;`
 
   await $.wait(2000)
 }
