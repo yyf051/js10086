@@ -8,29 +8,19 @@ const BrowserFinger = require('./function/BrowserFinger')
 
 const $ = new Env('江苏移动_查话费')
 
-const accounts = [{
-  phone: '13813753702',
-  password: 'ZrRfdOj5CCc%3D'
-}, {
-  phone: '15251300683',
-  password: 'qDcHZjiDryg%3D'
-}, {
-  phone: '13646197864',
-  password: 'J19hktL8%2Brk%3D'
-}, {
-  phone: '13584630864',
-  password: 'J19hktL8%2Brk%3D'
-}, {
-  phone: '15851276468',
-  password: '%2BJJhefIfe0c%3D'
-}]
-
+const js10086 = require('./function/js10086_chf')
+const cookiesArr = []
+Object.keys(js10086).forEach((item) => {
+  cookiesArr.push(js10086[item])
+})
 
 !(async () => {
   $.msg = ''
-  for (let i = 0; i < accounts.length; i++) {
-    $.phone = accounts[i].phone
-    $.password = accounts[i].password
+  for (let i = 0; i < cookiesArr.length; i++) {
+    const cookie = cookiesArr[i]
+    $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
+    $.password = cookie.match(/passwd=([^; ]+)(?=;?)/) && cookie.match(/passwd=([^; ]+)(?=;?)/)[1]
+
     const success = await initCookie($)
     if (!success) {
       $.msg += `${$.phone}登录失败......\n\n`

@@ -61,6 +61,7 @@ async function initIndexPage() {
 
   if (ret.unReceiveSignRecord) {
     // 首次进入，超级抽奖
+    console.log(`存在超级抽奖机会，进行超级抽奖`)
     await doSuperLottery()
   }
 
@@ -174,8 +175,8 @@ async function doSuperLottery() {
     return
   }
 
-  console.log(`抽奖成功，获得奖励：${ret.awardName}`)
-  $.msg += `抽奖成功，获得奖励：${ret.awardName}\n`
+  console.log(`超级抽奖成功，获得奖励：${ret.awardName}`)
+  $.msg += `超级抽奖成功，获得奖励：${ret.awardName}\n`
 
   await $.wait(2000)
 }
