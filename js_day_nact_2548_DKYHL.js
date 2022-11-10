@@ -55,18 +55,18 @@ Object.keys(js10086).forEach((item) => {
  */
 async function initIndexPage() {
   const params = `reqUrl=act${actCode}&method=initIndexPage&operType=1&actCode=${actCode}&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
-  const ret = await nactFunc($, params)
-  if (!ret) {
+  const resultObj = await nactFunc($, params, true)
+  if (!resultObj) {
     return
   }
 
   // 是否已打卡
-  const isPunch = ret.isPunch
+  const isPunch = resultObj.isPunch
   if (!isPunch) {
     await rightAwayPunch()
-  } else if (ret.awardName) {
-    console.log(`打卡成功，获取${ret.awardName}`)
-  $.msg += `打卡成功，获取${ret.awardName}\n`
+  } else if (resultObj.awardName) {
+    console.log(`打卡成功，获取${resultObj.awardName}`)
+    $.msg += `打卡成功，获取${resultObj.awardName}\n`
   } else {
     console.log(`今日已打卡`)
   }
