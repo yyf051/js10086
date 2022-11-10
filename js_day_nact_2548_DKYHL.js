@@ -79,7 +79,7 @@ async function initIndexPage() {
  * 检查打卡
  */
 async function rightAwayPunch() {
-  const params = `reqUrl=act${actCode}&method=rightAwayPunch&operType=1&actCode=${actCode}&taskId=${taskId}&extendParams=&ywcheckcode=&mywaytoopen=`
+  const params = `reqUrl=act${actCode}&method=rightAwayPunch&operType=1&actCode=${actCode}&extendParams=&ywcheckcode=&mywaytoopen=`
   const ret = await nactFunc($, params)
 
   if (!ret) {
