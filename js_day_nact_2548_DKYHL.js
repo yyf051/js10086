@@ -1,13 +1,13 @@
 /*
 http://wap.js.10086.cn/nact/resource/2548/html/index.html?shareToken=dQEWCORLKHrkeV2QtW/TUg==&rm=ydc
-江苏移动_攒油兑好礼
-cron:25 35 10 * * *
+江苏移动_打卡赢好礼
+cron:25 40 10 * * *
 */
 const Env = require('./function/01Env')
 const { getMobieCK } = require('./function/01js10086_common')
 const { nactFunc } = require('./function/01js10086_nact')
 
-const $ = new Env('江苏移动_大卡赢好礼')
+const $ = new Env('江苏移动_打卡赢好礼')
 const actCode = '2548'
 
 const js10086 = require('./function/js10086')
@@ -63,51 +63,21 @@ async function initIndexPage() {
   // 是否已打卡
   const isPunch = ret.isPunch
   if (!isPunch) {
-    await checkSign()
+    await rightAwayPunch()
+  } else if (ret.awardName) {
+    console.log(`打卡成功，获取${ret.awardName}`)
+  $.msg += `打卡成功，获取${ret.awardName}\n`
   } else {
     console.log(`今日已打卡`)
   }
-  let finishTaskIds = ['1']
-  const tasks = ret.doTaskList || []
-  finishTaskIds = finishTaskIds.concat(tasks.flatMap(e => e.source))
 
-  // console.log(finishTaskIds, ret.taskList)
-
-  await execTasks(ret.taskList, finishTaskIds)
-
-  await $.wait(2000)
-
-  await getOils()
-}
-
-async function getOils() {
-  const params = `reqUrl=act${actCode}&method=initIndexPage&operType=1&actCode=${actCode}&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
-  const ret = await nactFunc($, params)
-  if (!ret) {
-    return
-  }
-
-  $.myOil = Number.parseInt(ret.myOil)
-  const oilList = ret.oilList
-  if (oilList && oilList.length > 0) {
-    console.log(`存在油滴${oilList.length}个，进行获取`)
-    // $.msg += `存在油滴${oilList.length}个，进行获取\n`
-    for (let i = 0; i < oilList.length; i++) {
-      await getTemporaryOil(oilList[i].oil, oilList[i].getType)
-    }
-  }
-  console.log(`当前总油滴${$.myOil}个`)
-  $.msg += `当前总油滴${$.myOil}个\n`
+  // TODO 打卡6天超级抽奖
 }
 
 
 /**
  * 检查打卡
  */
-async function checkSign() {
-  await doTask(1, '每天签到领油')
-}
-
 async function rightAwayPunch() {
   const params = `reqUrl=act${actCode}&method=rightAwayPunch&operType=1&actCode=${actCode}&taskId=${taskId}&extendParams=&ywcheckcode=&mywaytoopen=`
   const ret = await nactFunc($, params)
@@ -117,65 +87,25 @@ async function rightAwayPunch() {
   }
 
   console.log(`打卡成功`)
-  // $.msg += `已完成任务：${taskName}\n`
-
-
-  const taskConfigBean = ret.taskConfigBean
   await $.wait(5000)
+
+  await initIndexPage()
 }
 
 
 /**
- * 执行任务
+ * 超级抽奖
  */
-async function execTasks(taskList, finishTaskIds) {
-  if (finishTaskIds.length == taskList.length) {
-    console.log(`今日任务均已完成，无需执行`)
-    $.msg += `今日任务均已完成，无需执行\n`
-  }
-  // console.log(finishTaskIds)
-  for (let i = 0; i < taskList.length; i++) {
-    const task = taskList[i]
-    // console.log(task)
-    if (finishTaskIds.indexOf(task.taskId) > -1) {
-      continue
-    }
-    await doTask(task.taskId, task.taskName)
-  }
-}
-
-
-/**
- * 完成任务
- */
-async function doTask(taskId, taskName) {
-  const params = `reqUrl=act${actCode}&method=doTask&operType=1&actCode=${actCode}&taskId=${taskId}&extendParams=&ywcheckcode=&mywaytoopen=`
-  const ret = await nactFunc($, params)
-
-  if (!ret) {
-    return
-  }
-
-  console.log(`已完成任务：${taskName}`)
-  // $.msg += `已完成任务：${taskName}\n`
-  await $.wait(5000)
-}
-
-
-/**
- * 抽奖
- */
-async function getTemporaryOil(oil, getType) {
-  const params = `reqUrl=act${actCode}&method=getTemporaryOil&operType=1&actCode=${actCode}&getType=${getType}&extendParams=&ywcheckcode=&mywaytoopen=`
+async function doSuperLottery() {
+  const params = `reqUrl=act${actCode}&method=doSuperLottery&operType=1&actCode=${actCode}&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
   const ret = await nactFunc($, params)
   
   if (!ret) {
     return
   }
 
-  $.myOil += Number.parseInt(oil)
-  console.log(`领${oil}滴油成功`)
-  $.msg += `领${oil}滴油成功;`
+  console.log(`超级抽奖成功，获得奖励：${ret.awardName}`)
+  $.msg += `超级抽奖成功，获得奖励：${ret.awardName}\n`
 
   await $.wait(2000)
 }
