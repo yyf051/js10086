@@ -69,6 +69,7 @@ async function initIndexPage() {
     $.msg += `打卡成功，获取${resultObj.awardName}\n`
   } else {
     console.log(`今日已打卡`)
+    $.msg += `今日已打卡\n`
   }
 
   // TODO 打卡6天超级抽奖
