@@ -1,4 +1,5 @@
 /*
+http://wap.js.10086.cn/mb_nact/new/act-front/cj/cj015/main.html?actNum=700002915&rm=ydc
 江苏移动_刷视频赢福利
 cron:0 40 8 * * *
 */

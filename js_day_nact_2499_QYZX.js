@@ -49,7 +49,7 @@ Object.keys(js10086).forEach((item) => {
  * 查询签到信息
  */
 async function initIndexPage () {
-  console.log(`${$.accountName}获取活动信息......`)
+  console.log(`${$.phone}获取活动信息......`)
   const params = 'reqUrl=act2499&method=initIndexPage&operType=0&actCode=2499&extendParams=&ywcheckcode=&mywaytoopen='
   const resultObj = await nactFunc($, params)
   if (!resultObj) {
@@ -82,7 +82,7 @@ async function initIndexPage () {
  * 完成任务
  */
 async function playTask (task) {
-  console.log(`${$.accountName}进行${task.taskName}......`)
+  console.log(`${$.phone}进行${task.taskName}......`)
   const params = `reqUrl=act2499&method=doTask&operType=1&actCode=2499&taskId=${task.taskId}&extendParams=&ywcheckcode=&mywaytoopen=`
   const resultObj = await nactFunc($, params)
   $.msg += `进行${task.taskName}......${resultObj && resultObj.isApp ? '---成功\n' : '---失败\n'}`
@@ -92,7 +92,7 @@ async function playTask (task) {
 }
 
 async function signAndDraw () {
-  console.log(`${$.accountName}开始抽奖......`)
+  console.log(`${$.phone}开始抽奖......`)
   const params = `reqUrl=act2499&method=signAndDraw&operType=1&actCode=2499&extendParams=&ywcheckcode=&mywaytoopen=`
   const resultObj = await nactFunc($, params)
   if (resultObj && resultObj.isApp) {

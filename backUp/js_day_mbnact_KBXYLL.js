@@ -1,4 +1,5 @@
 /*
+http://wap.js.10086.cn/mb_nact/new/act-front/cj/cj015/main.html?actNum=700002203&rm=ydc
 江苏移动_开宝箱赢流量
 cron:0 30 8 * * *
 enabled=false

@@ -37,12 +37,12 @@ function mbactFunc(vm, funcName, actNum, body) {
     try {
       const url = `${hostPath}/${funcName}?actNum=${actNum}`
       const options = { url, headers: getHeaders(vm) }
-      console.log(`mbactFunc options: `, options)
+      // console.log(`mbactFunc options: `, options)
       if (body) {
         options.body = JSON.stringify(body)
         vm.post(options, async (err, resp, data) => {
           if (err) throw new Error(err)
-          console.log(`${funcName}_${actNum}: ${data}`)
+          // console.log(`${funcName}_${actNum}: ${data}`)
           data = data && JSON.parse(data)
           let ret = false
           if (data.success && data.code == '1') {
@@ -53,7 +53,7 @@ function mbactFunc(vm, funcName, actNum, body) {
       } else {
         vm.get(options, async (err, resp, data) => {
           if (err) throw new Error(err)
-          console.log(`${funcName}_${actNum}: ${data}`)
+          // console.log(`${funcName}_${actNum}: ${data}`)
           if(!data) {
             console.log(`${vm.name} 活动查询失败，数据为空\n`)
             vm.msg += `${vm.name} 活动查询失败，数据为空\n`

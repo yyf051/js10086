@@ -32,7 +32,7 @@ Object.keys(js10086).forEach((item) => {
     console.log(`${$.phone}获取Cookie：`)
     $.setCookie = await getMobieCK($.phone, bodyParam)
     
-    console.log(`${$.accountName}获取活动信息......`)
+    console.log(`${$.phone}获取活动信息......`)
     let params = {
       "reqUrl": "act2269",
       "method": "initIndexPage",

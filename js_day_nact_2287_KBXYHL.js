@@ -1,4 +1,5 @@
 /*
+http://wap.js.10086.cn/nact/resource/2287/html/index.html?shareToken=dQEWCORLKHrkeV2QtW/TUg==&rm=ydc
 江苏移动_开宝箱赢好礼
 cron:40 10 9 * * *
 */
