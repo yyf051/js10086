@@ -5,9 +5,10 @@ cron:25 35 10 * * *
 */
 const Env = require('./function/01Env')
 const { getMobieCK } = require('./function/01js10086_common')
-const { nactFunc } = require('./function/01js10086_nact')
+const { nactFunc, getNactParams } = require('./function/01js10086_nact')
 
 const $ = new Env('江苏移动_攒油兑好礼')
+const actCode = '2539'
 
 const js10086 = require('./function/js10086')
 const cookiesArr = []
@@ -53,8 +54,8 @@ Object.keys(js10086).forEach((item) => {
  * 初始化页面
  */
 async function initIndexPage() {
-  const params = `reqUrl=act2539&method=initIndexPage&operType=1&actCode=2539&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
-  const ret = await nactFunc($, params)
+  // const params = `reqUrl=act2539&method=initIndexPage&operType=1&actCode=2539&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
+  const ret = await nactFunc($, getNactParams(actCode, 'initIndexPage'))
   if (!ret) {
     return
   }
@@ -80,8 +81,8 @@ async function initIndexPage() {
 }
 
 async function getOils() {
-  const params = `reqUrl=act2539&method=initIndexPage&operType=1&actCode=2539&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
-  const ret = await nactFunc($, params)
+  // const params = `reqUrl=act2539&method=initIndexPage&operType=1&actCode=2539&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
+  const ret = await nactFunc($, getNactParams(actCode, 'initIndexPage'))
   if (!ret) {
     return
   }
@@ -132,7 +133,9 @@ async function execTasks(taskList, finishTaskIds) {
  * 完成任务
  */
 async function doTask(taskId, taskName) {
-  const params = `reqUrl=act2539&method=doTask&operType=1&actCode=2539&taskId=${taskId}&extendParams=&ywcheckcode=&mywaytoopen=`
+  // const params = `reqUrl=act2539&method=doTask&operType=1&actCode=2539&taskId=${taskId}&extendParams=&ywcheckcode=&mywaytoopen=`
+  const params = getNactParams(actCode, 'doTask')
+  params.taskId = taskId
   const ret = await nactFunc($, params)
 
   if (!ret) {
@@ -149,7 +152,9 @@ async function doTask(taskId, taskName) {
  * 抽奖
  */
 async function getTemporaryOil(oil, getType) {
-  const params = `reqUrl=act2539&method=getTemporaryOil&operType=1&actCode=2539&getType=${getType}&extendParams=&ywcheckcode=&mywaytoopen=`
+  // const params = `reqUrl=act2539&method=getTemporaryOil&operType=1&actCode=2539&getType=${getType}&extendParams=&ywcheckcode=&mywaytoopen=`
+  const params = getNactParams(actCode, 'getTemporaryOil')
+  params.getType = getType
   const ret = await nactFunc($, params)
   
   if (!ret) {

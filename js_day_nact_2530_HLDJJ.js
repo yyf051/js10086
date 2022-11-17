@@ -5,9 +5,10 @@ cron:25 30 10 * * *
 */
 const Env = require('./function/01Env')
 const { getMobieCK } = require('./function/01js10086_common')
-const { nactFunc } = require('./function/01js10086_nact')
+const { nactFunc, getNactParams } = require('./function/01js10086_nact')
 
 const $ = new Env('江苏移动_好礼大集结，天天有惊喜')
+const actCode = '2530'
 
 const js10086 = require('./function/js10086')
 const cookiesArr = []
@@ -53,8 +54,8 @@ Object.keys(js10086).forEach((item) => {
  * 初始化页面
  */
 async function initIndexPage() {
-  const params = `reqUrl=act2530&method=initIndexPage&operType=1&actCode=2530&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
-  const ret = await nactFunc($, params)
+  // const params = `reqUrl=act2530&method=initIndexPage&operType=1&actCode=2530&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
+  const ret = await nactFunc($, getNactParams(actCode, 'initIndexPage'))
   if (!ret) {
     return
   }
@@ -131,7 +132,10 @@ async function execTasks(taskList, finishTaskIds) {
  * 完成任务
  */
 async function doTask(taskId, taskName, taskType) {
-  const params = `reqUrl=act2530&method=doTask&operType=1&actCode=2530&taskId=${taskId}&taskType=${taskType}&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
+  // const params = `reqUrl=act2530&method=doTask&operType=1&actCode=2530&taskId=${taskId}&taskType=${taskType}&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
+  const params = getNactParams(actCode, 'doTask');
+  params.taskId = taskId
+  params.taskType = taskType
   const ret = await nactFunc($, params)
 
   if (!ret) {
@@ -150,8 +154,8 @@ async function doTask(taskId, taskName, taskType) {
  * 抽奖
  */
 async function doLottery() {
-  const params = `reqUrl=act2530&method=doLottery&operType=1&actCode=2530&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
-  const ret = await nactFunc($, params)
+  // const params = `reqUrl=act2530&method=doLottery&operType=1&actCode=2530&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
+  const ret = await nactFunc($, getNactParams(actCode, 'doLottery'))
   
   if (!ret) {
     return
@@ -168,8 +172,8 @@ async function doLottery() {
  * 超级抽奖
  */
 async function doSuperLottery() {
-  const params = `reqUrl=act2530&method=doSuperLottery&operType=1&actCode=2530&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
-  const ret = await nactFunc($, params)
+  // const params = `reqUrl=act2530&method=doSuperLottery&operType=1&actCode=2530&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
+  const ret = await nactFunc($, getNactParams(actCode, 'doSuperLottery'))
   
   if (!ret) {
     return
