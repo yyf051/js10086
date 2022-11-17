@@ -54,7 +54,16 @@ Object.keys(js10086).forEach((item) => {
  * 初始化页面
  */
 async function initIndexPage() {
-  const params = `reqUrl=act${actCode}&method=initIndexPage&operType=1&actCode=${actCode}&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
+  // const params = `reqUrl=act${actCode}&method=initIndexPage&operType=1&actCode=${actCode}&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
+  const params = {
+    reqUrl: `act${actCode}`,
+    method: `initIndexPage`,
+    operType: 1,
+    actCode: `${actCode}`,
+    extendParams: `ch%3D03e5`,
+    ywcheckcode: ``,
+    mywaytoopen: ``
+  }
   let resultObj = await nactFunc($, params, true)
   if (!resultObj) {
     return
@@ -92,7 +101,16 @@ async function initIndexPage() {
  * 检查打卡
  */
 async function rightAwayPunch() {
-  const params = `reqUrl=act${actCode}&method=rightAwayPunch&operType=1&actCode=${actCode}&extendParams=&ywcheckcode=&mywaytoopen=`
+  // const params = `reqUrl=act${actCode}&method=rightAwayPunch&operType=1&actCode=${actCode}&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
+  const params = {
+    reqUrl: `act${actCode}`,
+    method: `rightAwayPunch`,
+    operType: 1,
+    actCode: `${actCode}`,
+    extendParams: `ch%3D03e5`,
+    ywcheckcode: ``,
+    mywaytoopen: ``
+  }
   const ret = await nactFunc($, params)
 
   if (!ret) {
@@ -110,7 +128,16 @@ async function rightAwayPunch() {
  * 超级抽奖
  */
 async function doSuperLottery() {
-  const params = `reqUrl=act${actCode}&method=isContinuousPunch&operType=1&actCode=${actCode}&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
+  // const params = `reqUrl=act${actCode}&method=isContinuousPunch&operType=1&actCode=${actCode}&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
+  const params = {
+    reqUrl: `act${actCode}`,
+    method: `isContinuousPunch`,
+    operType: 1,
+    actCode: `${actCode}`,
+    extendParams: `ch%3D03e5`,
+    ywcheckcode: ``,
+    mywaytoopen: ``
+  }
   const ret = await nactFunc($, params)
   
   if (!ret) {
