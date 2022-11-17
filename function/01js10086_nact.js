@@ -34,6 +34,21 @@ function serialize(params) {
   return ret && ret.substr(1)
 }
 
+/**
+ * 拼接参数
+ */
+function getNactParams(actCode, method) {
+  return {
+    reqUrl: `act${actCode}`,
+    method: `${method}`,
+    operType: 1,
+    actCode: `${actCode}`,
+    extendParams: `ch%3D03e5`,
+    ywcheckcode: ``,
+    mywaytoopen: ``
+  }
+}
+
 function nactFunc (vm, params, isDirectReturnResultObj = false, isLog = false) {
   return new Promise((resolve, reject) => {
     try {

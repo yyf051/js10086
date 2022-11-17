@@ -5,7 +5,7 @@ cron:25 40 10 5-10 * *
 */
 const Env = require('./function/01Env')
 const { getMobieCK } = require('./function/01js10086_common')
-const { nactFunc } = require('./function/01js10086_nact')
+const { nactFunc, getNactParams } = require('./function/01js10086_nact')
 
 const $ = new Env('江苏移动_打卡赢好礼')
 const actCode = '2548'
@@ -50,13 +50,12 @@ Object.keys(js10086).forEach((item) => {
   $.done()
 })
 
-
 /**
  * 初始化页面
  */
 async function initIndexPage() {
   // const params = `reqUrl=act${actCode}&method=initIndexPage&operType=1&actCode=${actCode}&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
-  const params = {
+  /*const params = {
     reqUrl: `act${actCode}`,
     method: `initIndexPage`,
     operType: 1,
@@ -64,8 +63,8 @@ async function initIndexPage() {
     extendParams: `ch%3D03e5`,
     ywcheckcode: ``,
     mywaytoopen: ``
-  }
-  let resultObj = await nactFunc($, params, true)
+  }*/
+  let resultObj = await nactFunc($, getNactParams(actCode, 'initIndexPage'), true)
   if (!resultObj) {
     return
   }
@@ -109,7 +108,7 @@ async function initIndexPage() {
  */
 async function rightAwayPunch() {
   // const params = `reqUrl=act${actCode}&method=rightAwayPunch&operType=1&actCode=${actCode}&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
-  const params = {
+  /*const params = {
     reqUrl: `act${actCode}`,
     method: `rightAwayPunch`,
     operType: 1,
@@ -117,8 +116,8 @@ async function rightAwayPunch() {
     extendParams: `ch%3D03e5`,
     ywcheckcode: ``,
     mywaytoopen: ``
-  }
-  const ret = await nactFunc($, params)
+  }*/
+  const ret = await nactFunc($, getNactParams(actCode, 'rightAwayPunch'))
 
   if (!ret) {
     return
@@ -136,7 +135,7 @@ async function rightAwayPunch() {
  */
 async function doSuperLottery() {
   // const params = `reqUrl=act${actCode}&method=isContinuousPunch&operType=1&actCode=${actCode}&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
-  const params = {
+  /*const params = {
     reqUrl: `act${actCode}`,
     method: `isContinuousPunch`,
     operType: 1,
@@ -144,8 +143,8 @@ async function doSuperLottery() {
     extendParams: `ch%3D03e5`,
     ywcheckcode: ``,
     mywaytoopen: ``
-  }
-  const ret = await nactFunc($, params)
+  }*/
+  const ret = await nactFunc($, getNactParams(actCode, 'isContinuousPunch'))
   
   if (!ret) {
     return
