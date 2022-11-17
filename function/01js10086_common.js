@@ -231,7 +231,7 @@ async function getMobieCK(phone, loginBody) {
 
       console.log('请求成功并缓存ck')
       await cache.hset(cacheKey, phone, setCookie)
-      const seconds = 60 * 60 // 1h过期
+      const seconds = 30 * 60 // 1h过期
       // console.log('超时秒数：', seconds)
       await cache.expire(cacheKey, seconds)
     } else{
