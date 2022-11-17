@@ -95,5 +95,5 @@ function nactFunc (vm, params, isDirectReturnResultObj = false, isLog = false) {
 }
 
 module.exports = {
-  nactFunc
+  nactFunc, getNactParams
 }
