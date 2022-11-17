@@ -55,7 +55,7 @@ Object.keys(js10086).forEach((item) => {
  */
 async function initIndexPage() {
   const params = `reqUrl=act${actCode}&method=initIndexPage&operType=1&actCode=${actCode}&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
-  const resultObj = await nactFunc($, params, true)
+  let resultObj = await nactFunc($, params, true)
   if (!resultObj) {
     return
   }
@@ -72,7 +72,19 @@ async function initIndexPage() {
     $.msg += `今日已打卡\n`
   }
 
-  // TODO 打卡6天超级抽奖
+
+
+  // 打卡6天超级抽奖
+  resultObj = await nactFunc($, params, true)
+  if (!resultObj) {
+    return
+  }
+  // const isContinuousPunch = resultObj.isContinuousPunch
+  const conPchAndNotDrawn = resultObj.conPchAndNotDrawn
+  if (conPchAndNotDrawn) {
+    console.log(`已连续打卡，可进行抽奖`)
+    await doSuperLottery()
+  }
 }
 
 
@@ -98,7 +110,7 @@ async function rightAwayPunch() {
  * 超级抽奖
  */
 async function doSuperLottery() {
-  const params = `reqUrl=act${actCode}&method=doSuperLottery&operType=1&actCode=${actCode}&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
+  const params = `reqUrl=act${actCode}&method=isContinuousPunch&operType=1&actCode=${actCode}&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
   const ret = await nactFunc($, params)
   
   if (!ret) {
