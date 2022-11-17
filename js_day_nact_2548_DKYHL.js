@@ -1,7 +1,7 @@
 /*
 http://wap.js.10086.cn/nact/resource/2548/html/index.html?shareToken=dQEWCORLKHrkeV2QtW/TUg==&rm=ydc
 江苏移动_打卡赢好礼
-cron:25 40 10 * * *
+cron:25 40 10 5-10 * *
 */
 const Env = require('./function/01Env')
 const { getMobieCK } = require('./function/01js10086_common')
@@ -33,7 +33,7 @@ Object.keys(js10086).forEach((item) => {
     console.log(`${$.phone}获取Cookie：`)
     $.setCookie = await getMobieCK($.phone, bodyParam)
     
-    // $.isLog = true
+    $.isLog = true
     await initIndexPage()
     
     console.log()
