@@ -34,6 +34,7 @@ Object.keys(js10086).forEach((item) => {
     $.setCookie = await getMobieCK($.phone, bodyParam)
     
     $.isLog = true
+    $.isDirectReturnResultObj = true
     await initIndexPage()
     
     console.log()
@@ -71,23 +72,29 @@ async function initIndexPage() {
 
   // 是否已打卡
   const isPunch = resultObj.isPunch
-  if (!isPunch) {
+  if (!isPunch && resultObj.signDays < 6) {
     await rightAwayPunch()
   } else if (resultObj.awardName) {
     console.log(`打卡成功，获取${resultObj.awardName}`)
     $.msg += `打卡成功，获取${resultObj.awardName}\n`
+    if (resultObj.signDays == 5) {
+      await initIndexPage()
+    }
+  } else if (resultObj.signDays == 6) {
+    console.log(`本月已全部打卡`)
+    $.msg += `本月已全部打卡\n`
   } else {
-    console.log(`今日已打卡`)
+    onsole.log(`今日已打卡`)
     $.msg += `今日已打卡\n`
   }
 
 
 
   // 打卡6天超级抽奖
-  resultObj = await nactFunc($, params, true)
+  /*resultObj = await nactFunc($, params, true)
   if (!resultObj) {
     return
-  }
+  }*/
   // const isContinuousPunch = resultObj.isContinuousPunch
   const conPchAndNotDrawn = resultObj.conPchAndNotDrawn
   if (conPchAndNotDrawn) {
