@@ -5,6 +5,7 @@ cron:0 10 8-22 * * *
 const Env = require('./function/01Env')
 const { initCookie } = require('./function/01js10086_common2')
 const BrowserFinger = require('./function/BrowserFinger')
+const sendWX = require('./function/lcwx')
 
 const $ = new Env('江苏移动_查话费')
 
@@ -37,6 +38,10 @@ Object.keys(js10086).forEach((item) => {
     console.log(`${$.phone}套餐内容: \n${tips2}\n\n`)
     $.msg += tips2
     $.msg += '\n\n'
+
+    if ($.redMesssgae.length > 0) {
+      sendWX(`尊敬的xxx用户：请注意，您存在套餐外消费：\n${$.redMesssgae}`, ['wjs876046992'])
+    }
 
     await $.wait(10000)
   }
@@ -179,7 +184,7 @@ function combineMessage2(data) {
   const billInfo = billData.billInfo
   const feeList = billInfo.feeDetailInfo
 
-  // let message = `${$.phone}: \n`
+  let redMesssgae = ''
   let message = ''
   for (let i = 0; i < feeList.length; i++) {
     const fee = feeList[i]
@@ -189,6 +194,7 @@ function combineMessage2(data) {
       for (let j = 0; j < feeDetails.length; j++) {
         const feeDetail = feeDetails[j]
         message += `\t\t<font size="3" color="red">${feeDetail.feeName}: ${feeDetail.fee}元</font>\n`
+        redMesssgae += `\t\t${feeDetail.feeName}: ${feeDetail.fee}元\n`
       }
     } else {
       message += `\t${fee.levelDbiName}: \n`
@@ -201,6 +207,8 @@ function combineMessage2(data) {
   }
   message += `共计: ${billInfo.actualPay}${billInfo.unit}\n`
   message += `余额: ${billData.accountBalance}元\n`
+
+  $.redMesssgae = redMesssgae
 
   return message
 }
