@@ -22,6 +22,7 @@ const hours = (new Date()).getHours()
   $.msg = ''
   for (let i = 0; i < cookiesArr.length; i++) {
     $.redMesssgae = '' // 每个账号的警示消息置空
+    $.singleMessage = ''
 
     const cookie = cookiesArr[i]
     $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
@@ -44,11 +45,14 @@ const hours = (new Date()).getHours()
     $.msg += tips2
     $.msg += '\n\n'
 
-    if (hours === 10 && $.redMesssgae.length > 0) {
-      const wxid = noticeConfig[$.phone]
+    const wxid = noticeConfig[$.phone]
+    /*if (hours === 20 && $.redMesssgae.length > 0) {
       if (wxid) {
          sendWX(`尊敬的${$.phone}用户：请注意，您存在套餐外消费：\n${$.redMesssgae}`, [wxid]) 
       }
+    }*/
+    if ((hours === 8 || hours === 18) && $.singleMessage.length > 0) {
+      sendWX(`尊敬的${$.phone}用户：您的套餐详情以及使用情况如下：\n${$.singleMessage}`, [wxid]) 
     }
 
     await $.wait(10000)
@@ -217,6 +221,7 @@ function combineMessage2(data) {
   message += `余额: ${billData.accountBalance}元\n`
 
   $.redMesssgae = redMesssgae
+  $.singleMessage = message.replaceAll(/<font size="3" color="red">/gi, '').replaceAll(/<\/font>/gi, '')
 
   return message
 }
