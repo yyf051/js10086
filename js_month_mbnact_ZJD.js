@@ -33,7 +33,7 @@ Object.keys(js10086).forEach((item) => {
     console.log(`${$.phone}获取Cookie：`)
     $.setCookie = await getMobieCK($.phone, bodyParam)
     
-    console.log(`${$.accountName}获取活动资格......`)
+    console.log(`${$.phone}获取活动资格......`)
     const initRet0 = await mbactFunc($, 'entitle/preconditions', actNum)
     if (!initRet0) {
       $.msg += `获取活动资格失败\n`
@@ -42,7 +42,7 @@ Object.keys(js10086).forEach((item) => {
     }
 
 
-    console.log(`${$.accountName}查询可抽奖次数......`)
+    console.log(`${$.phone}查询可抽奖次数......`)
     const initRet = await mbactFunc($, 'checkEntitleAccount', actNum)
     if (!initRet) {
       $.msg += `查询可抽奖次数失败\n`
