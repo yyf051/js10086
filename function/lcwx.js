@@ -6,7 +6,7 @@ const kam_wxid = process.env.KAM_BOT_ID || ''
 const kam_token = process.env.KAM_TOKEN || ''
 
 
-export default function sendNotice(msg, to_wxids) {
+function sendNotice(msg, to_wxids) {
 	if (!msg || !kam_addr || !kam_wxid || !to_wxids || to_wxids.length == 0) {
 		return
 	}
@@ -28,3 +28,5 @@ export default function sendNotice(msg, to_wxids) {
 		request(options)
 	}
 }
+
+module.exports = sendNotice
