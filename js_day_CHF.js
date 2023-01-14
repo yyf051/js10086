@@ -15,6 +15,9 @@ Object.keys(js10086).forEach((item) => {
   cookiesArr.push(js10086[item])
 })
 
+const noticeConfig = JSON.parse(process.env.WX_NOTICE_CONFIG || {})
+const hours = (new Date()).getHours()
+
 !(async () => {
   $.msg = ''
   for (let i = 0; i < cookiesArr.length; i++) {
@@ -41,8 +44,11 @@ Object.keys(js10086).forEach((item) => {
     $.msg += tips2
     $.msg += '\n\n'
 
-    if ($.redMesssgae.length > 0) {
-      sendWX(`尊敬的${$.phone}用户：请注意，您存在套餐外消费：\n${$.redMesssgae}`, ['wjs876046992'])
+    if (hours === 10 && $.redMesssgae.length > 0) {
+      const wxid = noticeConfig[$.phone]
+      if (wxid) {
+         sendWX(`尊敬的${$.phone}用户：请注意，您存在套餐外消费：\n${$.redMesssgae}`, [wxid]) 
+      }
     }
 
     await $.wait(10000)
