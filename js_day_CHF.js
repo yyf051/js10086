@@ -18,6 +18,8 @@ Object.keys(js10086).forEach((item) => {
 !(async () => {
   $.msg = ''
   for (let i = 0; i < cookiesArr.length; i++) {
+    $.redMesssgae = '' // 每个账号的警示消息置空
+
     const cookie = cookiesArr[i]
     $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
     $.password = cookie.match(/passwd=([^; ]+)(?=;?)/) && cookie.match(/passwd=([^; ]+)(?=;?)/)[1]
