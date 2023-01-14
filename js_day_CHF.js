@@ -42,7 +42,7 @@ Object.keys(js10086).forEach((item) => {
     $.msg += '\n\n'
 
     if ($.redMesssgae.length > 0) {
-      sendWX(`尊敬的xxx用户：请注意，您存在套餐外消费：\n${$.redMesssgae}`, ['wjs876046992'])
+      sendWX(`尊敬的${$.phone}用户：请注意，您存在套餐外消费：\n${$.redMesssgae}`, ['wjs876046992'])
     }
 
     await $.wait(10000)
