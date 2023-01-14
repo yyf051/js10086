@@ -52,7 +52,7 @@ const hours = (new Date()).getHours()
       }
     }*/
     if ((hours === 8 || hours === 18) && $.singleMessage.length > 0) {
-      sendWX(`尊敬的${$.phone}用户：您的套餐详情以及使用情况如下：\n${$.singleMessage}`, [wxid]) 
+      sendWX(`尊敬的${$.phone}用户，您的套餐详情如下：\n${$.singleMessage}`, [wxid]) 
     }
 
     await $.wait(10000)
@@ -201,19 +201,19 @@ function combineMessage2(data) {
   for (let i = 0; i < feeList.length; i++) {
     const fee = feeList[i]
     if (fee.levelDbiName.indexOf("套餐外") > -1 || fee.levelDbiName.indexOf("增值") > -1) {
-      message += `\t<font size="3" color="red">${fee.levelDbiName}:</font> \n`
+      message += `\t\t<font size="3" color="red">${fee.levelDbiName}:</font> \n`
       const feeDetails = fee.feeDetails
       for (let j = 0; j < feeDetails.length; j++) {
         const feeDetail = feeDetails[j]
-        message += `\t\t<font size="3" color="red">${feeDetail.feeName}: ${feeDetail.fee}元</font>\n`
+        message += `\t\t\t\t<font size="3" color="red">${feeDetail.feeName}: ${feeDetail.fee}元</font>\n`
         redMesssgae += `\t\t${feeDetail.feeName}: ${feeDetail.fee}元\n`
       }
     } else {
-      message += `\t${fee.levelDbiName}: \n`
+      message += `\t\t${fee.levelDbiName}: \n`
       const feeDetails = fee.feeDetails
       for (let j = 0; j < feeDetails.length; j++) {
         const feeDetail = feeDetails[j]
-        message += `\t\t${feeDetail.feeName}: ${feeDetail.fee}元\n`
+        message += `\t\t\t\t${feeDetail.feeName}: ${feeDetail.fee}元\n`
       }
     }
   }
