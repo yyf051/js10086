@@ -123,8 +123,8 @@ function combineMessage(data) {
   const ret = data.data
 
   let speech = `\t${ret.commonSpeechDashboard.bordTitle}: ${ret.commonSpeechDashboard.value}${ret.commonSpeechDashboard.unit}\n`
-  let gprs = `\t${ret.commonGPRSDashboard.bordTitle}: ${ret.commonGPRSDashboard.value}${ret.commonGPRSDashboard.unit}\n`
-  let other = `\t${ret.otherGPRSDashboard.bordTitle}: ${ret.otherGPRSDashboard.value}${ret.otherGPRSDashboard.unit}\n`
+  let gprs = `\t\t${ret.commonGPRSDashboard.bordTitle}: ${ret.commonGPRSDashboard.value}${ret.commonGPRSDashboard.unit}\n`
+  let other = `\t\t${ret.otherGPRSDashboard.bordTitle}: ${ret.otherGPRSDashboard.value}${ret.otherGPRSDashboard.unit}\n`
 
   const r = speech + gprs + other
   $.singleMessage += r.replaceAll(/<font size="3" color="red">/gi, '').replaceAll(/<\/font>/gi, '')
@@ -224,7 +224,7 @@ function combineMessage2(data) {
   message += `余额: ${billData.accountBalance}元\n`
 
   $.redMesssgae = redMesssgae
-  $.singleMessage += message.replaceAll(/<font size="3" color="red">/gi, '').replaceAll(/<\/font>/gi, '')
+  $.singleMessage += message.replaceAll(/<font size="3" color="red">/gi, '').replaceAll(/<\/font>/gi, '') + '\n'
 
   return message
 }
