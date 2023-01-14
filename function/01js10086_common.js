@@ -249,15 +249,15 @@ async function getMobieCK(phone, loginBody) {
 function initCookie(opt) {
   return new Promise(async (resolve) => {
     try {
-      const accountName = `${opt.headers['LC-PN']}`
-      console.log(`${accountName}获取JSESSIONID......`)
+      const phone = `${opt.headers['LC-PN']}`
+      console.log(`${phone}获取JSESSIONID......`)
 
       let setCookie = await recall()
       if (!setCookie) {
-        console.log(`${accountName}第二次获取JSESSIONID......`)
+        console.log(`${phone}第二次获取JSESSIONID......`)
         setCookie = await recall()
       }
-      console.log(`${accountName}获取Cookie......`)
+      console.log(`${phone}获取Cookie......`)
       const cks = await Promise.all([
         getCookie(opt, setCookie),
         getExtendCookie3(setCookie)

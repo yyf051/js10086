@@ -105,7 +105,7 @@ Object.keys(js10086).forEach((item) => {
   "success": true
 }*/
 async function doActivity () {
-  console.log(`${$.accountName}获取活动信息......`)
+  console.log(`${$.phone}获取活动信息......`)
   const params = {
     "reqUrl": "act2335",
     "method": "initIndexPage",

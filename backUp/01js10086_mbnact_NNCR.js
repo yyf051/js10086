@@ -27,7 +27,7 @@ const $ = new Env('江苏移动_暖暖春日')
       const subTaskList = resultObj.taskSubList.filter(e => e.currentDoneCount == 0).slice(0, 5)
       if (subTaskList.length > 0) {
         $.msg += `查询可完成任务数：${subTaskList.length}\n`
-        console.log(`${$.accountName}查询可完成任务数：${subTaskList.length}\n`)
+        console.log(`${$.phone}查询可完成任务数：${subTaskList.length}\n`)
         for (let j = 0; j < subTaskList.length; j++) {
           const task = subTaskList[j]
           if (task.taskType == 'BROWSE') {
@@ -41,7 +41,7 @@ const $ = new Env('江苏移动_暖暖春日')
         }
       } else {
         $.msg += `今日已完成，无任务可做\n`
-        console.log(`${$.accountName}今日已完成，无任务可做`)
+        console.log(`${$.phone}今日已完成，无任务可做`)
       }
     } 
     
@@ -60,7 +60,7 @@ const $ = new Env('江苏移动_暖暖春日')
  * 查询活动信息
  */
 async function queryTaskMain () {
-  console.log(`${$.accountName}查询任务信息......`)
+  console.log(`${$.phone}查询任务信息......`)
   return await mbactFunc($, 'queryTaskMain', 'RWCJ00000111')
 }
 
@@ -68,7 +68,7 @@ async function queryTaskMain () {
  * 执行任务
  */
 async function doTask (task) {
-  console.log(`${$.accountName}执行任务${task.taskName}......`)
+  console.log(`${$.phone}执行任务${task.taskName}......`)
   const actNum = `RWCJ00000111&configNum=${task.configNum}&taskType=${task.taskType}`
   const body = `actNum=RWCJ00000111&configNum=${task.configNum}&taskType=${task.taskType}`
   return await mbactFunc($, 'doTask', actNum, body)
@@ -78,7 +78,7 @@ async function doTask (task) {
  * 完成任务
  */
 async function doneBrowseTask (task, billNo) {
-  console.log(`${$.accountName}成功执行任务: ${task.taskName}......`)
+  console.log(`${$.phone}成功执行任务: ${task.taskName}......`)
   const actNum = `RWCJ00000111&billNum=${billNo}`
   const body = `actNum=RWCJ00000111&billNum=${billNo}`
   $.msg += `成功执行任务: ${task.taskName}\n`
@@ -92,6 +92,6 @@ async function lotteryStrengthen () {
   const resultObj = await mbactFunc($, 'lotteryStrengthen', 'RWCJ00000111&sourcesNum=H5&featureCode=')
   if (resultObj && resultObj.prize_name) {
     $.msg += `赢得${resultObj.prize_name}\n`
-    console.log(`${$.accountName}赢得${resultObj.prize_name}`)
+    console.log(`${$.phone}赢得${resultObj.prize_name}`)
   }
 }

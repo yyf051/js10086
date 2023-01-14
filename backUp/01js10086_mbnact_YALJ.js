@@ -8,7 +8,7 @@ const { mbactFunc } = require('./function/01js10086_mbnact')
   $.msg = ''
   for (let i = 0; i < options.length; i++) {
     await initCookie($, i)
-    console.log(`${$.accountName}获取活动信息......`)
+    console.log(`${$.phone}获取活动信息......`)
     const checkCanLottery = await mbactFunc($, 'checkCanLottery', '700002439')
     if (!checkCanLottery) {
       continue

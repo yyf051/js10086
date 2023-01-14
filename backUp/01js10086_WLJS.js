@@ -10,11 +10,11 @@ $.setCookie = ''
 !(async () => {
   for (let i = 0; i < options.length; i++) {
     $.index = i
-    const accountName = `账号${options[i].headers['LC-PN']}`
-    $.msg += `${accountName}: \n`
-    console.log(`${accountName}获取JSESSIONID......`)
+    const phone = `账号${options[i].headers['LC-PN']}`
+    $.msg += `${phone}: \n`
+    console.log(`${phone}获取JSESSIONID......`)
     $.setCookie = await recall()
-    console.log(`${accountName}获取Cookie......`)
+    console.log(`${phone}获取Cookie......`)
     const cks = await Promise.all([
       getCookie(options[i], $.setCookie),
       getExtendCookie3($.setCookie)
@@ -22,7 +22,7 @@ $.setCookie = ''
     $.setCookie += cks.join('')
 
     $.setCookie += setConstCookie();
-    console.log(`${accountName}获取活动信息......`)
+    console.log(`${phone}获取活动信息......`)
     let r = await queryTaskMain()
     if (typeof r == 'object') {
       for (let j = 0; j < r.length; j++) {

@@ -32,14 +32,14 @@ Object.keys(js10086).forEach((item) => {
     console.log(`${$.phone}获取Cookie：`)
     $.setCookie = await getMobieCK($.phone, bodyParam)
     
-    console.log(`${$.accountName}检查参与状态......`)
+    console.log(`${$.phone}检查参与状态......`)
     const initRet = await mbactFunc($, 'checkEntitleAccount', '7000152043gnqwc8')
     if (!initRet) {
       continue
     }
     if (initRet.surplusCount == 0) {
       $.msg += `无抽奖机会\n`
-      console.log(`${$.accountName}无抽奖机会`)
+      console.log(`${$.phone}无抽奖机会`)
       continue
     }
     for (let j = 0; j < initRet.surplusCount; j++) {
