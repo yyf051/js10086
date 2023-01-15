@@ -59,9 +59,9 @@ const noticeConfig = JSON.parse(process.env.WX_NOTICE_CONFIG || {})
   $.msg += '\n\n'
 
   const wxid = noticeConfig[$.phone]
-  sendWX(`尊敬的${$.phone}用户，您的套餐详情如下：\n${$.singleMessage}`, [wxid]) 
+  sendWX(`尊敬的${$.phone}用户，您的套餐详情如下：\n ${$.singleMessage}`, [wxid]) 
 
-  $.sendNotify($.name, $.msg)
+  // $.sendNotify($.name, $.msg)
 
 })().catch((e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
@@ -126,7 +126,7 @@ function combineMessage(data) {
 
   const ret = data.data
 
-  let speech = `\t${ret.commonSpeechDashboard.bordTitle}: ${ret.commonSpeechDashboard.value}${ret.commonSpeechDashboard.unit}\n`
+  let speech = `\t\t${ret.commonSpeechDashboard.bordTitle}: ${ret.commonSpeechDashboard.value}${ret.commonSpeechDashboard.unit}\n`
   let gprs = `\t\t${ret.commonGPRSDashboard.bordTitle}: ${ret.commonGPRSDashboard.value}${ret.commonGPRSDashboard.unit}\n`
   let other = `\t\t${ret.otherGPRSDashboard.bordTitle}: ${ret.otherGPRSDashboard.value}${ret.otherGPRSDashboard.unit}\n`
 
@@ -224,11 +224,11 @@ function combineMessage2(data) {
       }
     }
   }
-  message += `共计: ${billInfo.actualPay}${billInfo.unit}\n`
-  message += `余额: ${billData.accountBalance}元\n`
+  message += `本月消费: ${billInfo.actualPay}${billInfo.unit}\n`
+  message += `当前余额: ${billData.accountBalance}元`
 
   $.redMesssgae = redMesssgae
-  $.singleMessage += message.replaceAll(/<font size="3" color="red">/gi, '').replaceAll(/<\/font>/gi, '').replaceAll(/\t/gi, ' ') + '\n'
+  $.singleMessage += message.replaceAll(/<font size="3" color="red">/gi, '').replaceAll(/<\/font>/gi, '').replaceAll(/\t/gi, '  ')
 
   return message
 }
