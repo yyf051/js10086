@@ -59,7 +59,7 @@ const noticeConfig = JSON.parse(process.env.WX_NOTICE_CONFIG || {})
   $.msg += '\n\n'
 
   const wxid = noticeConfig[$.phone]
-  sendWX(`尊敬的${$.phone}用户，您的套餐详情如下：\n ${$.singleMessage}`, [wxid]) 
+  sendWX(`尊敬的${$.phone}用户，您的套餐详情如下：\n${$.singleMessage}`, [wxid]) 
 
   // $.sendNotify($.name, $.msg)
 
@@ -128,10 +128,10 @@ function combineMessage(data) {
 
   let speech = `\t\t${ret.commonSpeechDashboard.bordTitle}: ${ret.commonSpeechDashboard.value}${ret.commonSpeechDashboard.unit}\n`
   let gprs = `\t\t${ret.commonGPRSDashboard.bordTitle}: ${ret.commonGPRSDashboard.value}${ret.commonGPRSDashboard.unit}\n`
-  let other = `\t\t${ret.otherGPRSDashboard.bordTitle}: ${ret.otherGPRSDashboard.value}${ret.otherGPRSDashboard.unit}\n`
+  let other = `\t\t${ret.otherGPRSDashboard.bordTitle}: ${ret.otherGPRSDashboard.value}${ret.otherGPRSDashboard.unit}\n\n`
 
   const r = speech + gprs + other
-  $.singleMessage += r.replaceAll(/<font size="3" color="red">/gi, '').replaceAll(/<\/font>/gi, '')
+  $.singleMessage += r.replaceAll(/<font size="3" color="red">/gi, '').replaceAll(/<\/font>/gi, '').replaceAll(/\t/gi, '  ')
 
   return r
 }
@@ -208,7 +208,7 @@ function combineMessage2(data) {
   for (let i = 0; i < feeList.length; i++) {
     const fee = feeList[i]
     if (fee.levelDbiName.indexOf("套餐外") > -1 || fee.levelDbiName.indexOf("增值") > -1) {
-      message += `\t\t<font size="3" color="red">${fee.levelDbiName}:</font> \n`
+      message += `\t\t<font size="3" color="red">${fee.levelDbiName}:</font>\n`
       const feeDetails = fee.feeDetails
       for (let j = 0; j < feeDetails.length; j++) {
         const feeDetail = feeDetails[j]
@@ -216,7 +216,7 @@ function combineMessage2(data) {
         redMesssgae += `\t\t${feeDetail.feeName}: ${feeDetail.fee}元\n`
       }
     } else {
-      message += `\t\t${fee.levelDbiName}: \n`
+      message += `\t\t${fee.levelDbiName}:\n`
       const feeDetails = fee.feeDetails
       for (let j = 0; j < feeDetails.length; j++) {
         const feeDetail = feeDetails[j]
@@ -224,6 +224,7 @@ function combineMessage2(data) {
       }
     }
   }
+  message += '\n'
   message += `本月消费: ${billInfo.actualPay}${billInfo.unit}\n`
   message += `当前余额: ${billData.accountBalance}元`
 
