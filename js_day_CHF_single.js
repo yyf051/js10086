@@ -44,7 +44,7 @@ const noticeConfig = JSON.parse(process.env.WX_NOTICE_CONFIG || {})
   const success = await initCookie($)
   if (!success) {
     $.msg += `${$.phone}登录失败......\n\n`
-    continue
+    return
   }
 
   $.msg += `<font size="5">${$.phone}</font>: \n`
@@ -228,7 +228,7 @@ function combineMessage2(data) {
   message += `余额: ${billData.accountBalance}元\n`
 
   $.redMesssgae = redMesssgae
-  $.singleMessage += message.replaceAll(/<font size="3" color="red">/gi, '').replaceAll(/<\/font>/gi, '') + '\n'
+  $.singleMessage += message.replaceAll(/<font size="3" color="red">/gi, '').replaceAll(/<\/font>/gi, '').replaceAll(/\t/gi, ' ') + '\n'
 
   return message
 }
