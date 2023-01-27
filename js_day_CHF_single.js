@@ -15,13 +15,13 @@ Object.keys(js10086).forEach((item) => {
   cookiesArr.push(js10086[item])
 })
 
-const noticeConfig = JSON.parse(process.env.WX_NOTICE_CONFIG || {})
 
 !(async () => {
   $.msg = ''  
 
   const userPhone = process.env.JS_USER_PHONE || ''
-  if (!userPhone) {
+  const JS_WX_ID = process.env.JS_WX_ID || ''
+  if (!userPhone || !JS_WX_ID) {
     return
   }
 
@@ -58,8 +58,7 @@ const noticeConfig = JSON.parse(process.env.WX_NOTICE_CONFIG || {})
   $.msg += tips2
   $.msg += '\n\n'
 
-  const wxid = noticeConfig[$.phone]
-  sendWX(`尊敬的${$.phone}用户，您的套餐详情如下：\n${$.singleMessage}`, [wxid]) 
+  sendWX(`尊敬的${$.phone}用户，您的套餐详情如下：\n${$.singleMessage}`, [JS_WX_ID]) 
 
   // $.sendNotify($.name, $.msg)
 
