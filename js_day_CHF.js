@@ -127,7 +127,7 @@ function combineMessage(data) {
   let other = `\t\t${ret.otherGPRSDashboard.bordTitle}: ${ret.otherGPRSDashboard.value}${ret.otherGPRSDashboard.unit}\n`
 
   const r = speech + gprs + other
-  $.singleMessage += r.replaceAll(/<font size="3" color="red">/gi, '').replaceAll(/<\/font>/gi, '')
+  $.singleMessage += r.replaceAll(/<font size="3" color="red">/gi, '').replaceAll(/<\/font>/gi, '').replaceAll(/\t/gi, '  ')
 
   return r
 }
@@ -224,7 +224,7 @@ function combineMessage2(data) {
   message += `余额: ${billData.accountBalance}元\n`
 
   $.redMesssgae = redMesssgae
-  $.singleMessage += message.replaceAll(/<font size="3" color="red">/gi, '').replaceAll(/<\/font>/gi, '') + '\n'
+  $.singleMessage += message.replaceAll(/<font size="3" color="red">/gi, '').replaceAll(/<\/font>/gi, '').replaceAll(/\t/gi, '  ')
 
   return message
 }

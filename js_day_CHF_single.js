@@ -20,7 +20,8 @@ Object.keys(js10086).forEach((item) => {
   $.msg = ''  
 
   const userPhone = process.env.JS_USER_PHONE || ''
-  const JS_WX_ID = process.env.JS_WX_ID || ''
+  const noticeConfig = JSON.parse(process.env.WX_NOTICE_CONFIG || {})
+  const JS_WX_ID = noticeConfig[$.phone] || process.env.JS_WX_ID || ''
   if (!userPhone || !JS_WX_ID) {
     return
   }
