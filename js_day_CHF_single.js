@@ -130,13 +130,14 @@ function combineMessage(data) {
   let gprs = `\t\t\t\t${ret.commonGPRSDashboard.bordTitle}: ${ret.commonGPRSDashboard.value}${ret.commonGPRSDashboard.unit}\n`
   let other = `\t\t\t\t${ret.otherGPRSDashboard.bordTitle}: ${ret.otherGPRSDashboard.value}${ret.otherGPRSDashboard.unit}\n\n`
 
-  const r = '[庆祝]套餐剩余: \n' + speech + gprs + other
+  const r = '[庆祝]💹套餐剩余: \n' + speech + gprs + other
   $.singleMessage += r.replaceAll(/<font size="3" color="red">/gi, '').replaceAll(/<\/font>/gi, '').replaceAll(/\t/gi, '  ')
 
   return r
-}尊敬的13584630864用户，您的套餐详情如下：
+}
+`尊敬的13584630864用户，您的套餐详情如下：
 
-`💹套餐剩余: 
+💹套餐剩余: 
     💨通用通话剩余: 0分钟
     💨通用流量剩余: 586.61MB
     💨其它流量剩余: 0GB
