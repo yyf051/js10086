@@ -126,15 +126,34 @@ function combineMessage(data) {
 
   const ret = data.data
 
-  let speech = `\t\t\t\t1⃣${ret.commonSpeechDashboard.bordTitle}: ${ret.commonSpeechDashboard.value}${ret.commonSpeechDashboard.unit}\n`
-  let gprs = `\t\t\t\t2⃣${ret.commonGPRSDashboard.bordTitle}: ${ret.commonGPRSDashboard.value}${ret.commonGPRSDashboard.unit}\n`
-  let other = `\t\t\t\t3⃣${ret.otherGPRSDashboard.bordTitle}: ${ret.otherGPRSDashboard.value}${ret.otherGPRSDashboard.unit}\n\n`
+  let speech = `\t\t\t\t[]${ret.commonSpeechDashboard.bordTitle}: ${ret.commonSpeechDashboard.value}${ret.commonSpeechDashboard.unit}\n`
+  let gprs = `\t\t\t\t${ret.commonGPRSDashboard.bordTitle}: ${ret.commonGPRSDashboard.value}${ret.commonGPRSDashboard.unit}\n`
+  let other = `\t\t\t\t${ret.otherGPRSDashboard.bordTitle}: ${ret.otherGPRSDashboard.value}${ret.otherGPRSDashboard.unit}\n\n`
 
-  const r = '➡套餐剩余: \n' + speech + gprs + other
+  const r = '[庆祝]套餐剩余: \n' + speech + gprs + other
   $.singleMessage += r.replaceAll(/<font size="3" color="red">/gi, '').replaceAll(/<\/font>/gi, '').replaceAll(/\t/gi, '  ')
 
   return r
-}
+}尊敬的13584630864用户，您的套餐详情如下：
+
+`💹套餐剩余: 
+    💨通用通话剩余: 0分钟
+    💨通用流量剩余: 586.61MB
+    💨其它流量剩余: 0GB
+✳套餐及固定费: 
+    ➡短信呼(1元): 1.00元
+    ➡1元包本地主叫200分钟(09版集团套餐): 0.87元
+    ➡10元提速包（提至100M）: 9.28元
+    ➡4G飞享18元套餐（2018版）: 17.11元
+❌套餐外语音费: 
+    💤基本通话费: 6.08元
+❌套餐外短彩信费: 
+    💤国内（不含港澳台）短信费: 0.10元
+❌增值业务费: 
+    💤视频彩铃订阅-酷电秀专属6元包: 6.00元
+
+共计: 40.44元
+余额: 163.43元`
 
 
 function queryBillInfo() {
@@ -208,7 +227,7 @@ function combineMessage2(data) {
   for (let i = 0; i < feeList.length; i++) {
     const fee = feeList[i]
     if (fee.levelDbiName.indexOf("套餐外") > -1 || fee.levelDbiName.indexOf("增值") > -1) {
-      message += `➡<font size="3" color="red">${fee.levelDbiName}:</font>\n`
+      message += `<font size="3" color="red">${fee.levelDbiName}:</font>\n`
       const feeDetails = fee.feeDetails
       for (let j = 0; j < feeDetails.length; j++) {
         const feeDetail = feeDetails[j]
@@ -239,6 +258,20 @@ function getNumberEmoj(num) {
     return '1⃣'
   } else if (num == 2) {
     return '2⃣'
+  } else if (num == 3) {
+    return '3⃣'
+  } else if (num == 4) {
+    return '4⃣'
+  } else if (num == 5) {
+    return '5⃣'
+  } else if (num == 6) {
+    return '6⃣'
+  } else if (num == 7) {
+    return '7⃣'
+  } else if (num == 8) {
+    return '8⃣'
+  } else if (num == 9) {
+    return '9⃣'
   } else {
     return '*'
   }
