@@ -8,7 +8,7 @@ const { getMobieCK } = require('./function/01js10086_common')
 const { nactFunc, getNactParams } = require('./function/01js10086_nact')
 
 const $ = new Env('江苏移动_点亮兔子灯')
-const actCode = '2548'
+const actCode = '2574'
 
 const js10086 = require('./function/js10086')
 const cookiesArr = []
@@ -33,7 +33,7 @@ Object.keys(js10086).forEach((item) => {
     console.log(`${$.phone}获取Cookie：`)
     $.setCookie = await getMobieCK($.phone, bodyParam)
     
-    $.isLog = true
+    $.isLog = false
     $.isDirectReturnResultObj = true
     await initIndexPage()
     
@@ -79,6 +79,7 @@ async function execTasks(taskList) {
     }
     if (task.taskState == 0) {
       await completeTask(task.taskId, task.taskName)
+      await doLottery(task.taskId)
     } else if (task.taskState == 1) {
       await doLottery(task.taskId)
     }
