@@ -98,6 +98,12 @@ async function getOils() {
   }
   console.log(`当前总油滴${$.myOil}个`)
   $.msg += `当前总油滴${$.myOil}个\n`
+
+  // 2元话费要求1800
+  if ($.myOil >= 1800) {
+    console.log(`准备兑换...`)
+    await initGetPrizePage()
+  }
 }
 
 
@@ -166,4 +172,60 @@ async function getTemporaryOil(oil, getType) {
   $.msg += `领${oil}滴油成功;`
 
   await $.wait(2000)
+}
+
+async function exchagePrize(prizeId) {
+  // const params = `reqUrl=act2539&method=exchagePrize&operType=1&actCode=2539&prizeId=${prizeId}&extendParams=&ywcheckcode=&mywaytoopen=`
+  const params = getNactParams(actCode, 'initGetPrizePage')
+  params.prizeId = prizeId
+  const ret = await nactFunc($, params)
+  
+  if (!ret) {
+    return
+  }
+
+  console.log(`执行结果： ${JOSN.stringify(ret)}`)
+}
+
+
+/**
+ * 抽奖
+ */
+async function initGetPrizePage() {
+  // const params = `reqUrl=act2539&method=initGetPrizePage&operType=1&actCode=2539&extendParams=&ywcheckcode=&mywaytoopen=`
+  const params = getNactParams(actCode, 'initGetPrizePage')
+  const ret = await nactFunc($, params)
+  
+  if (!ret) {
+    return
+  }
+
+  const myOil = ret.myOil
+  const prizeConfig = ret.prizeConfig
+  /*{
+    "leftNumber": 0,
+    "limit": "1",
+    "month": "202301",
+    "needOil": 1800,
+    "order": "40",
+    "poolId": "2563",
+    "prizeId": "44",
+    "prizeName": "2元话费",
+    "value": "1"
+  }*/
+  const cfg
+  for (let i = prizeConfig.length - 1; i >= 0; i--) {
+    const config = prizeConfig[i]
+    if (config.prizeId == 44 || config.prizeName.indexOf('话费') > -1) {
+      cfg = config
+      break
+    }
+  }
+
+  await $.wait(2000)
+
+  if (myOil >= cfg.needOil && cfg.leftNumber > 0) {
+    // do exchange
+    await exchagePrize(cfg.prizeId)
+  }
 }
