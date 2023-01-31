@@ -74,7 +74,7 @@ async function initIndexPage() {
       await doLottery()
     }
   }
-  if (ret.signRecordByToday) {
+  if (!ret.signRecordByToday) {
     await checkSign()
   }
 
