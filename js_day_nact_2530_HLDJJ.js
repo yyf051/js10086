@@ -74,8 +74,12 @@ async function initIndexPage() {
       await doLottery()
     }
   }
+  if (ret.tasks.flatMap(e => e.taskId)) {
+    await checkSign()
+  }
 
-  const finishTaskIds = await checkSign(ret.doTaskList)
+  const tasks = ret.doTaskList || []
+  const finishTaskIds = tasks.flatMap(e => e.taskId)
 
   await execTasks(ret.taskList, finishTaskIds)
 
@@ -86,26 +90,9 @@ async function initIndexPage() {
 /**
  * 检查打卡
  */
-async function checkSign(doTaskList) {
-  // let canSign = !doTaskList || doTaskList.length == 0
-  // // console.log(1, canSign, doTaskList)
-  // if (!canSign) {
-  //   const signTask = doTaskList.filter(e => {
-  //     return e.taskId == 0
-  //   })
-  //   canSign = !signTask || signTask.length == 0
-  //   // console.log(2, canSign, signTask)
-  // }
+async function checkSign() {
 
-  // if (canSign) {
-  //   await doTask(0, '每天打卡', 0)
-  // }
-
-  // console.log(`今日已打卡，无需打卡`)
-  // $.msg += `今日已打卡，无需打卡\n`
-
-  const tasks = doTaskList || []
-  return tasks.flatMap(e => e.taskId)
+  await doTask(0, '今日打卡', 0)
 }
 
 
