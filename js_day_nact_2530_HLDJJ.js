@@ -74,7 +74,7 @@ async function initIndexPage() {
       await doLottery()
     }
   }
-  if (ret.tasks.flatMap(e => e.taskId)) {
+  if (ret.signRecordByToday) {
     await checkSign()
   }
 
