@@ -60,21 +60,18 @@ async function initIndexPage() {
     return
   }
 
-  const tasks = ret.task || []
-  const finishTaskIds = tasks.flatMap(e => e.source)
+  if (resultObj.ActObtain == '0') {
+    console.log(`领取材料并抽奖...\n`)
+    await doLottery(0)
+  }
 
-  await execTasks(ret.task, finishTaskIds)
+  await execTasks(resultObj.task)
 }
 
 /**
  * 执行任务
  */
-async function execTasks(taskList, finishTaskIds) {
-  if (finishTaskIds.length == taskList.length) {
-    console.log(`今日任务均已完成，无需执行`)
-    $.msg += `今日任务均已完成，无需执行\n`
-  }
-  // console.log(finishTaskIds)
+async function execTasks(taskList) {
   for (let i = 0; i < taskList.length; i++) {
     const task = taskList[i]
     if (task.taskType == 2) {
