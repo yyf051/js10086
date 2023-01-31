@@ -1,4 +1,5 @@
 /*
+http://wap.js.10086.cn/LuckyEgg.thtml?shareToken=dSyvvaQjcVPn9njBkUMiYg==&rm=ydc
 江苏移动_幸运扭蛋机
 cron:45 45 9 5 * *
 */
@@ -72,6 +73,7 @@ function dispatch() {
             if (data) data = JSON.parse(data)
 
             if (data.success && data.resultCode == '0') {
+                console.log(`${JSON.stringify(data.resultObj)}`)
                 console.log(`抽奖成功, 获得${data.resultObj.luckyEggPojoTemp.bigTitle}: ${data.resultObj.luckyEggPojoTemp.smallTitle}`)
                 $.msg += `抽奖成功, 获得${data.resultObj.luckyEggPojoTemp.bigTitle}: ${data.resultObj.luckyEggPojoTemp.smallTitle}\n`
                 resolve(true)
