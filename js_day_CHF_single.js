@@ -126,11 +126,11 @@ function combineMessage(data) {
 
   const ret = data.data
 
-  let speech = `\t\t\t\t[]${ret.commonSpeechDashboard.bordTitle}: ${ret.commonSpeechDashboard.value}${ret.commonSpeechDashboard.unit}\n`
-  let gprs = `\t\t\t\t${ret.commonGPRSDashboard.bordTitle}: ${ret.commonGPRSDashboard.value}${ret.commonGPRSDashboard.unit}\n`
-  let other = `\t\t\t\t${ret.otherGPRSDashboard.bordTitle}: ${ret.otherGPRSDashboard.value}${ret.otherGPRSDashboard.unit}\n\n`
+  let speech = `\t\t\t\t1、${ret.commonSpeechDashboard.bordTitle}: ${ret.commonSpeechDashboard.value}${ret.commonSpeechDashboard.unit}\n`
+  let gprs = `\t\t\t\t2、${ret.commonGPRSDashboard.bordTitle}: ${ret.commonGPRSDashboard.value}${ret.commonGPRSDashboard.unit}\n`
+  let other = `\t\t\t\t3、${ret.otherGPRSDashboard.bordTitle}: ${ret.otherGPRSDashboard.value}${ret.otherGPRSDashboard.unit}\n\n`
 
-  const r = '[庆祝]💹套餐剩余: \n' + speech + gprs + other
+  const r = '[庆祝]套餐剩余: \n' + speech + gprs + other
   $.singleMessage += r.replaceAll(/<font size="3" color="red">/gi, '').replaceAll(/<\/font>/gi, '').replaceAll(/\t/gi, '  ')
 
   return r
@@ -228,7 +228,7 @@ function combineMessage2(data) {
   for (let i = 0; i < feeList.length; i++) {
     const fee = feeList[i]
     if (fee.levelDbiName.indexOf("套餐外") > -1 || fee.levelDbiName.indexOf("增值") > -1) {
-      message += `<font size="3" color="red">${fee.levelDbiName}:</font>\n`
+      message += `[庆祝]<font size="3" color="red">${fee.levelDbiName}:</font>\n`
       const feeDetails = fee.feeDetails
       for (let j = 0; j < feeDetails.length; j++) {
         const feeDetail = feeDetails[j]
@@ -236,7 +236,7 @@ function combineMessage2(data) {
         redMesssgae += `\t\t${feeDetail.feeName}: ${feeDetail.fee}元\n`
       }
     } else {
-      message += `➡${fee.levelDbiName}:\n`
+      message += `[庆祝]${fee.levelDbiName}:\n`
       const feeDetails = fee.feeDetails
       for (let j = 0; j < feeDetails.length; j++) {
         const feeDetail = feeDetails[j]
@@ -256,24 +256,24 @@ function combineMessage2(data) {
 
 function getNumberEmoj(num) {
   if (num == 1) {
-    return '1⃣'
+    return '1、'
   } else if (num == 2) {
-    return '2⃣'
+    return '2、'
   } else if (num == 3) {
-    return '3⃣'
+    return '3、'
   } else if (num == 4) {
-    return '4⃣'
+    return '4、'
   } else if (num == 5) {
-    return '5⃣'
+    return '5、'
   } else if (num == 6) {
-    return '6⃣'
+    return '6、'
   } else if (num == 7) {
-    return '7⃣'
+    return '7、'
   } else if (num == 8) {
-    return '8⃣'
+    return '8、'
   } else if (num == 9) {
-    return '9⃣'
+    return '9、'
   } else {
-    return '*'
+    return '* '
   }
 }
