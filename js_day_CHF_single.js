@@ -126,11 +126,11 @@ function combineMessage(data) {
 
   const ret = data.data
 
-  let speech = `\t\t\t\t1、${ret.commonSpeechDashboard.bordTitle}: ${ret.commonSpeechDashboard.value}${ret.commonSpeechDashboard.unit}\n`
-  let gprs = `\t\t\t\t2、${ret.commonGPRSDashboard.bordTitle}: ${ret.commonGPRSDashboard.value}${ret.commonGPRSDashboard.unit}\n`
-  let other = `\t\t\t\t3、${ret.otherGPRSDashboard.bordTitle}: ${ret.otherGPRSDashboard.value}${ret.otherGPRSDashboard.unit}\n\n`
+  let speech = `\t\t\t\t${ret.commonSpeechDashboard.bordTitle}: ${ret.commonSpeechDashboard.value}${ret.commonSpeechDashboard.unit}\n`
+  let gprs = `\t\t\t\t${ret.commonGPRSDashboard.bordTitle}: ${ret.commonGPRSDashboard.value}${ret.commonGPRSDashboard.unit}\n`
+  let other = `\t\t\t\t${ret.otherGPRSDashboard.bordTitle}: ${ret.otherGPRSDashboard.value}${ret.otherGPRSDashboard.unit}\n\n`
 
-  const r = '[庆祝]套餐剩余: \n' + speech + gprs + other
+  const r = '[庆祝]\t\t套餐剩余: \n' + speech + gprs + other
   $.singleMessage += r.replaceAll(/<font size="3" color="red">/gi, '').replaceAll(/<\/font>/gi, '').replaceAll(/\t/gi, '  ')
 
   return r
@@ -228,19 +228,19 @@ function combineMessage2(data) {
   for (let i = 0; i < feeList.length; i++) {
     const fee = feeList[i]
     if (fee.levelDbiName.indexOf("套餐外") > -1 || fee.levelDbiName.indexOf("增值") > -1) {
-      message += `[庆祝]<font size="3" color="red">${fee.levelDbiName}:</font>\n`
+      message += `[庆祝]\t\t<font size="3" color="red">${fee.levelDbiName}:</font>\n`
       const feeDetails = fee.feeDetails
       for (let j = 0; j < feeDetails.length; j++) {
         const feeDetail = feeDetails[j]
-        message += `\t\t\t\t${getNumberEmoj(i+1)}<font size="3" color="red">${feeDetail.feeName}: ${feeDetail.fee}元</font>\n`
+        message += `\t\t\t\t<font size="3" color="red">${feeDetail.feeName}: ${feeDetail.fee}元</font>\n`
         redMesssgae += `\t\t${feeDetail.feeName}: ${feeDetail.fee}元\n`
       }
     } else {
-      message += `[庆祝]${fee.levelDbiName}:\n`
+      message += `[庆祝]\t\t${fee.levelDbiName}:\n`
       const feeDetails = fee.feeDetails
       for (let j = 0; j < feeDetails.length; j++) {
         const feeDetail = feeDetails[j]
-        message += `\t\t\t\t${getNumberEmoj(i+1)}${feeDetail.feeName}: ${feeDetail.fee}元\n`
+        message += `\t\t\t\t${feeDetail.feeName}: ${feeDetail.fee}元\n`
       }
     }
   }
