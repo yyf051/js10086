@@ -1,7 +1,7 @@
 /*
 http://wap.js.10086.cn/nact/resource/2574/html/index.html?shareToken=dQEWCORLKHrkeV2QtW/TUg==&rm=ydc
 江苏移动_点亮兔子灯
-cron:25 43 10 5 * *
+cron:25 43 10 5 1 *
 */
 const Env = require('./function/01Env')
 const { getMobieCK } = require('./function/01js10086_common')
