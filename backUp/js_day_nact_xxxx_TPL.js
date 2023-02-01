@@ -7,7 +7,7 @@ const Env = require('./function/01Env')
 const { getMobieCK } = require('./function/01js10086_common')
 const { nactFunc, getNactParams } = require('./function/01js10086_nact')
 
-const $ = new Env('江苏移动_点亮兔子灯')
+const $ = new Env('江苏移动_xxx')
 const actCode = 'xxxx'
 
 const js10086 = require('./function/js10086')
