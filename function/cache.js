@@ -70,4 +70,11 @@ oc.expire = function(key, time) {
     })
 }
 
+oc.exists = function(key) {
+    return new Promise((resolve) => {
+        const ret = await client.exists(key)
+        resolve(ret > 0)
+    })
+}
+
 module.exports = Cache
