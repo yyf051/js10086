@@ -39,7 +39,7 @@ Object.keys(js10086).forEach((item) => {
     
     console.log()
     $.msg += `\n`
-    console.log(`-------------------------------------\n`)
+    console.log(`---------------------------------------------------------\n`)
     await $.wait(10000)
   }
 

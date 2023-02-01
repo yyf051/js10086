@@ -51,7 +51,7 @@ let exec = true
     
     console.log()
     $.msg += `\n`
-    console.log(`-------------------------------------\n`)
+    console.log(`---------------------------------------------------------\n`)
     await $.wait(10000)
   }
 
@@ -93,23 +93,33 @@ async function initIndexPage() {
     return
   }
   if (resultObj.errorCode == '-2468010') {
-    const shareId = await shareToFriends()
-    await receiveGift(shareId)
+    // console.log(``)
+    const receiveRet = await receiveGift()
+    if (!receiveRet) {
+      console.log(`领取失败，该账号无法继续拆红包分享`)
+      return
+    }
+  } else if (resultObj.errorCode == '-2468006') {
+    console.log(`当天已赠送了3次红包，明日再来～`)
+    $.msg += `当天已赠送了3次红包，明日再来～\n`
+    return
   }
 
   const remainCount = resultObj.remainCount
   if (remainCount > 0) {
     for (let i = 0; i < remainCount; i++) {
-       const shareId = await doLottery()
-       await receiveGift(shareId)
+      const shareId = await doLottery()
+      const receiveRet = await receiveGift(shareId)
+      if (!receiveRet) {
+        console.log(`领取失败，该账号无法继续拆红包分享`)
+        return
+      }
     }
+  } else {
+    console.log(`无可拆红包，明日再来～`)
+    $.msg += `无可拆红包，明日再来～\n`
   }
 
-}
-
-// no used
-async function generateShareUrl(shareId) {
-  return `https://wap.js.10086.cn/nact/resource/${actCode}/html/share.html?shareId=${shareId}`
 }
 
 /**
@@ -129,38 +139,80 @@ async function shareToFriends() {
 }
 
 /**
- * 亲友领取，每人每天只能领取1次，每月最多领取10次
- * Redis 记录每个人当日是否领取，每月领取数量
+ * 分享给亲友，每人每天最多可赠送3次，每月赠送无限制
  */
-async function receiveGift(shareId) {
-  if (!shareId) {
-    console.log(`未传递shareId，结束领取`)
-    return
-  }
-  // `reqUrl=act${actCode}&method=receiveGift&operType=1&actCode=${actCode}&extendParams=&ywcheckcode=&mywaytoopen=`
-  const params = getNactParams(actCode, 'receiveGift')
+async function initSharePage(vm, shareId) {
+  // `reqUrl=act${actCode}&method=initSharePage&operType=1&actCode=${actCode}&extendParams=&ywcheckcode=&mywaytoopen=`
+  const params = getNactParams(actCode, 'initSharePage')
   params.shareId = shareId
-  const account = getReceiveAccount()
-  if (!account) {
-    // 未找到可领取账号，结束。
-    return
-  }
-  const vm = {
-    ...$,
-    ...account
-  }
-  console.log(`环境信息： ${vm.phone}`)
   const ret = await nactFunc(vm, params)
 
   if (!ret) {
     return
   }
+  await vm.wait(2000)
+  return true
+}
 
+/**
+ * 亲友领取，每人每天只能领取1次，每月最多领取10次
+ * Redis 记录每个人当日是否领取，每月领取数量
+ */
+async function receiveGift(shareId) {
+
+  // 查找可分享的亲友
+  const account = await getReceiveAccount()
+  if (!account) {
+    // 未找到可领取账号，结束。
+    return
+  }
+
+  if (!shareId) {
+    // 未传shareId，分享给亲友
+    shareId = await shareToFriends()
+  }
+
+  if (!shareId) {
+    console.log(`未传递shareId，结束领取`)
+    return
+  }
+  const vmx = Object.assign(new Env('领取奖励'), account)
+  vmx.isLog = true
+  console.log(`环境信息： ${vmx.phone}`)
+
+  const initShareRet = await initSharePage(vmx, shareId)
+  if (!initShareRet) {
+    console.log(`初始化分享失败，不再执行`)
+    return
+  }
+
+
+  // `reqUrl=act${actCode}&method=receiveGift&operType=1&actCode=${actCode}&extendParams=&ywcheckcode=&mywaytoopen=`
+  const params = getNactParams(actCode, 'receiveGift')
+  params.shareId = shareId
+  vmx.isDirectReturnResultObj = true
+  const ret = await nactFunc(vmx, params)
+  vmx.isDirectReturnResultObj = false
+
+  if (!ret) {
+    return
+  }
+
+  // 记录redis
   await logReceiveCount(account.phone)
-  console.log(`领取成功，获得奖励：${ret.awardName}`)
-  $.msg += `领取成功，获得奖励：${ret.awardName}\n`
 
   await $.wait(3000)
+  if (ret.errorCode == '-2468011') {
+    console.log(`${vmx.phone}今日已领取过红包`)
+    $.msg += `${vmx.phone}今日已领取过红包\n`
+    // 未能领取成功，重新领取
+    console.log(`继续查找可领取的用户...`)
+    return await receiveGift(shareId)
+  } else {
+    console.log(`领取成功，${vmx.phone}获得奖励：${ret.awardName}`)
+    $.msg += `领取成功，${vmx.phone}获得奖励：${ret.awardName}\n`
+  }
+  return true
 }
 
 /**
@@ -173,11 +225,13 @@ async function getReceiveAccount() {
     const phone = decodeURIComponent(ck.match(/phone=([^; ]+)(?=;?)/) && ck.match(/phone=([^; ]+)(?=;?)/)[1])
     if (phone == $.phone) {
       // 自己，跳过
+      console.log(`当前查找到的是自己：${phone}，跳过`)
       continue
     }
 
     // 检查该手机号当月领取次数；检查今日是否领取过
-    if (!checkPhonePermission(phone)) {
+    const targetPhoneCanReceive = await checkPhonePermission(phone)
+    if (!targetPhoneCanReceive) {
       // 检查未通过，跳过
       continue
     }
@@ -192,14 +246,16 @@ async function getReceiveAccount() {
   const result = ret.hasOwnProperty('phone') ? ret : false
   if (!result) {
     // 检查下自己是否已经领取过
-    const currentPhoneCanReceive = checkPhonePermission($.phone)
-    if (currentPhoneCanReceive) {
+    const currentPhoneCanReceive = await checkPhonePermission($.phone)
+    if (!currentPhoneCanReceive) {
       // 记录不要继续执行了，每人可以领奖励了。
       $.msg += `当日所有账号均已领取过，不再执行\n`
+      console.log(`当日所有账号均已领取过，不再执行`)
       exec = false  
     }
+  } else {
+    console.log(`查找到的可领取的手机号：${ret.phone}`)
   }
-
   return result
 }
 
@@ -233,12 +289,30 @@ async function logReceiveCount(phone) {
     const client = redis.createClient(config)
     try {
       const cache = initCache(client)
+
+      // 设置key及过期时间
+      const monthKeyExists = await cache.exists(MONTH_KEY)
+      if (!monthKeyExists) {
+        await cache.expire(MONTH_KEY, 30 * 23 * 60 * 60)          
+      }
+      const dayKeyExists = await cache.exists(DAY_KEY)
+      if (!dayKeyExists) {
+        await cache.expire(DAY_KEY, 23 * 60 * 60)          
+      }
+
+      // 获取key
       const receiveCountMonth = await cache.hget(MONTH_KEY, phone)
       const receiveCountToday = await cache.hget(DAY_KEY, phone)
       // 设置reids
-      cache.hset(MONTH_KEY, phone, receiveCountMonth + 1)
-      cache.hset(DAY_KEY, phone, receiveCountToday + 1)
-      console.log(`${phone}更新redis，month=${receiveCountMonth + 1}，day=${receiveCountToday }`)
+      if (receiveCountToday < 1) {
+        // 今日未记录过，则记录
+        await cache.hset(MONTH_KEY, phone, receiveCountMonth + 1)
+        await cache.hset(DAY_KEY, phone, 1)
+        console.log(`${phone}更新redis，month=${receiveCountMonth + 1}，day=1`)
+      } else {
+        console.log(`${phone}更新redis，month=${receiveCountMonth}，day=${receiveCountToday}`)
+      }
+
     } catch (e) {
       console.error(e)
     } finally {
