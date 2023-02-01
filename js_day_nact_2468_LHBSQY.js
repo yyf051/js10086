@@ -1,7 +1,7 @@
 /*
 http://wap.js.10086.cn/nact/resource/2468/html/index.html?shareToken=dQEWCORLKHrkeV2QtW/TUg==&rm=ydc
 江苏移动_领红包送亲友
-cron:25 43 12 1-10 * *
+cron:25 1 12 1-10 * *
 */
 const Env = require('./function/01Env')
 const { getMobieCK } = require('./function/01js10086_common')
@@ -238,7 +238,7 @@ async function logReceiveCount(phone) {
       // 设置reids
       cache.hset(MONTH_KEY, phone, receiveCountMonth + 1)
       cache.hset(DAY_KEY, phone, receiveCountToday + 1)
-      console.log(`${phone}更新redis，month=${receiveCountMonth + 1}，day=${receiveCountToday}`)
+      console.log(`${phone}更新redis，month=${receiveCountMonth + 1}，day=${receiveCountToday }`)
     } catch (e) {
       console.error(e)
     } finally {
