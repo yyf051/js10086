@@ -1,6 +1,6 @@
 /*
 江苏移动_家庭星级权益抽奖
-cron:45 45 8 5 * *
+cron:45 45 12 1 * *
 */
 const Env = require('./function/01Env')
 const { getMobieCK}  = require('./function/01js10086_common')

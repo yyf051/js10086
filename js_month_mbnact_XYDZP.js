@@ -1,6 +1,6 @@
 /*
 江苏移动_幸运大转盘
-cron:45 5 9 5 * *
+cron:45 5 12 1 * *
 */
 const Env = require('./function/01Env')
 const { getMobieCK } = require('./function/01js10086_common')

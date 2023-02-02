@@ -1,6 +1,6 @@
 /*
 江苏移动_天天翻好礼
-cron:40 50 9 5-9 * *
+cron:40 50 9 1-3 * *
 */
 const Env = require('./function/01Env')
 const { options, getMobieCK } = require('./function/01js10086_common')

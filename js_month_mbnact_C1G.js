@@ -1,6 +1,6 @@
 /*
 江苏移动_抽1GB
-cron:45 35 8 5 * *
+cron:45 35 12 1 * *
 */
 const Env = require('./function/01Env')
 const { getMobieCK } = require('./function/01js10086_common')
