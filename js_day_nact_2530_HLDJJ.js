@@ -34,6 +34,7 @@ Object.keys(js10086).forEach((item) => {
     $.setCookie = await getMobieCK($.phone, bodyParam)
     
     // $.isLog = true
+    $.isDirectReturnResultObj = true
     await initIndexPage()
     
     console.log()
