@@ -32,10 +32,8 @@ Object.keys(js10086).forEach((item) => {
 
     console.log(`${$.phone}获取Cookie：`)
     $.setCookie = await getMobieCK($.phone, bodyParam)
-    
-    $.isLog = false
-    $.isDirectReturnResultObj = true
-    await initIndexPage()
+
+    await execActivity()
     
     console.log()
     $.msg += `\n`
@@ -52,15 +50,26 @@ Object.keys(js10086).forEach((item) => {
 })
 
 /**
+ * 开始处理
+ */
+async function execActivity() {    
+  $.isLog = false
+  $.isDirectReturnResultObj = true
+  let resultObj = await initIndexPage()
+  
+  // speical logic
+
+}
+
+/**
  * 初始化页面
  */
 async function initIndexPage() {
   let resultObj = await nactFunc($, getNactParams(actCode, 'initIndexPage'), true)
   if (!resultObj) {
-    return
+    throw Error('初始化活动失败...')
   }
-
-  // add special logic
+  return resultObj
 }
 
 /**
