@@ -36,10 +36,9 @@ Object.keys(js10086).forEach((item) => {
 
         await execActivity()
 
-        console.log()
         $.msg += `\n`
         console.log(`---------------------------------------------------------\n`)
-        await $.wait(10000)
+        await $.wait(20000)
     }
 
     console.log(`通知内容：\n\n`, $.msg)
@@ -60,7 +59,7 @@ async function execActivity() {
     await throwBottle(resultObj)
     
     resultObj = await initIndexPage()
-    flashingBottle(resultObj)
+    await flashingBottle(resultObj)
 }
 
 /**
@@ -82,6 +81,7 @@ async function flashingBottle(resultObj) {
     const surplusChance = userDayChance.surplusChance
     const fishingChance = userDayChance.fishingChance
     const left = surplusChance - fishingChance
+    console.log(`当前剩余${left}次机会, 进行捞瓶子...`)
 
     const params = getNactParams(actCode, 'flashingBottle')
     
@@ -94,7 +94,7 @@ async function flashingBottle(resultObj) {
             await openBottle(ret.userFlashingBottle)
         }
 
-        await $.wait(2000)
+        await $.wait(5000)
     }
 }
 
@@ -102,7 +102,7 @@ async function delBottleRedis(bottleUUID) {
     const params = getNactParams(actCode, 'delBottleRedis')
     params.bottleUUID = bottleUUID
     await nactFunc($, params)
-    await $.wait(2000)
+    await $.wait(3000)
 }
 
 /**
@@ -114,8 +114,8 @@ async function openBottle(bottleUUID) {
     const ret = await nactFunc($, params)
     
     console.log(`开瓶成功，奖励: ${ret.userBottleGift}`)
-    $.msg += `签到抽奖成功，奖励: ${ret.awardName}\n`
-    await $.wait(2000)
+    $.msg += `开瓶成功，奖励: ${ret.userBottleGift}\n`
+    await $.wait(5000)
 }
 
 /**
@@ -135,7 +135,8 @@ async function throwBottle(resultObj) {
 
     for (let index = 0; index < left; index++) {
         await nactFunc($, params)
-        await $.wait(2000)
+        await $.wait(8000)
     }
+    console.log(`完成扔漂流瓶...`)
 
 }
