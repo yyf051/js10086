@@ -1,0 +1,141 @@
+/*
+http://wap.js.10086.cn/nact/resource/2556/html/index.html?shareToken=dQEWCORLKHrkeV2QtW/TUg==&rm=ydc
+江苏移动_拆漂流瓶
+cron:25 43 10 5 * *
+*/
+const Env = require('./function/01Env')
+const { getMobieCK } = require('./function/01js10086_common')
+const { nactFunc, getNactParams } = require('./function/01js10086_nact')
+
+const $ = new Env('江苏移动_拆漂流瓶')
+const actCode = '2556'
+const MAX_THROW_COUNT = 10
+
+const js10086 = require('./function/js10086')
+const cookiesArr = []
+Object.keys(js10086).forEach((item) => {
+    cookiesArr.push(js10086[item])
+})
+
+!(async () => {
+    $.msg = ''
+    for (let i = 0; i < cookiesArr.length; i++) {
+        const cookie = cookiesArr[i]
+        $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
+        const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
+
+        $.msg += `<font size="5">${$.phone}</font>\n`
+        // console.log(`env: ${$.phone}, ${bodyParam}`)
+        if (!$.phone || !bodyParam) {
+            $.msg += `登陆参数配置不正确\n`
+            continue
+        }
+
+        console.log(`${$.phone}获取Cookie：`)
+        $.setCookie = await getMobieCK($.phone, bodyParam)
+
+        await execActivity()
+
+        console.log()
+        $.msg += `\n`
+        console.log(`---------------------------------------------------------\n`)
+        await $.wait(10000)
+    }
+
+    console.log(`通知内容：\n\n`, $.msg)
+    await $.sendNotify($.name, $.msg)
+})().catch((e) => {
+    $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
+}).finally(() => {
+    $.done()
+})
+
+/**
+ * 开始处理
+ */
+async function execActivity() {
+    $.isLog = false
+    $.isDirectReturnResultObj = true
+    let resultObj = await initIndexPage()
+    await throwBottle(resultObj)
+    
+    resultObj = await initIndexPage()
+    flashingBottle(resultObj)
+}
+
+/**
+ * 初始化页面
+ */
+async function initIndexPage() {
+    let resultObj = await nactFunc($, getNactParams(actCode, 'initIndexPage'))
+    if (!resultObj) {
+        throw Error('初始化活动失败...')
+    }
+    return resultObj
+}
+
+/**
+ * 捞瓶子
+ */
+async function flashingBottle(resultObj) {
+    const userDayChance = resultObj.userDayChance
+    const surplusChance = userDayChance.surplusChance
+    const fishingChance = userDayChance.fishingChance
+    const left = surplusChance - fishingChance
+
+    const params = getNactParams(actCode, 'flashingBottle')
+    
+    for (let index = 0; index < left; index++) {
+        const ret = await nactFunc($, params)
+        if (ret.userFlashingBottle != '10000000000') {
+            console.log(`捞到的不是系统瓶，删除瓶子`)
+            await delBottleRedis(ret.userFlashingBottle)
+        } else {
+            await openBottle(ret.userFlashingBottle)
+        }
+
+        await $.wait(2000)
+    }
+}
+
+async function delBottleRedis(bottleUUID) {
+    const params = getNactParams(actCode, 'delBottleRedis')
+    params.bottleUUID = bottleUUID
+    await nactFunc($, params)
+    await $.wait(2000)
+}
+
+/**
+ * 开瓶子
+ */
+async function openBottle(bottleUUID) {
+    const params = getNactParams(actCode, 'openBottle')
+    params.bottleUUID = bottleUUID
+    const ret = await nactFunc($, params)
+    
+    console.log(`开瓶成功，奖励: ${ret.userBottleGift}`)
+    $.msg += `签到抽奖成功，奖励: ${ret.awardName}\n`
+    await $.wait(2000)
+}
+
+/**
+ * 扔瓶子
+ * @param {} resultObj 
+ */
+async function throwBottle(resultObj) {
+    const userDayChance = resultObj.userDayChance
+    
+    const params = getNactParams(actCode, 'throwBottle')
+    params.bottleType = 1
+    params.bottleMsg = encodeURIComponent(`团团圆圆新年到,欢欢喜喜迎新年,开开心心好运来。`)
+    params.bottleGift = null
+    
+    const throwChance = userDayChance.throwChance
+    const left = MAX_THROW_COUNT - throwChance
+
+    for (let index = 0; index < left; index++) {
+        await nactFunc($, params)
+        await $.wait(2000)
+    }
+
+}
