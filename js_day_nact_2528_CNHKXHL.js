@@ -67,6 +67,9 @@ async function execActivity() {
   resultObj = await initIndexPage()
   const starLeft = resultObj.registerBean.starLeft
   await watering(starLeft)
+  
+  resultObj = await initIndexPage()
+  await lottery(resultObj.registerBean)
 
 }
 
@@ -186,6 +189,7 @@ async function doTask(task) {
 async function watering(starLeft) {
   if (starLeft < WATER_NEED) {
     console.log(`水滴不足${WATER_NEED}, 结束浇水...`)
+    $.msg += `水滴不足${WATER_NEED}, 结束浇水...\n`
     return
   }
 
@@ -207,17 +211,36 @@ async function watering(starLeft) {
 /**
  * 抽奖
  */
-async function doLottery(taskId) {
+async function lottery(registerBean) {
+  if (!registerBean) {
+    return
+  }
+  const bigLeft = registerBean.bigLeft
+  for (let i = 0; i < bigLeft; i++) {
+    await doLottery(0)
+  }
+  const picecCount = registerBean.picecCount
+  for (let i = 0; i < picecCount; i++) {
+    await doLottery('big')
+  }
+}
+
+/**
+ * 抽奖
+ */
+async function doLottery(pieceId) {
   const params = getNactParams(actCode, 'doLottery')
-  params.taskId = taskId
+  params.pieceId = pieceId  
   const ret = await nactFunc($, params)
   
   if (!ret) {
     return
   }
-
-  console.log(`抽奖成功，获得奖励：${ret.prizeLog}`)
-  $.msg += `抽奖成功，获得奖励：${ret.prizeLog}\n`
+  if (ret.isWin) {
+    // console.log(JSON.stringify(ret))
+    console.log(`抽奖成功，获得奖励：${ret.prizeLog.awardName}`)
+    $.msg += `抽奖成功，获得奖励：${ret.prizeLog.awardName}\n`
+  }
 
   await $.wait(2000)
 }
