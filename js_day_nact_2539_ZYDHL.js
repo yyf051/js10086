@@ -174,9 +174,9 @@ async function getTemporaryOil(oil, getType) {
   await $.wait(2000)
 }
 
-async function exchagePrize(prizeId) {
-  // const params = `reqUrl=act2539&method=exchagePrize&operType=1&actCode=2539&prizeId=${prizeId}&extendParams=&ywcheckcode=&mywaytoopen=`
-  const params = getNactParams(actCode, 'initGetPrizePage')
+async function exchangePrize(prizeId) {
+  // const params = `reqUrl=act2539&method=exchangePrize&operType=1&actCode=2539&prizeId=${prizeId}&extendParams=&ywcheckcode=&mywaytoopen=`
+  const params = getNactParams(actCode, 'exchangePrize')
   params.prizeId = prizeId
   const ret = await nactFunc($, params)
   
@@ -184,7 +184,9 @@ async function exchagePrize(prizeId) {
     return
   }
 
-  console.log(`执行结果： ${JOSN.stringify(ret)}`)
+  // console.log(`执行结果： ${JSON.stringify(ret)}`)
+  console.log(`兑换${ret.awardName}成功`)
+  $.msg += `兑换${ret.awardName}成功\n`
 }
 
 
@@ -213,7 +215,7 @@ async function initGetPrizePage() {
     "prizeName": "2元话费",
     "value": "1"
   }*/
-  const cfg
+  let cfg
   for (let i = prizeConfig.length - 1; i >= 0; i--) {
     const config = prizeConfig[i]
     if (config.prizeId == 44 || config.prizeName.indexOf('话费') > -1) {
@@ -226,6 +228,6 @@ async function initGetPrizePage() {
 
   if (myOil >= cfg.needOil && cfg.leftNumber > 0) {
     // do exchange
-    await exchagePrize(cfg.prizeId)
+    await exchangePrize(cfg.prizeId)
   }
 }
