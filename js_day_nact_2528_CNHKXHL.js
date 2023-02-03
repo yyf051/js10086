@@ -11,6 +11,7 @@ const $ = new Env('江苏移动_春暖花开享好礼')
 const actCode = '2528'
 const MAX_SIGN_MONTH = 5 // 每月可签到天数
 const MAX_SHARE_MONTH = 3 // 每月可分享次数
+const WATER_NEED = 20 // 每次浇水所需水滴
 
 const js10086 = require('./function/js10086')
 const cookiesArr = []
@@ -34,10 +35,8 @@ Object.keys(js10086).forEach((item) => {
 
     console.log(`${$.phone}获取Cookie：`)
     $.setCookie = await getMobieCK($.phone, bodyParam)
-    
-    $.isLog = false
-    $.isDirectReturnResultObj = true
-    await initIndexPage()
+
+    await execActivity()
     
     console.log()
     $.msg += `\n`
@@ -54,17 +53,45 @@ Object.keys(js10086).forEach((item) => {
 })
 
 /**
+ * 开始处理
+ */
+async function execActivity() {    
+  $.isLog = false
+  $.isDirectReturnResultObj = true
+  let resultObj = await initIndexPage()
+  
+  await handleSign(resultObj)
+  await handleShare(resultObj)
+  await handleBrowser(resultObj)
+  
+  resultObj = await initIndexPage()
+  const starLeft = resultObj.registerBean.starLeft
+  await watering(starLeft)
+
+}
+
+/**
  * 初始化页面
  */
 async function initIndexPage() {
   let resultObj = await nactFunc($, getNactParams(actCode, 'initIndexPage'), true)
   if (!resultObj) {
+    throw Error('初始化活动失败...')
+  }
+  return resultObj
+}
+
+/**
+ * 处理签到
+ */
+async function handleSign(resultObj) {
+  const isSign = resultObj.isSign
+  if (isSign) {
+    console.log(`今日已签到...`)
     return
   }
 
-  await handleShare(resultObj)
-  await handleBrowser(resultObj)
-
+  await doTask({taskId: 0, taskName: '签到', taskType: 0})
 }
 
 /**
@@ -74,7 +101,7 @@ async function handleShare(resultObj) {
 
   const shareS = resultObj.shareS ? resultObj.shareS.length : 0
   if (shareS >= MAX_SHARE_MONTH) {
-    console.log(`${$.phone}当月已达到最大分享次数${MAX_SHARE_MONTH}`)
+    console.log(`当月已达到最大分享次数${MAX_SHARE_MONTH}`)
     return
   }
 
@@ -102,7 +129,7 @@ async function handleBrowser(resultObj) {
   // taskType: 1、分享，2、浏览，3、办理
   // status: 1、未完成
   const taskConfig = resultObj.taskConfig
-  const tasks = taskConfig.filter(e => e.taskId == 1)
+  const tasks = taskConfig.filter(e => e.taskType == 2)
   if (!tasks || tasks.length == 0) {
     console.log(`未查找到浏览任务...`)
     return
@@ -129,7 +156,7 @@ async function execTasks(taskList, finishTaskIds) {
     if (finishTaskIds.indexOf(task.taskId) > -1) {
       continue
     }
-    await doTask(task.taskId, task.taskName, task.type)
+    await doTask(task)
   }
 }
 
@@ -138,7 +165,6 @@ async function execTasks(taskList, finishTaskIds) {
  * 完成任务
  */
 async function doTask(task) {
-  // const params = `reqUrl=act2530&method=doTask&operType=1&actCode=2530&taskId=${taskId}&taskType=${taskType}&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
   const params = getNactParams(actCode, 'doTask');
   params.taskId = task.taskId
   params.taskType = task.taskType
@@ -148,16 +174,40 @@ async function doTask(task) {
     return
   }
 
-  console.log(`已完成任务：${task.taskName}，获得${task.startCount}水滴`)
-  $.msg += `已完成任务：${task.taskName}，获得${task.startCount}水滴\n`
+  task = ret.taskConfig
+  console.log(`已完成任务：${task.taskName}，获得${task.startCount || ' UNKNOWN '}水滴`)
+  $.msg += `已完成任务：${task.taskName}，获得${task.startCount || ' UNKNOWN '}水滴\n`
   await $.wait(3000)
+}
+
+/**
+ * 浇水
+ */
+async function watering(starLeft) {
+  if (starLeft < WATER_NEED) {
+    console.log(`水滴不足${WATER_NEED}, 结束浇水...`)
+    return
+  }
+
+
+  console.log(`开始浇水...`)
+  const params = getNactParams(actCode, 'watering')
+  const ret = await nactFunc($, params)
+  if (!ret) {
+    return
+  }
+
+  console.log(`浇水成功，剩余水滴：${ret.StarLeft}`)
+  $.msg += `浇水成功，剩余水滴：${ret.StarLeft}\n`
+
+  await $.wait(2000)
+  watering(ret.StarLeft)
 }
 
 /**
  * 抽奖
  */
 async function doLottery(taskId) {
-  // const params = `reqUrl=act${actCode}&method=doLottery&operType=1&actCode=${actCode}&extendParams=ch%3D03e5&ywcheckcode=&mywaytoopen=`
   const params = getNactParams(actCode, 'doLottery')
   params.taskId = taskId
   const ret = await nactFunc($, params)
