@@ -87,12 +87,12 @@ async function flashingBottle(resultObj) {
     
     for (let index = 0; index < left; index++) {
         const ret = await nactFunc($, params)
-        if (ret.userFlashingBottle != '10000000000') {
-            console.log(`捞到的不是系统瓶，删除瓶子`)
-            await delBottleRedis(ret.userFlashingBottle)
-        } else {
+        // if (ret.userFlashingBottle != '10000000000') {
+            // console.log(`捞到的不是系统瓶，删除瓶子`)
+            // await delBottleRedis(ret.userFlashingBottle)
+        // } else {
             await openBottle(ret.userFlashingBottle)
-        }
+        // }
 
         await $.wait(5000)
     }

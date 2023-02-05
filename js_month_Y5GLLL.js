@@ -1,7 +1,7 @@
 /*
 http://wap.js.10086.cn/vw/navbar/market_summer5g_new?shareToken=dQEWCORLKHrkeV2QtW/TUg==&rm=ydc
 江苏移动_用5G领流量
-cron:45 55 9 5 * *
+cron:45 55 9 6 * *
 */
 const Env = require('./function/01Env')
 const { getMobieCK } = require('./function/01js10086_common')
