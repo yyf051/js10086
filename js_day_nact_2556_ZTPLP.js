@@ -77,9 +77,9 @@ async function initIndexPage() {
  * 捞瓶子
  */
 async function flashingBottle(resultObj) {
-    const userDayChance = resultObj.userDayChance
-    const surplusChance = userDayChance.surplusChance
-    const fishingChance = userDayChance.fishingChance
+    const userDayChance = resultObj.userDayChance || {}
+    const surplusChance = userDayChance.surplusChance || 5
+    const fishingChance = userDayChance.fishingChance || 0
     const left = surplusChance - fishingChance
     console.log(`当前剩余${left}次机会, 进行捞瓶子...`)
 
@@ -123,14 +123,14 @@ async function openBottle(bottleUUID) {
  * @param {} resultObj 
  */
 async function throwBottle(resultObj) {
-    const userDayChance = resultObj.userDayChance
+    const userDayChance = resultObj.userDayChance || {}
     
     const params = getNactParams(actCode, 'throwBottle')
     params.bottleType = 1
     params.bottleMsg = encodeURIComponent(`团团圆圆新年到,欢欢喜喜迎新年,开开心心好运来。`)
     params.bottleGift = null
     
-    const throwChance = userDayChance.throwChance
+    const throwChance = userDayChance.throwChance || 0
     const left = MAX_THROW_COUNT - throwChance
 
     for (let index = 0; index < left; index++) {
