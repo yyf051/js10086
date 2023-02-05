@@ -1,7 +1,7 @@
 /*
 http://wap.js.10086.cn/nact/resource/2574/html/index.html?shareToken=dQEWCORLKHrkeV2QtW/TUg==&rm=ydc
 江苏移动_点亮兔子灯
-cron:25 43 10 5 1 *
+cron:25 43 12 1 * *
 */
 const Env = require('./function/01Env')
 const { getMobieCK } = require('./function/01js10086_common')
@@ -60,7 +60,7 @@ async function initIndexPage() {
     return
   }
 
-  if (resultObj.ActObtain == '0') {
+  if (resultObj.drawChance == '0') {
     console.log(`领取材料并抽奖...\n`)
     await doLottery(0)
   }
