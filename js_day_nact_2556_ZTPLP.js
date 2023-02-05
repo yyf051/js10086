@@ -86,6 +86,7 @@ async function flashingBottle(resultObj) {
     const params = getNactParams(actCode, 'flashingBottle')
     
     for (let index = 0; index < left; index++) {
+        console.log(`开始捞瓶子...`)
         const ret = await nactFunc($, params)
         if (ret.userFlashingBottle != '10000000000') {
             console.log(`捞到的不是系统瓶，删除瓶子`)
