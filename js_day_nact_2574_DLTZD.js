@@ -60,7 +60,7 @@ async function initIndexPage() {
     return
   }
 
-  if (resultObj.drawChance == '0') {
+  if (resultObj.user && resultObj.user.drawChance == '0') {
     console.log(`领取材料并抽奖...\n`)
     await doLottery(0)
   }
