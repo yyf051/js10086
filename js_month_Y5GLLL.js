@@ -1,7 +1,7 @@
 /*
 http://wap.js.10086.cn/vw/navbar/market_summer5g_new?shareToken=dQEWCORLKHrkeV2QtW/TUg==&rm=ydc
 江苏移动_用5G领流量
-cron:45 55 9 6 * *
+cron:1 1 1 1 1 1
 */
 const Env = require('./function/01Env')
 const { getMobieCK } = require('./function/01js10086_common')
@@ -18,33 +18,60 @@ const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/6
 
 !(async () => {
   $.msg = ''
+  const Y5GLLLConfig = JSON.parse(process.env.Y5GLLLConfig || '{}')
+  const JS_WX_ID = Y5GLLLConfig.wxid
+  const userPhone = Y5GLLLConfig.phone
+  if (!userPhone || !JS_WX_ID) {
+    console.log(`手机号或微信号为空，不执行`)
+    return
+  }
+
   for (let i = 0; i < cookiesArr.length; i++) {
     const cookie = cookiesArr[i]
     $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
-    const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
-    
-    $.msg += `<font size="5">${$.phone}</font>\n`
-    // console.log(`env: ${$.phone}, ${bodyParam}`)
-    if (!$.phone || !bodyParam) {
-      $.msg += `登陆参数配置不正确\n`
-      continue
+    $.password = cookie.match(/passwd=([^; ]+)(?=;?)/) && cookie.match(/passwd=([^; ]+)(?=;?)/)[1]
+    if (userPhone == $.phone) {
+      break
     }
-
-    console.log(`${$.phone}获取Cookie：`)
-    $.setCookie = await getMobieCK($.phone, bodyParam)
-    
-    let r = await initPage()
-    if (r) {
-      r = await lottery()
-      if (r) {
-        await receive()
-      }
-    } else {
-      $.msg += `流量领取失败: 未满足领取条件\n`
-    }
-    console.log()
-    $.msg += `\n\n`
   }
+
+  if (!$.phone || !$.password) {
+    console.log(`不存在此号码，结束运行`)
+    return
+  }
+
+  const cookie = cookiesArr[i]
+  $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
+  const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
+  
+  $.msg += `<font size="5">${$.phone}</font>\n`
+  // console.log(`env: ${$.phone}, ${bodyParam}`)
+  if (!$.phone || !bodyParam) {
+    $.msg += `登陆参数配置不正确\n`
+    continue
+  }
+
+  console.log(`${$.phone}获取Cookie：`)
+  $.setCookie = await getMobieCK($.phone, bodyParam)
+    
+  let r = await initPage()
+  if (r.data.isGet != '1') {
+    console.log(`领取奖励...`)
+    r = await lottery()
+    if (r && r.checkCode == 'E10003') {
+      console.log(`发送验证码...`)
+      await sendSms()
+    }
+  } else {
+    if (r.checkCode == 'E10003') {
+      // 已经领取，需要短信验证码
+      console.log(`已领取, 发送验证码...`)
+      await sendSms()
+    }
+  }
+  console.log()
+  $.msg += `\n\n`
+
   console.log(`通知内容：\n\n`, $.msg)
   await $.sendNotify($.name, $.msg)
 })().catch((e) => {
@@ -107,18 +134,14 @@ function initPage () {
       body: JSON.stringify(body)
     }
     $.post(options, async (err, resp, data) => {
-      // console.log(`initPage: ${data}`)
+      console.log(`initPage: ${data}`)
       if (err) throw new Error(err)
       data = JSON.parse(data)
-      let ret = false
       if (data.success == '0' && data.code == '200' && data.data) {
-        if (data.data.checkCode) {
-          $.msg += `查询结果：${data.data.checkMessage}\n`
-          console.log(`查询结果：${data.data.checkMessage}\n`)
-          ret = data.data.useFlow > 0
-        }
+        $.msg += `查询结果：${data.data.checkMessage}\n`
+        console.log(`查询结果：${data.data.checkMessage}\n`)
       }
-      resolve(ret)
+      resolve(data.data)
     })
   })
 }
@@ -179,12 +202,12 @@ function lottery () {
     // console.log(JSON.stringify(options))
     $.post(options, async (err, resp, data) => {
       if (err) throw new Error(err)
-      // console.log('receive: ' + data)
+      console.log('lottery: ' + data)
       data = JSON.parse(data)
       let ret = false
       if (data && data.code == '200') {
       
-        ret = data.isGet == 0
+        ret = data.data.isGet == 0
         if (ret) {
           $.msg += `抽奖成功: ${data.data.priceName}\n`
           console.log(`抽奖成功: ${data.data.priceName}`)
@@ -193,7 +216,7 @@ function lottery () {
           console.log(`抽奖成功: ${data.data.errorMsg}`)
         }
       }
-      resolve(ret)
+      resolve(data.data)
     })
   })
 }
@@ -251,3 +274,90 @@ function receive () {
     })
   })
 }
+
+function confirmType () {
+  return new Promise((resolve, reject) => {
+    const body = {
+      "bizCode": "8TCYHNEW",
+      "wapContext": {
+        "channel": "02",
+        "netType": "",
+        "optType": "3",
+        "bizCode": "TCYHNEW",
+        "pageCode": "market_summer5g_new",
+        "markCdeo": "TxGuddOIS7WXoueQNSkvAQ==-market_summer5g_new-market_summer5g_new-1675644544527",
+        "subBizCode": "TCYHNEW",
+        "effect": "",
+        "verifyCode": ""
+      }
+    }
+
+    const options = {
+      'url': `https://wap.js.10086.cn/vw/gateway/biz/confirm/confirmType`,
+      'headers': {
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Accept-Encoding': 'br, gzip, deflate',
+        'Connection': 'keep-alive',
+        'Accept': '*/*',
+        'Referer': 'https://wap.js.10086.cn/',
+        'Accept-Language': 'en-us',
+        'X-Requested-With': 'XMLHttpRequest',
+        'Cookie': $.setCookie,
+        'User-Agent': ua
+      },
+      'body': JSON.stringify(body)
+    }
+    // console.log(JSON.stringify(options))
+    $.post(options, async (err, resp, data) => {
+      if (err) throw new Error(err)
+      console.log('confirmType: ' + data)
+      data = JSON.parse(data)
+      let ret = -1
+      if (data && data.code == '200' && data.success == '0' ) {
+      
+        ret = data.data.confirmType
+      }
+      resolve(ret)
+    })
+  })
+}
+
+function sendSms () {
+  return new Promise((resolve, reject) => {
+    const body = {
+      "wapContext": {
+        "channel": "wap",
+        "netType": "",
+        "optType": "1",
+        "bizCode": "market_summer5g_new",
+        "pageCode": "market_summer5g_new",
+        "markCdeo": "TxGuddOIS7WXoueQNSkvAQ==-market_summer5g_new-market_summer5g_new-1675644544527",
+        "subBizCode": "market_summer5g_new",
+        "effect": "",
+        "verifyCode": ""
+      }
+    }
+
+    const options = {
+      'url': `https://wap.js.10086.cn/vw/gateway/biz/smsVerifyCode/sendSms`,
+      'headers': {
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Accept-Encoding': 'br, gzip, deflate',
+        'Connection': 'keep-alive',
+        'Accept': '*/*',
+        'Referer': 'https://wap.js.10086.cn/',
+        'Accept-Language': 'en-us',
+        'X-Requested-With': 'XMLHttpRequest',
+        'Cookie': $.setCookie,
+        'User-Agent': ua
+      },
+      'body': JSON.stringify(body)
+    }
+    // console.log(JSON.stringify(options))
+    $.post(options, async (err, resp, data) => {
+      if (err) throw new Error(err)
+      console.log('sendSms: ' + data)
+    })
+  })
+}
+
