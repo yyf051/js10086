@@ -5,6 +5,7 @@ cron:1 1 1 1 1 1
 */
 const Env = require('./function/01Env')
 const { getMobieCK } = require('./function/01js10086_common')
+const sendWX = require('./function/lcwx')
 
 const $ = new Env('江苏移动_用5G领流量')
 
