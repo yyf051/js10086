@@ -18,9 +18,12 @@ const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/6
 
 !(async () => {
   $.msg = ''
-  const Y5GLLLConfig = JSON.parse(process.env.Y5GLLLConfig || '{}')
-  const JS_WX_ID = Y5GLLLConfig.wxid
-  const userPhone = Y5GLLLConfig.phone
+  const Y5GLLLConfig = (process.env.Y5GLLLConfig || '').split('&')
+  if (Y5GLLLConfig.length == 2) {
+    console.log(`参数配置错误: ${process.env.Y5GLLLConfig}`)
+  }
+  const JS_WX_ID = Y5GLLLConfig[1]
+  const userPhone = Y5GLLLConfig[0]
   if (!userPhone || !JS_WX_ID) {
     console.log(`手机号或微信号为空，不执行`)
     return
