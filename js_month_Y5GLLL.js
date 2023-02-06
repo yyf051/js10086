@@ -29,30 +29,25 @@ const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/6
   for (let i = 0; i < cookiesArr.length; i++) {
     const cookie = cookiesArr[i]
     $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
-    $.password = cookie.match(/passwd=([^; ]+)(?=;?)/) && cookie.match(/passwd=([^; ]+)(?=;?)/)[1]
+    $.bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
     if (userPhone == $.phone) {
       break
     }
   }
 
-  if (!$.phone || !$.password) {
+  if (!$.phone || !$.bodyParam) {
     console.log(`不存在此号码，结束运行`)
     return
   }
-
-  const cookie = cookiesArr[i]
-  $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
-  const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
   
   $.msg += `<font size="5">${$.phone}</font>\n`
-  // console.log(`env: ${$.phone}, ${bodyParam}`)
-  if (!$.phone || !bodyParam) {
+  if (!$.phone || !$.bodyParam) {
     $.msg += `登陆参数配置不正确\n`
-    continue
+    return
   }
 
   console.log(`${$.phone}获取Cookie：`)
-  $.setCookie = await getMobieCK($.phone, bodyParam)
+  $.setCookie = await getMobieCK($.phone, $.bodyParam)
     
   let r = await initPage()
   if (r.data.isGet != '1') {
