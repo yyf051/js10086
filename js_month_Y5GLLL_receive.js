@@ -27,47 +27,36 @@ const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/6
     return
   }
 
+  const smsCode = Y5GLLLConfig.smsCode
+  if (!smsCode) {
+    console.log(`短信验证码为空，结束运行`)
+    return
+  }
+
   for (let i = 0; i < cookiesArr.length; i++) {
     const cookie = cookiesArr[i]
     $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
-    $.password = cookie.match(/passwd=([^; ]+)(?=;?)/) && cookie.match(/passwd=([^; ]+)(?=;?)/)[1]
+    $.bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
     if (userPhone == $.phone) {
       break
     }
   }
 
-  if (!$.phone || !$.password) {
+  if (!$.phone || !$.bodyParam) {
     console.log(`不存在此号码，结束运行`)
     return
   }
-
-  const cookie = cookiesArr[i]
-  $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
-  const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
   
   $.msg += `<font size="5">${$.phone}</font>\n`
-  // console.log(`env: ${$.phone}, ${bodyParam}`)
-  if (!$.phone || !bodyParam) {
+  if (!$.phone || !$.bodyParam) {
     $.msg += `登陆参数配置不正确\n`
-    continue
+    return
   }
 
   console.log(`${$.phone}获取Cookie：`)
-  $.setCookie = await getMobieCK($.phone, bodyParam)
-  
-  const Y5GLLLConfig = process.env.Y5GLLLConfig ? JSON.parse(process.env.Y5GLLLConfig) : null
-  if (!Y5GLLLConfig) {
-    console.log(`未配置Y5GLLLConfig, 结束运行...`)
-    return
-  }
+  $.setCookie = await getMobieCK($.phone, $.bodyParam)
 
   $.msg += `\n\n`
-
-  const smsCode = Y5GLLLConfig[$.phone].smsCode
-  if (!smsCode) {
-    console.log(`短信验证码为空，结束运行`)
-    return
-  }
   await receive(smsCode)
 
   console.log(`通知内容：\n\n`, $.msg)
