@@ -99,7 +99,7 @@ function receive (smsCode) {
     }
 
     const options = {
-      'url': `https://wap.js.10086.cn/vw/gateway/biz/marketSummer5gNew/receive`,
+      'url': `https://wap.js.10086.cn/vw/gateway/biz/marketSummer5gNew/handle`,
       'headers': {
         'Content-Type': 'application/json;charset=UTF-8',
         'Accept-Encoding': 'br, gzip, deflate',
@@ -116,7 +116,7 @@ function receive (smsCode) {
     // console.log(JSON.stringify(options))
     $.post(options, async (err, resp, data) => {
       if (err) throw new Error(err)
-      // console.log('receive: ' + data)
+      console.log('handle: ' + data)
       data = JSON.parse(data)
       let ret = false
       if (data && data.code == '200') {
