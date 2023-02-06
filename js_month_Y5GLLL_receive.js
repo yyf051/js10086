@@ -94,7 +94,7 @@ function receive (smsCode) {
         "verifyCode": smsCode
       },
       "orderActionLog": `是否勾选协议:是;勾选时间是：${orderTime}534;是否输入验证码:是;`,
-      "orderTime": `${orderTime388}`,
+      "orderTime": `${orderTime}388`,
       "smsCode": smsCode
     }
 
