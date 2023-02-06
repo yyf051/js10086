@@ -50,7 +50,7 @@ const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/6
   $.setCookie = await getMobieCK($.phone, $.bodyParam)
     
   let r = await initPage()
-  if (r.data.isGet != '1') {
+  if (r.isGet != '1') {
     console.log(`领取奖励...`)
     r = await lottery()
     if (r && r.checkCode == 'E10003') {

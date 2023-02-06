@@ -68,22 +68,33 @@ const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/6
 })
 
 
-function receive () {
+function receive (smsCode) {
   return new Promise((resolve, reject) => {
+    const now = new Date()
+    const year = now.getFullYear()
+    const month = now.getMonth() + 1 < 10 ? '0' + (now.getMonth() + 1) : now.getMonth() + 1
+    const day = now.getDate() < 10 ? '0' + (now.getDate()) : now.getDate()
+    const hour = now.getHours() < 10 ? '0' + (now.getHours()) : now.getHours()
+    const minute = now.getMinutes() < 10 ? '0' + (now.getMinutes()) : now.getMinutes()
+    const seconds = now.getSeconds() < 10 ? '0' + (now.getSeconds()) : now.getSeconds()
+    const orderTime = `${year}${month}${day}${hour}${minute}${seconds}`
     const body = {
-      "fxnum": "839095",
       "wapContext": {
-          "netType": "",
-          "bizCode": "market_summer5g_new",
-          "pageCode": "market_summer5g_new",
-          "markCdeo": "TxGuddOIS7WXoueQNSkvAQ==-market_summer5g_new-market_summer5g_new-1647069952498",
-          "effect": "",
-          "verifyCode": "",
-          "optType": "1",
-          "channel": "wap",
-          "subBizCode": "market_summer5g_new"
-      }
+        "channel": "wap",
+        "netType": "",
+        "optType": "1",
+        "bizCode": "market_summer5g_new",
+        "pageCode": "market_summer5g_new",
+        "markCdeo": "TxGuddOIS7WXoueQNSkvAQ==-market_summer5g_new-market_summer5g_new-1675658755517",
+        "subBizCode": "market_summer5g_new",
+        "effect": "",
+        "verifyCode": smsCode
+      },
+      "orderActionLog": `是否勾选协议:是;勾选时间是：${orderTime}534;是否输入验证码:是;`,
+      "orderTime": `${orderTime388}`,
+      "smsCode": smsCode
     }
+
     const options = {
       'url': `https://wap.js.10086.cn/vw/gateway/biz/marketSummer5gNew/receive`,
       'headers': {
