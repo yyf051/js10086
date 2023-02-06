@@ -62,9 +62,15 @@ const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/6
     }
   } else {
     if (r.checkCode == 'E10003') {
-      // 已经领取，需要短信验证码
-      console.log(`已领取, 发送验证码...`)
-      await sendSms()
+      // 查询列表，是否已经激活
+      const isHandled = await summer5gRecords()
+      if (isHandled) {
+        sendWX('本月已领取，下个月6号之后再来', [JS_WX_ID])
+      } else {
+        // 已经领取，需要短信验证码
+        console.log(`发送验证码...`)
+        await sendSms()
+      }
     }
   }
   console.log()
@@ -144,6 +150,79 @@ function initPage () {
   })
 }
 
+/**
+ * {
+  "success": "0",
+  "message": "操作成功",
+  "code": "200",
+  "data": {
+    "month": "202302",
+    "summer5gRecords": [{
+      "id": "summer5g82554ca74d704feda94cc3c6de6baf7f8144",
+      "mobile": null,
+      "city": "20",
+      "time": "20230206085109",
+      "month": "202302",
+      "priceFlow": "5120",
+      "priceName": "5GB",
+      "status": "0",
+      "checkCode": null,
+      "checkMsg": null,
+      "code": null,
+      "msg": null,
+      "fxNum": null,
+      "fxMobile": null
+    }]
+    }
+ * }
+ */
+function summer5gRecords() {
+  return new Promise((resolve, reject) => {
+    const body = {
+      "wapContext": {
+        "channel": "wap",
+        "netType": "",
+        "optType": "3",
+        "bizCode": "market_summer5g_new",
+        "pageCode": "market_summer5g_new",
+        "markCdeo": "TxGuddOIS7WXoueQNSkvAQ==-market_summer5g_new-market_summer5g_new-1675658755517",
+        "subBizCode": "market_summer5g_new",
+        "effect": "",
+        "verifyCode": ""
+      }
+    }
+    const options = {
+      'url': `https://wap.js.10086.cn/vw/gateway/biz/marketSummer5gNew/summer5gRecords`,
+      'headers': {
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Accept-Encoding': 'br, gzip, deflate',
+        'Connection': 'keep-alive',
+        'Accept': '*/*',
+        'Referer': 'https://wap.js.10086.cn/',
+        'Accept-Language': 'en-us',
+        'X-Requested-With': 'XMLHttpRequest',
+        'Cookie': $.setCookie,
+        'User-Agent': ua
+      },
+      body: JSON.stringify(body)
+    }
+    $.post(options, async (err, resp, data) => {
+      console.log(`initPage: ${data}`)
+      if (err) throw new Error(err)
+      data = JSON.parse(data)
+      let ret = false
+      if (data.success == '0' && data.code == '200' && data.data) {
+        const summer5gRecords = data.data.summer5gRecords
+        const month = data.data.month
+        const founds = summer5gRecords.filter(e => e.month == month)
+
+        // 没记录或者已领取但未提交
+        ret = founds.length == 1 && founds[0].status == 1
+      }
+      resolve(ret)
+    })
+  })
+}
 
 /*{
   "success": "0",

@@ -15,7 +15,7 @@ Object.keys(js10086).forEach((item) => {
   cookiesArr.push(js10086[item])
 })
 const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/16A366  Jsmcc/1.0 ua=jsmcc&loginmobile=0a5b99bfb7fb26214a146094942d4d91&deviceid=891DDB4F-ED63-4EF0-AF49-8F6EE6005F89&platform=iphone&channel=sd&ch=03&version=8.4.9&netmode=WiFi&time=20220308151203&lng=7effded641d49c4f&lat=7effded641d49c4f&poi=(null)&cityCode=(null)&JType=0&platformExpland=iPhone%208&idfaMd5=CB272611-A585-4786-9DE1-23BC50B73007&cmtokenid=E0157A381A2741979E9AB324F2370CC3@js.ac.10086.cn'
-
+let wxid
 
 !(async () => {
   $.msg = ''
@@ -29,6 +29,7 @@ const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/6
     console.log(`手机号或微信号为空，不执行`)
     return
   }
+  wxid = JS_WX_ID
 
   const smsCode = Y5GLLLConfig[2]
   if (!smsCode) {
@@ -70,6 +71,79 @@ const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/6
   $.done()
 })
 
+/**
+ * {
+  "success": "0",
+  "message": "操作成功",
+  "code": "200",
+  "data": {
+    "month": "202302",
+    "summer5gRecords": [{
+      "id": "summer5g82554ca74d704feda94cc3c6de6baf7f8144",
+      "mobile": null,
+      "city": "20",
+      "time": "20230206085109",
+      "month": "202302",
+      "priceFlow": "5120",
+      "priceName": "5GB",
+      "status": "0",
+      "checkCode": null,
+      "checkMsg": null,
+      "code": null,
+      "msg": null,
+      "fxNum": null,
+      "fxMobile": null
+    }]
+    }
+ * }
+ */
+function summer5gRecords() {
+  return new Promise((resolve, reject) => {
+    const body = {
+      "wapContext": {
+        "channel": "wap",
+        "netType": "",
+        "optType": "3",
+        "bizCode": "market_summer5g_new",
+        "pageCode": "market_summer5g_new",
+        "markCdeo": "TxGuddOIS7WXoueQNSkvAQ==-market_summer5g_new-market_summer5g_new-1675658755517",
+        "subBizCode": "market_summer5g_new",
+        "effect": "",
+        "verifyCode": ""
+      }
+    }
+    const options = {
+      'url': `https://wap.js.10086.cn/vw/gateway/biz/marketSummer5gNew/summer5gRecords`,
+      'headers': {
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Accept-Encoding': 'br, gzip, deflate',
+        'Connection': 'keep-alive',
+        'Accept': '*/*',
+        'Referer': 'https://wap.js.10086.cn/',
+        'Accept-Language': 'en-us',
+        'X-Requested-With': 'XMLHttpRequest',
+        'Cookie': $.setCookie,
+        'User-Agent': ua
+      },
+      body: JSON.stringify(body)
+    }
+    $.post(options, async (err, resp, data) => {
+      console.log(`initPage: ${data}`)
+      if (err) throw new Error(err)
+      data = JSON.parse(data)
+      let ret = false
+      if (data.success == '0' && data.code == '200' && data.data) {
+        const summer5gRecords = data.data.summer5gRecords
+        const month = data.data.month
+        const founds = summer5gRecords.filter(e => e.month == month)
+
+        // 没记录或者已领取但未提交
+        ret = founds.length == 1 && founds[0].status == 1
+      }
+      resolve(ret)
+    })
+  })
+}
 
 function receive (smsCode) {
   return new Promise((resolve, reject) => {
@@ -121,14 +195,17 @@ function receive (smsCode) {
       let ret = false
       if (data && data.code == '200') {
       
-        ret = data.success == '0' 
+        ret = data.success == '0'
+        let msg
         if (ret) {
-          $.msg += `流量领取成功: ${data.data.priceName}\n`
-          console.log(`流量领取成功: ${data.data.priceName}`)
+          msg = `流量领取成功: ${data.data.priceName}`
         } else {
-          $.msg += `流量领取失败: ${data.data.errorMsg}\n`
-          console.log(`流量领取失败: ${data.data.errorMsg}`)
+          msg = `流量领取失败: ${data.data.errorMsg}`
         }
+        $.msg += `${msg}\n`
+        console.log(`${msg}`)
+
+        sendWX(msg, [wxid])
       }
       resolve(ret)
     })
