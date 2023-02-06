@@ -20,8 +20,9 @@ const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/6
 !(async () => {
   $.msg = ''
   const Y5GLLLConfig = (process.env.Y5GLLLConfig || '').split('&')
-  if (Y5GLLLConfig.length == 2) {
-    console.log(`参数配置错误: ${process.env.Y5GLLLConfig}`)
+  if (Y5GLLLConfig.length != 2) {
+    console.log(`参数配置错误: ${process.env.Y5GLLLConfig}, ${JSON.stringify(Y5GLLLConfig)}`)
+    return
   }
   const JS_WX_ID = Y5GLLLConfig[1]
   const userPhone = Y5GLLLConfig[0]
@@ -66,7 +67,7 @@ const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/6
       // 查询列表，是否已经激活
       const isHandled = await summer5gRecords()
       if (isHandled) {
-        sendWX('本月已领取，下个月6号之后再来', [JS_WX_ID])
+        sendWX(`${$.name}本月已领取，下个月6号之后再来`, [JS_WX_ID])
       } else {
         // 已经领取，需要短信验证码
         console.log(`发送验证码...`)
@@ -220,6 +221,7 @@ function summer5gRecords() {
         // 没记录或者已领取但未提交
         ret = founds.length == 1 && founds[0].status == 1
       }
+      console.log(`是否已领取：${ret}`)
       resolve(ret)
     })
   })

@@ -22,6 +22,7 @@ let wxid
   const Y5GLLLConfig = (process.env.Y5GLLLConfig || '').split('&')
   if (Y5GLLLConfig.length != 3) {
     console.log(`参数配置错误: ${process.env.Y5GLLLConfig}`)
+    return
   }
   const JS_WX_ID = Y5GLLLConfig[1]
   const userPhone = Y5GLLLConfig[0]
