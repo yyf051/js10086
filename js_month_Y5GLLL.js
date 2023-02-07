@@ -67,7 +67,7 @@ const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/6
       // 查询列表，是否已经激活
       const isHandled = await summer5gRecords()
       if (isHandled) {
-        sendWX(`${$.name}本月已领取，下个月6号之后再来`, [JS_WX_ID])
+        sendWX(`【${$.name}】\n本月已领取，下个月6号之后再来`, [JS_WX_ID])
       } else {
         // 已经领取，需要短信验证码
         console.log(`发送验证码...`)
