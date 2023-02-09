@@ -1,6 +1,6 @@
 /*
 江苏移动_查话费
-cron:2 2 2 2 2
+cron:12 12 29 2 ?
 */
 const Env = require('./function/01Env')
 const { initCookie } = require('./function/01js10086_common2')
@@ -42,11 +42,12 @@ Object.keys(js10086).forEach((item) => {
   $.redMesssgae = '' // 每个账号的警示消息置空
   $.singleMessage = ''
 
-  const success = await initCookie($)
-  if (!success) {
+  const ck = await initCookie($)
+  if (!ck) {
     $.msg += `${$.phone}登录失败......\n\n`
     return
   }
+  $.setCookie = ck
 
   $.msg += `<font size="5">${$.phone}</font>: \n`
   const tips = await queryIndexTopBar()
@@ -61,7 +62,7 @@ Object.keys(js10086).forEach((item) => {
 
   sendWX(`尊敬的${$.phone}用户，您的套餐详情如下：\n${$.singleMessage}`, [JS_WX_ID]) 
 
-  // $.sendNotify($.name, $.msg)
+  $.sendNotify($.name, $.msg)
 
 })().catch((e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
@@ -108,12 +109,10 @@ function queryIndexTopBar() {
       body: JSON.stringify(data)
     }
     
-    $.post(op, async (err, resp, data) => {
+    $.post(op, (err, resp, data) => {
       if (err) throw Error(err)
-      // console.log(data)
 
       data = JSON.parse(data)
-
       resolve(combineMessage(data))
     })
   })
@@ -135,27 +134,6 @@ function combineMessage(data) {
 
   return r
 }
-`尊敬的13584630864用户，您的套餐详情如下：
-
-💹套餐剩余: 
-    💨通用通话剩余: 0分钟
-    💨通用流量剩余: 586.61MB
-    💨其它流量剩余: 0GB
-✳套餐及固定费: 
-    ➡短信呼(1元): 1.00元
-    ➡1元包本地主叫200分钟(09版集团套餐): 0.87元
-    ➡10元提速包（提至100M）: 9.28元
-    ➡4G飞享18元套餐（2018版）: 17.11元
-❌套餐外语音费: 
-    💤基本通话费: 6.08元
-❌套餐外短彩信费: 
-    💤国内（不含港澳台）短信费: 0.10元
-❌增值业务费: 
-    💤视频彩铃订阅-酷电秀专属6元包: 6.00元
-
-共计: 40.44元
-余额: 163.43元`
-
 
 function queryBillInfo() {
   return new Promise((resolve) => {
@@ -197,20 +175,12 @@ function queryBillInfo() {
       },
       body : JSON.stringify(data)
     }
-    // console.log(JSON.stringify(op))
-    // console.log()
-    // console.log()
     
     $.post(op, async (err, resp, data) => {
       if (err) throw Error(err)
-      // console.log(data)
-      // console.log()
-      // console.log()
 
       data = JSON.parse(data)
-
       resolve(combineMessage2(data))
-      // resolve(true)
     })
   })
 }

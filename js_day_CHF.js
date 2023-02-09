@@ -28,11 +28,12 @@ const hours = (new Date()).getHours()
     $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
     $.password = cookie.match(/passwd=([^; ]+)(?=;?)/) && cookie.match(/passwd=([^; ]+)(?=;?)/)[1]
 
-    const success = await initCookie($)
-    if (!success) {
+    const ck = await initCookie($.phone, $.password)
+    if (!ck) {
       $.msg += `${$.phone}登录失败......\n\n`
       continue
     }
+    $.setCookie = ck
 
     $.msg += `<font size="5">${$.phone}</font>: \n`
     const tips = await queryIndexTopBar()
@@ -46,11 +47,6 @@ const hours = (new Date()).getHours()
     $.msg += '\n\n'
 
     const wxid = noticeConfig[$.phone]
-    /*if (hours === 20 && $.redMesssgae.length > 0) {
-      if (wxid) {
-         sendWX(`尊敬的${$.phone}用户：请注意，您存在套餐外消费：\n${$.redMesssgae}`, [wxid]) 
-      }
-    }*/
     if ((hours === 8 || hours === 18) && $.singleMessage.length > 0) {
       sendWX(`尊敬的${$.phone}用户，您的套餐详情如下：\n${$.singleMessage}`, [wxid]) 
     }
@@ -106,10 +102,8 @@ function queryIndexTopBar() {
     
     $.post(op, async (err, resp, data) => {
       if (err) throw Error(err)
-      // console.log(data)
 
       data = JSON.parse(data)
-
       resolve(combineMessage(data))
     })
   })
@@ -173,20 +167,12 @@ function queryBillInfo() {
       },
       body : JSON.stringify(data)
     }
-    // console.log(JSON.stringify(op))
-    // console.log()
-    // console.log()
     
     $.post(op, async (err, resp, data) => {
       if (err) throw Error(err)
-      // console.log(data)
-      // console.log()
-      // console.log()
 
       data = JSON.parse(data)
-
       resolve(combineMessage2(data))
-      // resolve(true)
     })
   })
 }

@@ -1,4 +1,6 @@
 const BrowserFinger = require('./BrowserFinger')
+const Env = require('./01Env')
+let $ = new Env()
 
 function getSetCookie (resp) {
   let c = ''
@@ -12,7 +14,7 @@ function getSetCookie (resp) {
 /**
  * 获取JSESSIONID
  */
-function getInitSessionID (vm) {    
+function getInitSessionID () {    
   return new Promise((resolve) => {
     const data = {
       "wapContext": {
@@ -43,16 +45,9 @@ function getInitSessionID (vm) {
       },
       body : JSON.stringify(data)
     }
-    vm.post(options, async (err, resp, data) => {
+    $.post(options, async (err, resp, data) => {
       if (err) throw new Error(err)
-      // $.log("getInitSessionID: "+data)
-      // resolve(getSetCookie(resp))
-      try {
-        resolve(getSetCookie(resp))
-      } catch (e) {
-        // await recall()
-        resolve(false)
-      }
+      resolve(getSetCookie(resp))
     })
   })
 }
@@ -73,13 +68,12 @@ function setConstCookie (ck = '') {
   $t = encodeURIComponent($t)
   // return "WT_FPC=id=" + $t + ":lv=" + $u.getTime().toString() + ":ss=" + $w.getTime().toString() 
   ck += 'WT_FPC=id=' + $t + ':lv=' + $u.getTime().toString() + ':ss=' + $w.getTime().toString() + '; '
-  //   console.log('setConstCookie：', ck)
   return ck
 }
 
-function checkLogin(vm) {
-  return new Promise(async (resolve) => {
-    const data = `reqUrl=CheckJSMobile&busiNum=CheckJSMobile&operType=3&mobile=${vm.phone}`
+function checkLogin(phone, ck) {
+  return new Promise((resolve) => {
+    const data = `reqUrl=CheckJSMobile&busiNum=CheckJSMobile&operType=3&mobile=${phone}`
 
     const options = {
       url: 'http://wap.js.10086.cn/actionDispatcher.do',
@@ -94,22 +88,21 @@ function checkLogin(vm) {
         'Origin': 'http://wap.js.10086.cn', 
         'Referer': 'http://wap.js.10086.cn/login.thtml?redirectURL=//wap.js.10086.cn/vw/index/home', 
         'Accept-Language': 'zh-CN,zh;q=0.9', 
-        'Cookie': vm.setCookie
+        'Cookie': ck
       },
       body : JSON.stringify(data)
     }
 
-    vm.post(options, async (err, resp, data) => {
+    $.post(options, (err, resp, data) => {
       if (err) throw new Error(err)
-      // $.log("getInitSessionID: "+data)
       resolve(getSetCookie(resp))
     })
   })
 }
 
-function login(vm) {
+function login(phone, password, ck) {
   return new Promise((resolve) => {
-    const data = `reqUrl=loginTouch&busiNum=login&mobile=${vm.phone}&password=${vm.password}&passwordSMS_vaild=&isSavePasswordVal=&verifyCode=&isSms=0&ver=t&imgReqSeq=a8490160ff5f4f1b96df232a4a27c5ba1305&loginType=0`
+    const data = `reqUrl=loginTouch&busiNum=login&mobile=${phone}&password=${password}&passwordSMS_vaild=&isSavePasswordVal=&verifyCode=&isSms=0&ver=t&imgReqSeq=a8490160ff5f4f1b96df232a4a27c5ba1305&loginType=0`
 
     const options = {
       method: 'post',
@@ -125,42 +118,37 @@ function login(vm) {
         'Origin': 'http://wap.js.10086.cn', 
         'Referer': 'http://wap.js.10086.cn/login.thtml?redirectURL=//wap.js.10086.cn/vw/index/home', 
         'Accept-Language': 'zh-CN,zh;q=0.9', 
-        'Cookie': vm.setCookie
+        'Cookie': ck
       },
       body: data
     }
 
-    vm.post(options, async (err, resp, data) => {
+    $.post(options, (err, resp, data) => {
       if (err) throw new Error(err)
-      // $.log("getInitSessionID: "+data)
       resolve(getSetCookie(resp))
     })
   })
 }
 
-function initCookie(vm) {
-  return new Promise(async (resolve) => {
-    await vm.wait(5000)
-    let success = false
+async function initCookie(phone, password) {
+    let ck
     try {
-      // console.log(`${vm.phone}获取JSESSIONID......`)
-      vm.setCookie = await getInitSessionID(vm)
-      if (!vm.setCookie) {
-        console.log(`${vm.phone}第二次获取JSESSIONID......`)
-        vm.setCookie = await getInitSessionID(vm)
+      ck = await getInitSessionID()
+      if (!ck) {
+        await $.wait(2000)
+        console.log(`获取失败，第2次获取JSESSIONID......`)
+        ck = await getInitSessionID()
       }
-      // console.log(`${vm.phone}通过SESSION:${vm.setCookie}获取Cookie......`)
-      vm.setCookie += setConstCookie()
-      vm.setCookie += `mywaytoopen=${BrowserFinger.get({phone: vm.phone})}; `
-      vm.setCookie += await checkLogin(vm)
-      vm.setCookie += await login(vm)
-      success = true
+      ck += setConstCookie()
+      ck += `mywaytoopen=${BrowserFinger.get({phone})}; `
+      ck += await checkLogin(phone, ck)
+      ck += await login(phone, password, ck)
     } catch (e) {
       console.log('登录失败', e)
-    } finally {
-      resolve(success)
+      ck = false
     }
-  })
+    console.log(ck)
+    return ck
 }
 
 module.exports = {
