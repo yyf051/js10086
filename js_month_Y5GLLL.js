@@ -18,7 +18,7 @@ const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/6
 
 
 !(async () => {
-  $.msg = ''
+  $.message = ''
   const Y5GLLLConfig = (process.env.Y5GLLLConfig || '').split('&')
   if (Y5GLLLConfig.length != 2) {
     console.log(`参数配置错误: ${process.env.Y5GLLLConfig}, ${JSON.stringify(Y5GLLLConfig)}`)
@@ -45,9 +45,9 @@ const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/6
     return
   }
   
-  $.msg += `<font size="5">${$.phone}</font>\n`
+  $.message += `<font size="5">${$.phone}</font>\n`
   if (!$.phone || !$.bodyParam) {
-    $.msg += `登陆参数配置不正确\n`
+    $.message += `登陆参数配置不正确\n`
     return
   }
 
@@ -76,10 +76,10 @@ const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/6
     }
   }
   console.log()
-  $.msg += `\n\n`
+  $.message += `\n\n`
 
-  console.log(`通知内容：\n\n`, $.msg)
-  await $.sendNotify($.name, $.msg)
+  console.log(`通知内容：\n\n`, $.message)
+  await $.sendNotify($.name, $.message)
 })().catch((e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
 }).finally(() => {
@@ -144,7 +144,7 @@ function initPage () {
       if (err) throw new Error(err)
       data = JSON.parse(data)
       if (data.success == '0' && data.code == '200' && data.data) {
-        $.msg += `查询结果：${data.data.checkMessage}\n`
+        $.message += `查询结果：${data.data.checkMessage}\n`
         console.log(`查询结果：${data.data.checkMessage}\n`)
       }
       resolve(data.data)
@@ -289,10 +289,10 @@ function lottery () {
       
         ret = data.data.isGet == 0
         if (ret) {
-          $.msg += `抽奖成功: ${data.data.priceName}\n`
+          $.message += `抽奖成功: ${data.data.priceName}\n`
           console.log(`抽奖成功: ${data.data.priceName}`)
         } else {
-          $.msg += `抽奖成功: ${data.data.errorMsg}\n`
+          $.message += `抽奖成功: ${data.data.errorMsg}\n`
           console.log(`抽奖成功: ${data.data.errorMsg}`)
         }
       }
@@ -343,10 +343,10 @@ function receive () {
       
         ret = data.success == '0' 
         if (ret) {
-          $.msg += `流量领取成功: ${data.data.priceName}\n`
+          $.message += `流量领取成功: ${data.data.priceName}\n`
           console.log(`流量领取成功: ${data.data.priceName}`)
         } else {
-          $.msg += `流量领取失败: ${data.data.errorMsg}\n`
+          $.message += `流量领取失败: ${data.data.errorMsg}\n`
           console.log(`流量领取失败: ${data.data.errorMsg}`)
         }
       }

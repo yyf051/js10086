@@ -5,7 +5,7 @@ const { nactFunc } = require('./function/01js10086_nact')
 const $ = new Env('江苏移动_签到组队')
 
 !(async () => {
-  $.msg = ''
+  $.message = ''
   for (let i = 0; i < options.length; i++) {
     $.index = i
     await initCookie($, i)
@@ -14,10 +14,10 @@ const $ = new Env('江苏移动_签到组队')
 
     await $.wait(10000)
     console.log()
-    $.msg += `\n`
+    $.message += `\n`
   }
-  console.log(`通知内容：\n\n`, $.msg)
-  await $.sendNotify($.name, $.msg)
+  console.log(`通知内容：\n\n`, $.message)
+  await $.sendNotify($.name, $.message)
 })().catch(async (e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
   await $.sendNotify($.name, "签到失败，手动检查...")
@@ -36,20 +36,20 @@ async function initIndexFunny() {
   if (resultObj) {
     if (!resultObj.isInTeam && !resultObj.funnyInvitedInfo && $.teamUUID == '') {
       if ($.index <= 1) {
-        $.msg += '尚未加入队伍，创建队伍~\n'
+        $.message += '尚未加入队伍，创建队伍~\n'
         console.log(`${$.phone}尚未加入队伍，创建队伍~`)
         await createTeam() // 仅第一个人进行队伍创建，并逐次邀请第2、3、4人加团
       }
     } else if (!resultObj.isInTeam && resultObj.funnyInvitedInfo) {
-      $.msg += '尚未加入队伍，加入队伍~\n'
+      $.message += '尚未加入队伍，加入队伍~\n'
       console.log(`${$.phone}尚未加入队伍，加入队伍~`)
       await joinTeam()
     } else if (resultObj.isInTeam && resultObj.funnyTeamInfo) {
       const teamId = resultObj.funnyTeamInfo.teamId
-      $.msg += `已加入队伍，队伍ID=${teamId}~\n`
+      $.message += `已加入队伍，队伍ID=${teamId}~\n`
       console.log(`${$.phone}已加入队伍，队伍ID=${teamId}~\n`)
       if (resultObj.funnyTeamInfo.teamSignCnt >= 50) {
-        $.msg += `组团任务已完成，进行抽奖~\n`
+        $.message += `组团任务已完成，进行抽奖~\n`
         console.log(`${$.phone}组团任务已完成，进行抽奖~\n`)
         await teamReceiveAward(teamId)
       }
@@ -125,7 +125,7 @@ async function teamSendInvitation (teamId, friendMobile) {
   $.isDirectReturnResultObj = true
   const params = `reqUrl=act2510&method=teamSendInvitation&operType=1&actCode=2510&teamId=${teamId}&friendMobile=${friendMobile}&extendParams=teamId%3D${teamId}&ywcheckcode=&mywaytoopen=`
   const resultObj = await nactFunc($, params)
-  $.msg += `邀请好友加团成功~\n`
+  $.message += `邀请好友加团成功~\n`
   console.log(`${$.phone}邀请好友加团成功~\n`)
 
   $.isDirectReturnResultObj = false
@@ -141,7 +141,7 @@ async function teamReceiveAward (teamId) {
   await $.wait(1000)
   const params = `reqUrl=act2510&method=teamReceiveAward&operType=1&actCode=2510&teamId=${teamId}&extendParams=&ywcheckcode=&mywaytoopen=`
   const resultObj = await nactFunc($, params)
-  $.msg += `组团任务抽奖成功~\n`
+  $.message += `组团任务抽奖成功~\n`
   console.log(`${$.phone}组团任务抽奖成功~\n`)
 }
 

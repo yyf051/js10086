@@ -16,16 +16,16 @@ Object.keys(js10086).forEach((item) => {
 
 
 !(async () => {
-  $.msg = ''
+  $.message = ''
   for (let i = 0; i < cookiesArr.length; i++) {
     const cookie = cookiesArr[i]
     $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
     const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
     
-    $.msg += `<font size="5">${$.phone}</font>\n`
+    $.message += `<font size="5">${$.phone}</font>\n`
     // console.log(`env: ${$.phone}, ${bodyParam}`)
     if (!$.phone || !bodyParam) {
-      $.msg += `登陆参数配置不正确\n`
+      $.message += `登陆参数配置不正确\n`
       continue
     }
 
@@ -44,11 +44,11 @@ Object.keys(js10086).forEach((item) => {
       if (resultObj.today - resultObj.monthSignCnt > 1) {
         await doSignSupply()
       } else {
-        $.msg += `1无需补签monthSignCnt=${resultObj.monthSignCnt}，today=${resultObj.today}\n`
+        $.message += `1无需补签monthSignCnt=${resultObj.monthSignCnt}，today=${resultObj.today}\n`
         console.log(`1无需补签monthSignCnt=${resultObj.monthSignCnt}，today=${resultObj.today}`)
       }
     } else {
-      $.msg += `无法领取补签卡isGetFreeChance=${resultObj.isGetFreeChance}，totalFreeChance=${resultObj.totalFreeChance}\n`
+      $.message += `无法领取补签卡isGetFreeChance=${resultObj.isGetFreeChance}，totalFreeChance=${resultObj.totalFreeChance}\n`
       console.log(`${$.phone}无法领取补签卡isGetFreeChance=${resultObj.isGetFreeChance}，totalFreeChance=${resultObj.totalFreeChance}`)
     }
 
@@ -57,16 +57,16 @@ Object.keys(js10086).forEach((item) => {
     if (!resultObj.isSignSupplu && resultObj.currentFreeChance > 0 && resultObj.today - resultObj.monthSignCnt > 1) {
       await doSignSupply()
     } else {
-      $.msg += `无需补签isSignSupplu=${resultObj.isSignSupplu}，currentFreeChance=${resultObj.currentFreeChance}，monthSignCnt=${resultObj.monthSignCnt}，today=${resultObj.today}\n`
+      $.message += `无需补签isSignSupplu=${resultObj.isSignSupplu}，currentFreeChance=${resultObj.currentFreeChance}，monthSignCnt=${resultObj.monthSignCnt}，today=${resultObj.today}\n`
       console.log(`${$.phone}无需补签isSignSupplu=${resultObj.isSignSupplu}，currentFreeChance=${resultObj.currentFreeChance}，monthSignCnt=${resultObj.monthSignCnt}，today=${resultObj.today}`)
     }
 
     await $.wait(10000)
     console.log()
-    $.msg += `\n`
+    $.message += `\n`
   }
-  console.log(`通知内容：\n\n`, $.msg)
-  await $.sendNotify($.name, $.msg)
+  console.log(`通知内容：\n\n`, $.message)
+  await $.sendNotify($.name, $.message)
 })().catch(async (e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
   await $.sendNotify($.name, "签到失败，手动检查...")
@@ -89,11 +89,11 @@ async function initIndexPage () {
     if (resultObj.isSignToday) {
       const prize = resultObj.prize
       console.log(`${$.phone}今日已签到，获得的奖励: ${prize.awardName}`)
-      $.msg += `今日已签到，获得的奖励: ${prize.awardName};\n`
+      $.message += `今日已签到，获得的奖励: ${prize.awardName};\n`
     } else {
       if (resultObj.isHasMulti) {
         console.log(`${$.phone}签到成功，需要再次领取奖励: ${prize.awardName}`)
-        $.msg += `已签到，需要再次领取奖励: ${prize.awardName}\n`
+        $.message += `已签到，需要再次领取奖励: ${prize.awardName}\n`
         await doSignMulti()
       }
     }
@@ -128,12 +128,12 @@ async function doSign () {
   if (prize && prize.awardNum) {
     // 直接下发奖励
     console.log(`${$.phone}签到成功，奖励: ${prize.awardName}`)
-    $.msg += `签到成功，奖励: ${prize.awardName}\n`
+    $.message += `签到成功，奖励: ${prize.awardName}\n`
   } else {
     // 需要进行抽奖
     if (resultObj.isHasMulti) {
       console.log(`${$.phone}已签到，需要再次领取奖励: ${prize.awardName}`)
-      $.msg += `已签到，需要再次领取奖励: ${prize.awardName}\n`
+      $.message += `已签到，需要再次领取奖励: ${prize.awardName}\n`
       await doSignMulti()
     }
   }
@@ -156,14 +156,14 @@ async function doSignMulti () {
   const supplyPrize = resultObj.supplyPrize
   if (prize && prize.awardNum) {
     // 直接下发奖励
-    $.msg += `签到抽奖成功，奖励: ${prize.awardName}\n`
+    $.message += `签到抽奖成功，奖励: ${prize.awardName}\n`
     console.log(`${$.phone}签到抽奖成功，奖励: ${prize.awardName}\n`)
   } else if (supplyPrize && supplyPrize.awardNum) {
     // 直接下发奖励
-    $.msg += `补签抽奖成功，奖励: ${prize.awardName}\n`
+    $.message += `补签抽奖成功，奖励: ${prize.awardName}\n`
     console.log(`${$.phone}补签抽奖成功，奖励: ${prize.awardName}\n`)
   } else {
-    $.msg += '领奖貌似没成功，手动检查吧\n'
+    $.message += '领奖貌似没成功，手动检查吧\n'
     console.log(`${$.phone}领奖貌似没成功，手动检查吧\n`)
   }
 }
@@ -177,7 +177,7 @@ async function getFreeSupplySignChance () {
   const params = 'reqUrl=act2510&method=getFreeSupplySignChance&operType=1&actCode=2510&hasGetMax=&extendParams=&ywcheckcode=&mywaytoopen='
   const resultObj = await nactFunc($, params)
   if (resultObj && resultObj.isGetFreeChance) {
-    $.msg += '获取免费补签卡成功~\n'
+    $.message += '获取免费补签卡成功~\n'
     console.log(`${$.phone}获取免费补签卡成功~`)
     // const today = resultObj.today.substring(6)
     // await doSignSupply()
@@ -198,12 +198,12 @@ async function doSignSupply() {
   if (prize && prize.awardNum) {
     // 直接下发奖励
     console.log(`${$.phone}补签成功，奖励: ${prize.awardName}`)
-    $.msg += `补签成功，奖励: ${prize.awardName}\n`
+    $.message += `补签成功，奖励: ${prize.awardName}\n`
   } else {
     // 需要进行抽奖
     if (resultObj.isHasMulti) {
       console.log(`${$.phone}已补签，需要再次领取奖励: ${prize.awardName}`)
-      $.msg += `已补签，需要再次领取奖励: ${prize.awardName}\n`
+      $.message += `已补签，需要再次领取奖励: ${prize.awardName}\n`
       await doSignMulti()
     }
   }

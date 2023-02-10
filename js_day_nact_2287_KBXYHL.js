@@ -16,16 +16,16 @@ Object.keys(js10086).forEach((item) => {
 })
 
 !(async () => {
-  $.msg = ''
+  $.message = ''
   for (let i = 0; i < cookiesArr.length; i++) {
     const cookie = cookiesArr[i]
     $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
     const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
     
-    $.msg += `<font size="5">${$.phone}</font>\n`
+    $.message += `<font size="5">${$.phone}</font>\n`
     // console.log(`env: ${$.phone}, ${bodyParam}`)
     if (!$.phone || !bodyParam) {
-      $.msg += `登陆参数配置不正确\n`
+      $.message += `登陆参数配置不正确\n`
       continue
     }
 
@@ -43,12 +43,12 @@ Object.keys(js10086).forEach((item) => {
     }
     const initIndexPage = await nactFunc($, params)
     if (!initIndexPage) {
-      $.msg += '\n'
+      $.message += '\n'
       continue
     } else {
         if (initIndexPage.chanceState >= 3) {
             console.log(`${$.phone}今日已抽奖......`)
-            $.msg += `今日已抽奖......\n\n`
+            $.message += `今日已抽奖......\n\n`
             continue
         }
     }
@@ -90,21 +90,21 @@ Object.keys(js10086).forEach((item) => {
         }
 
         if (doLottery.isApp && doLottery.isWin) {
-          $.msg += `${doLottery.awardName}\n`
+          $.message += `${doLottery.awardName}\n`
           console.log(`${doLottery.awardName}\n`)
         } else {
-          $.msg += `未中奖\n`
+          $.message += `未中奖\n`
           console.log(`未中奖\n`)
         }
     }
 
     console.log()
-    $.msg += `\n`
+    $.message += `\n`
 
     await $.wait(8000)
   }
-  console.log(`通知内容：\n\n`, $.msg)
-  await $.sendNotify($.name, $.msg)
+  console.log(`通知内容：\n\n`, $.message)
+  await $.sendNotify($.name, $.message)
 })().catch((e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
 }).finally(() => {

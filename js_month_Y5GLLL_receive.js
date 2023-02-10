@@ -18,7 +18,7 @@ const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/6
 let wxid
 
 !(async () => {
-  $.msg = ''
+  $.message = ''
   const Y5GLLLConfig = (process.env.Y5GLLLConfig || '').split('&')
   if (Y5GLLLConfig.length != 3) {
     console.log(`参数配置错误: ${process.env.Y5GLLLConfig}`)
@@ -52,20 +52,20 @@ let wxid
     return
   }
   
-  $.msg += `<font size="5">${$.phone}</font>\n`
+  $.message += `<font size="5">${$.phone}</font>\n`
   if (!$.phone || !$.bodyParam) {
-    $.msg += `登陆参数配置不正确\n`
+    $.message += `登陆参数配置不正确\n`
     return
   }
 
   console.log(`${$.phone}获取Cookie：`)
   $.setCookie = await getMobieCK($.phone, $.bodyParam)
 
-  $.msg += `\n\n`
+  $.message += `\n\n`
   await receive(smsCode)
 
-  console.log(`通知内容：\n\n`, $.msg)
-  await $.sendNotify($.name, $.msg)
+  console.log(`通知内容：\n\n`, $.message)
+  await $.sendNotify($.name, $.message)
 })().catch((e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
 }).finally(() => {
@@ -203,7 +203,7 @@ function receive (smsCode) {
         } else {
           msg = `流量领取失败: ${data.data.errorMsg}`
         }
-        $.msg += `${msg}\n`
+        $.message += `${msg}\n`
         console.log(`${msg}`)
 
         sendWX(msg, [wxid])

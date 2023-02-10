@@ -7,7 +7,7 @@ const Env = require('./function/Env')
 
 const $ = new Env('江苏移动_查找活动')
 !(async () => {
-  $.msg = ''
+  $.message = ''
   for (let i = 2571; i <= 2600; i++) {
     const url = `https://wap.js.10086.cn/nact/resource/${i}/html/index.html`
     $.get({url}, async (err, desp, data) => {

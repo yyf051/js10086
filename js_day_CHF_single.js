@@ -22,7 +22,7 @@ Object.keys(js10086).forEach((item) => {
   await doActivity()
   console.log('------------------------------------------------\n\n\n')
 
-  $.sendNotify($.name, $.msg)
+  $.sendNotify($.name, $.message)
 
 })().catch((e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
@@ -31,7 +31,7 @@ Object.keys(js10086).forEach((item) => {
 })
 
 async function doActivity() {
-  $.msg = ''
+  $.message = ''
   $.singleMessage = ''
 
   // 登陆
@@ -41,15 +41,17 @@ async function doActivity() {
   const indexBar = await webApi.queryIndexTopBar()
   const tips = webApi.combineIndexBarMessage(indexBar)
   $.singleMessage += tips
-  $.msg += `${tips}\n`
+  $.message += `${tips}\n`
 
   // 账单信息
   const billInfo = await webApi.queryBillInfo()
   const tips2 = webApi.combineBillInfoMessage(billInfo)
   $.singleMessage += tips2
-  $.msg += `${tips2}\n`
+  $.message += `${tips2}\n`
 
-  sendWX(`尊敬的${$.phone}用户，您的套餐详情如下：\n${$.singleMessage}`, [$.wxid])
+  let msg = `尊敬的${$.phone}用户，您的套餐详情如下：\n${$.singleMessage}`;
+  $.log(msg)
+  sendWX(msg, [$.wxid])
 }
 
 async function login() {
@@ -74,7 +76,7 @@ async function login() {
     throw Error('账号或密码为空')
   }
 
-  $.msg += `<font size="5">${$.phone}</font>: \n`
+  $.message += `<font size="5">${$.phone}</font>: \n`
   const ck = await initCookie($.phone, $.password)
   if (!ck) {
     throw Error('登录失败')

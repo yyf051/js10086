@@ -15,16 +15,16 @@ Object.keys(js10086).forEach((item) => {
 })
 
 !(async () => {
-  $.msg = ''
+  $.message = ''
   for (let i = 0; i < cookiesArr.length; i++) {
     const cookie = cookiesArr[i]
     $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
     const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
     
-    $.msg += `<font size="5">${$.phone}</font>\n`
+    $.message += `<font size="5">${$.phone}</font>\n`
     // console.log(`env: ${$.phone}, ${bodyParam}`)
     if (!$.phone || !bodyParam) {
-      $.msg += `登陆参数配置不正确\n`
+      $.message += `登陆参数配置不正确\n`
       continue
     }
 
@@ -40,7 +40,7 @@ Object.keys(js10086).forEach((item) => {
       continue
     } else if (!initRet.paramId) {
       console.log(`没有paramId，不执行`)
-      $.msg += `没有paramId，不执行\n`
+      $.message += `没有paramId，不执行\n`
       continue
       // initRet.paramId = 'dfcfbc4e279c297029f4ac944bf057d4b4872f25a01d7876'
     }
@@ -61,12 +61,12 @@ Object.keys(js10086).forEach((item) => {
     }
     
     console.log()
-    $.msg += `\n\n`
+    $.message += `\n\n`
     await $.wait(3000)
   }
 
-  console.log(`通知内容：\n\n`, $.msg)
-  await $.sendNotify($.name, $.msg)
+  console.log(`通知内容：\n\n`, $.message)
+  await $.sendNotify($.name, $.message)
 })().catch((e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
 }).finally(() => {
@@ -82,10 +82,10 @@ async function doLottery(paramId) {
     return
   } else if (!ret.isWin) {
     console.log(`抽奖成功，未获得奖励`)
-    $.msg += `抽奖成功，未获得奖励\n`
+    $.message += `抽奖成功，未获得奖励\n`
   } else {
     console.log(`抽奖成功，获得奖励：${ret.awardName}`)
-    $.msg += `抽奖成功，获得奖励：${ret.awardName}\n`
+    $.message += `抽奖成功，获得奖励：${ret.awardName}\n`
   }
 
   await $.wait(2000)

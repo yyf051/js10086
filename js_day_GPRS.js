@@ -32,7 +32,7 @@ const noticeConfig = JSON.parse(process.env.WX_NOTICE_CONFIG || {})
     await $.wait(10000)
   }
 
-  $.sendNotify($.name, $.msg)
+  $.sendNotify($.name, $.message)
 
 })().catch((e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
@@ -41,8 +41,8 @@ const noticeConfig = JSON.parse(process.env.WX_NOTICE_CONFIG || {})
 })
 
 function appendMsg(msg) {
-  $.msg = $.msg || ''
-  $.msg += msg
+  $.message = $.message || ''
+  $.message += msg
 }
 
 async function login(cookie) {

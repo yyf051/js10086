@@ -17,16 +17,16 @@ Object.keys(js10086).forEach((item) => {
 })
 
 !(async () => {
-  $.msg = ''
+  $.message = ''
   for (let i = 0; i < cookiesArr.length; i++) {
     const cookie = cookiesArr[i]
     $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
     const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
     
-    $.msg += `<font size="5">${$.phone}</font>\n`
+    $.message += `<font size="5">${$.phone}</font>\n`
     // console.log(`env: ${$.phone}, ${bodyParam}`)
     if (!$.phone || !bodyParam) {
-      $.msg += `登陆参数配置不正确\n`
+      $.message += `登陆参数配置不正确\n`
       continue
     }
 
@@ -37,12 +37,12 @@ Object.keys(js10086).forEach((item) => {
     await initIndexPage()
     
     console.log()
-    $.msg += `\n`
+    $.message += `\n`
     await $.wait(10000)
   }
 
-  console.log(`通知内容：\n\n`, $.msg)
-  await $.sendNotify($.name, $.msg)
+  console.log(`通知内容：\n\n`, $.message)
+  await $.sendNotify($.name, $.message)
 })().catch((e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
 }).finally(() => {
@@ -66,7 +66,7 @@ async function initIndexPage() {
     await checkSign()
   } else {
     console.log(`今日已签到`)
-    // $.msg += `今日已签到\n`
+    // $.message += `今日已签到\n`
   }
   let finishTaskIds = ['1']
   const tasks = ret.doTaskList || []
@@ -92,13 +92,13 @@ async function getOils() {
   const oilList = ret.oilList
   if (oilList && oilList.length > 0) {
     console.log(`存在油滴${oilList.length}个，进行获取`)
-    // $.msg += `存在油滴${oilList.length}个，进行获取\n`
+    // $.message += `存在油滴${oilList.length}个，进行获取\n`
     for (let i = 0; i < oilList.length; i++) {
       await getTemporaryOil(oilList[i].oil, oilList[i].getType)
     }
   }
   console.log(`当前总油滴${$.myOil}个`)
-  $.msg += `当前总油滴${$.myOil}个\n`
+  $.message += `当前总油滴${$.myOil}个\n`
 
   // 2元话费要求1800
   if ($.myOil >= 1800) {
@@ -122,7 +122,7 @@ async function checkSign() {
 async function execTasks(taskList, finishTaskIds) {
   if (finishTaskIds.length == taskList.length) {
     console.log(`今日任务均已完成，无需执行`)
-    $.msg += `今日任务均已完成，无需执行\n`
+    $.message += `今日任务均已完成，无需执行\n`
   }
   // console.log(finishTaskIds)
   for (let i = 0; i < taskList.length; i++) {
@@ -150,7 +150,7 @@ async function doTask(taskId, taskName) {
   }
 
   console.log(`已完成任务：${taskName}`)
-  // $.msg += `已完成任务：${taskName}\n`
+  // $.message += `已完成任务：${taskName}\n`
   await $.wait(5000)
 }
 
@@ -170,7 +170,7 @@ async function getTemporaryOil(oil, getType) {
 
   $.myOil += Number.parseInt(oil)
   console.log(`领${oil}滴油成功`)
-  $.msg += `领${oil}滴油成功;`
+  $.message += `领${oil}滴油成功;`
 
   await $.wait(2000)
 }
@@ -187,7 +187,7 @@ async function exchangePrize(prizeId) {
 
   // console.log(`执行结果： ${JSON.stringify(ret)}`)
   console.log(`兑换${ret.awardName}成功`)
-  $.msg += `兑换${ret.awardName}成功\n`
+  $.message += `兑换${ret.awardName}成功\n`
 }
 
 

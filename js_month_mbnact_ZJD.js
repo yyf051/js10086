@@ -17,16 +17,16 @@ Object.keys(js10086).forEach((item) => {
 })
 
 !(async () => {
-  $.msg = ''
+  $.message = ''
   for (let i = 0; i < cookiesArr.length; i++) {
     const cookie = cookiesArr[i]
     $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
     const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
     
-    $.msg += `<font size="5">${$.phone}</font>\n`
+    $.message += `<font size="5">${$.phone}</font>\n`
     // console.log(`env: ${$.phone}, ${bodyParam}`)
     if (!$.phone || !bodyParam) {
-      $.msg += `登陆参数配置不正确\n`
+      $.message += `登陆参数配置不正确\n`
       continue
     }
 
@@ -36,7 +36,7 @@ Object.keys(js10086).forEach((item) => {
     console.log(`${$.phone}获取活动资格......`)
     const initRet0 = await mbactFunc($, 'entitle/preconditions', actNum)
     if (!initRet0) {
-      $.msg += `获取活动资格失败\n`
+      $.message += `获取活动资格失败\n`
       console.log(`获取活动资格失败`, initRet0)
       continue
     }
@@ -45,7 +45,7 @@ Object.keys(js10086).forEach((item) => {
     console.log(`${$.phone}查询可抽奖次数......`)
     const initRet = await mbactFunc($, 'checkEntitleAccount', actNum)
     if (!initRet) {
-      $.msg += `查询可抽奖次数失败\n`
+      $.message += `查询可抽奖次数失败\n`
       console.log(`查询可抽奖次数失败`, initRet)
       continue
     }
@@ -53,7 +53,7 @@ Object.keys(js10086).forEach((item) => {
       for (let j = 0; j < initRet.surplusCount; j++) {
         const checkCanLottery = await mbactFunc($, 'checkCanLottery', actNum)
         if (!checkCanLottery) {
-          $.msg += `无抽奖权限\n`
+          $.message += `无抽奖权限\n`
           console.log(`无抽奖权限`, checkCanLottery)
           continue
         }
@@ -61,24 +61,24 @@ Object.keys(js10086).forEach((item) => {
 
         const lotteryStrengthen = await mbactFunc($, 'lotteryStrengthen', `${actNum}&sourcesNum=H5&featureCode=`)
         if (!lotteryStrengthen) {
-          $.msg += `抽奖失败\n`
+          $.message += `抽奖失败\n`
           console.log(`抽奖失败`, lotteryStrengthen)
           continue
         }
-        $.msg += `赢得${lotteryStrengthen.prize_name}\n`
+        $.message += `赢得${lotteryStrengthen.prize_name}\n`
         console.log(`赢得${lotteryStrengthen.prize_name}\n`)
         await $.wait(2000)
       }
     } else {
-      $.msg += `本月已参与过，无抽奖机会了\n`
+      $.message += `本月已参与过，无抽奖机会了\n`
       console.log(`本月已参与过，无抽奖机会了`)
     }
     
     console.log()
-    $.msg += `\n`
+    $.message += `\n`
     await $.wait(10000)
   }
-  await $.sendNotify($.name, $.msg)
+  await $.sendNotify($.name, $.message)
 })().catch((e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
 }).finally(() => {

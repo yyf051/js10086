@@ -20,16 +20,16 @@ Object.keys(js10086).forEach((item) => {
 })
 
 !(async () => {
-  $.msg = ''
+  $.message = ''
   for (let i = 0; i < cookiesArr.length; i++) {
     const cookie = cookiesArr[i]
     $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
     const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
     
-    $.msg += `<font size="5">${$.phone}</font>\n`
+    $.message += `<font size="5">${$.phone}</font>\n`
     // console.log(`env: ${$.phone}, ${bodyParam}`)
     if (!$.phone || !bodyParam) {
-      $.msg += `登陆参数配置不正确\n`
+      $.message += `登陆参数配置不正确\n`
       continue
     }
 
@@ -39,13 +39,13 @@ Object.keys(js10086).forEach((item) => {
     await execActivity()
     
     console.log()
-    $.msg += `\n`
+    $.message += `\n`
     console.log(`---------------------------------------------------------\n\n\n`)
     await $.wait(10000)
   }
 
-  console.log(`通知内容：\n\n`, $.msg)
-  await $.sendNotify($.name, $.msg)
+  console.log(`通知内容：\n\n`, $.message)
+  await $.sendNotify($.name, $.message)
 })().catch((e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
 }).finally(() => {
@@ -150,7 +150,7 @@ async function handleBrowser(resultObj) {
 async function execTasks(taskList, finishTaskIds) {
   if (finishTaskIds.length == taskList.length) {
     console.log(`今日任务均已完成，无需执行`)
-    $.msg += `今日任务均已完成，无需执行\n`
+    $.message += `今日任务均已完成，无需执行\n`
     return
   }
 
@@ -179,7 +179,7 @@ async function doTask(task) {
 
   task = ret.taskConfig
   console.log(`已完成任务：${task.taskName}，获得${task.startCount || ' UNKNOWN '}水滴`)
-  $.msg += `已完成任务：${task.taskName}，获得${task.startCount || ' UNKNOWN '}水滴\n`
+  $.message += `已完成任务：${task.taskName}，获得${task.startCount || ' UNKNOWN '}水滴\n`
   await $.wait(3000)
 }
 
@@ -189,7 +189,7 @@ async function doTask(task) {
 async function watering(starLeft) {
   if (starLeft < WATER_NEED) {
     console.log(`水滴不足${WATER_NEED}, 结束浇水...`)
-    $.msg += `水滴不足${WATER_NEED}, 结束浇水...\n`
+    $.message += `水滴不足${WATER_NEED}, 结束浇水...\n`
     return
   }
 
@@ -202,7 +202,7 @@ async function watering(starLeft) {
   }
 
   console.log(`浇水成功，剩余水滴：${ret.StarLeft}`)
-  $.msg += `浇水成功，剩余水滴：${ret.StarLeft}\n`
+  $.message += `浇水成功，剩余水滴：${ret.StarLeft}\n`
 
   await $.wait(2000)
   watering(ret.StarLeft)
@@ -239,7 +239,7 @@ async function doLottery(pieceId) {
   if (ret.isWin) {
     // console.log(JSON.stringify(ret))
     console.log(`抽奖成功，获得奖励：${ret.prizeLog.awardName}`)
-    $.msg += `抽奖成功，获得奖励：${ret.prizeLog.awardName}\n`
+    $.message += `抽奖成功，获得奖励：${ret.prizeLog.awardName}\n`
   }
 
   await $.wait(2000)

@@ -15,16 +15,16 @@ Object.keys(js10086).forEach((item) => {
 })
 
 !(async () => {
-  $.msg = ''
+  $.message = ''
   for (let i = 0; i < cookiesArr.length; i++) {
     const cookie = cookiesArr[i]
     $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
     const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
     
-    $.msg += `<font size="5">${$.phone}</font>\n`
+    $.message += `<font size="5">${$.phone}</font>\n`
     // console.log(`env: ${$.phone}, ${bodyParam}`)
     if (!$.phone || !bodyParam) {
-      $.msg += `登陆参数配置不正确\n`
+      $.message += `登陆参数配置不正确\n`
       continue
     }
 
@@ -35,10 +35,10 @@ Object.keys(js10086).forEach((item) => {
 
     await $.wait(10000)
     console.log()
-    $.msg += `\n`
+    $.message += `\n`
   }
-  console.log(`通知内容：\n\n`, $.msg)
-  await $.sendNotify($.name, $.msg)
+  console.log(`通知内容：\n\n`, $.message)
+  await $.sendNotify($.name, $.message)
 })().catch(async (e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
   await $.sendNotify($.name, "签到失败，手动检查...")
@@ -66,7 +66,7 @@ async function doGetAllPrize () {
       }
   } else {
     console.log(`${$.phone}无需领奖`)
-    $.msg += ` 满签奖励无需领奖\n`
+    $.message += ` 满签奖励无需领奖\n`
   }
   return false
 }
@@ -88,9 +88,9 @@ async function doReceiveFullSign (lotteryCode) {
   if (receiveFullPrize && receiveFullPrize.awardNum) {
     // 直接下发奖励
     console.log(`${$.phone}签到成功，奖励: ${receiveFullPrize.awardName}`)
-    $.msg += `签到成功，奖励: ${receiveFullPrize.awardName}\n`
+    $.message += `签到成功，奖励: ${receiveFullPrize.awardName}\n`
   } else {
     console.log(`${$.phone}领取失败`)
-    $.msg += ` 满签奖励领取失败\n`
+    $.message += ` 满签奖励领取失败\n`
   }
 }

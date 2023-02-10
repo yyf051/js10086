@@ -15,16 +15,16 @@ Object.keys(js10086).forEach((item) => {
 })
 
 !(async () => {
-  $.msg = ''
+  $.message = ''
   for (let i = 0; i < cookiesArr.length; i++) {
     const cookie = cookiesArr[i]
     $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
     const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
     
-    $.msg += `<font size="5">${$.phone}</font>\n`
+    $.message += `<font size="5">${$.phone}</font>\n`
     // console.log(`env: ${$.phone}, ${bodyParam}`)
     if (!$.phone || !bodyParam) {
-      $.msg += `登陆参数配置不正确\n`
+      $.message += `登陆参数配置不正确\n`
       continue
     }
 
@@ -35,10 +35,10 @@ Object.keys(js10086).forEach((item) => {
 
     await $.wait(10000)
     console.log()
-    $.msg += `\n`
+    $.message += `\n`
   }
-  console.log(`通知内容：\n\n`, $.msg)
-  await $.sendNotify($.name, $.msg)
+  console.log(`通知内容：\n\n`, $.message)
+  await $.sendNotify($.name, $.message)
 })().catch(async (e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
   await $.sendNotify($.name, "签到失败，手动检查...")
@@ -57,7 +57,7 @@ async function initIndexTasks() {
   const okTaskIds = []
   if (resultObj && resultObj.userTasksOpr) {
     console.log(`${$.phone}成功查询已完成E豆任务列表：${resultObj.userTasksOpr.length}`)
-    $.msg += `成功查询E豆任务列表：${resultObj.userTasksOpr.length}\n`
+    $.message += `成功查询E豆任务列表：${resultObj.userTasksOpr.length}\n`
     for (let i = 0; i < resultObj.userTasksOpr.length; i++) {
       const task = resultObj.userTasksOpr[i]
       okTaskIds.push(task.taskId)
@@ -71,7 +71,7 @@ async function initIndexTasks() {
 
   if (resultObj && resultObj.tasksCfg) {
     console.log(`${$.phone}成功查询E豆任务列表：${resultObj.tasksCfg.length}`)
-    $.msg += `成功查询E豆任务列表：${resultObj.tasksCfg.length}\n`
+    $.message += `成功查询E豆任务列表：${resultObj.tasksCfg.length}\n`
     for (let i = 0; i < resultObj.tasksCfg.length; i++) {
       const task = resultObj.tasksCfg[i]
       if (okTaskIds.indexOf(task.taskId) == -1) {
@@ -88,11 +88,11 @@ async function initIndexTasks() {
         } else if (task.url.indexOf('https://wap.js.10086.cn/nact/resource/') > -1) {
           const actNo = task.url.substring('https://wap.js.10086.cn/nact/resource/'.length).split('/')[0]
           await turntable(task.taskId, task.taskName, actNo)
-          $.msg += '\n'
+          $.message += '\n'
         // } else if (task.url.indexOf('https://wap.js.10086.cn/vw/navbar/') > -1) {
         //   const actNo = task.url.substring('https://wap.js.10086.cn/nact/resource/'.length).split('/')[0]
         //   await turntable(task.taskId, task.taskName, actNo)
-        //   $.msg += '\n'
+        //   $.message += '\n'
         } else {
           console.log(`任务信息：${JSON.stringify(task)}`)
         }
@@ -204,7 +204,7 @@ async function turntable(taskId, taskName, actNo, methodName = 'turntable') {
   await $.wait(2000)
   $.isDirectReturnResultObj = true
   console.log(`${$.phone}执行E豆任务：${taskName}......`)
-  $.msg += `执行E豆任务：${taskName}......\n`
+  $.message += `执行E豆任务：${taskName}......\n`
   const params = `reqUrl=act${actNo}&method=${methodName}&actCode=${actNo}&extendParams=thass%3D1%26task2510Id%3D${taskId}%26task2510Status%3D0&ywcheckcode=&mywaytoopen=`
   const resultObj = await nactFunc($, params)
 
@@ -225,7 +225,7 @@ async function newCompleteEBeanTask(taskId, taskName, actNo) {
   // console.log('newCompleteEBeanTask', resultObj)
   if (resultObj && resultObj.liulan == 1) {
     console.log(`${$.phone}成功完成E豆任务：${taskName}......`)
-    $.msg += `成功完成E豆任务：${taskName}......\n`
+    $.message += `成功完成E豆任务：${taskName}......\n`
     await receiveTaskAward(taskId)
   }
 }
@@ -238,6 +238,6 @@ async function receiveTaskAward(taskId) {
 
   if (resultObj) {
     console.log(`${$.phone}领取5E豆任务奖励成功......`)
-    $.msg += `领取5E豆任务奖励......\n`
+    $.message += `领取5E豆任务奖励......\n`
   }
 }

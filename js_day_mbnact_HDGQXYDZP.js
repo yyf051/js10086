@@ -16,16 +16,16 @@ Object.keys(js10086).forEach((item) => {
 })
 
 !(async () => {
-  $.msg = ''
+  $.message = ''
   for (let i = 0; i < cookiesArr.length; i++) {
     const cookie = cookiesArr[i]
     $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
     const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
     
-    $.msg += `<font size="5">${$.phone}</font>\n`
+    $.message += `<font size="5">${$.phone}</font>\n`
     // console.log(`env: ${$.phone}, ${bodyParam}`)
     if (!$.phone || !bodyParam) {
-      $.msg += `登陆参数配置不正确\n`
+      $.message += `登陆参数配置不正确\n`
       continue
     }
 
@@ -38,7 +38,7 @@ Object.keys(js10086).forEach((item) => {
       continue
     }
     if (initRet.surplusCount == 0) {
-      $.msg += `无抽奖机会\n`
+      $.message += `无抽奖机会\n`
       console.log(`${$.phone}无抽奖机会`)
       continue
     }
@@ -53,17 +53,17 @@ Object.keys(js10086).forEach((item) => {
       if (!lotteryStrengthen) {
         continue
       }
-      $.msg += `赢得${lotteryStrengthen.prize_name}\n`
+      $.message += `赢得${lotteryStrengthen.prize_name}\n`
       console.log(`赢得${lotteryStrengthen.prize_name}\n`)
       await $.wait(2000)
     }
     
     console.log()
-    $.msg += `\n`
+    $.message += `\n`
     await $.wait(5000)
   }
-  console.log(`通知内容：\n\n`, $.msg)
-  await $.sendNotify($.name, $.msg)
+  console.log(`通知内容：\n\n`, $.message)
+  await $.sendNotify($.name, $.message)
 })().catch((e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
 }).finally(() => {

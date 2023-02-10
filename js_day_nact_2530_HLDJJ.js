@@ -17,16 +17,16 @@ Object.keys(js10086).forEach((item) => {
 })
 
 !(async () => {
-  $.msg = ''
+  $.message = ''
   for (let i = 0; i < cookiesArr.length; i++) {
     const cookie = cookiesArr[i]
     $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
     const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
     
-    $.msg += `<font size="5">${$.phone}</font>\n`
+    $.message += `<font size="5">${$.phone}</font>\n`
     // console.log(`env: ${$.phone}, ${bodyParam}`)
     if (!$.phone || !bodyParam) {
-      $.msg += `登陆参数配置不正确\n`
+      $.message += `登陆参数配置不正确\n`
       continue
     }
 
@@ -38,12 +38,12 @@ Object.keys(js10086).forEach((item) => {
     await initIndexPage()
     
     console.log()
-    $.msg += `\n\n`
+    $.message += `\n\n`
     await $.wait(10000)
   }
 
-  console.log(`通知内容：\n\n`, $.msg)
-  await $.sendNotify($.name, $.msg)
+  console.log(`通知内容：\n\n`, $.message)
+  await $.sendNotify($.name, $.message)
 })().catch((e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
 }).finally(() => {
@@ -70,7 +70,7 @@ async function initIndexPage() {
   const chance = ret.chance
   if (chance && chance > 0) {
     console.log(`存在抽奖${chance}机会，进行抽奖`)
-    $.msg += `存在抽奖${chance}机会，进行抽奖\n`
+    $.message += `存在抽奖${chance}机会，进行抽奖\n`
     for (let i = 0; i < chance; i++) {
       await doLottery()
     }
@@ -103,7 +103,7 @@ async function checkSign() {
 async function execTasks(taskList, finishTaskIds) {
   if (finishTaskIds.length == taskList.length) {
     console.log(`今日任务均已完成，无需执行`)
-    $.msg += `今日任务均已完成，无需执行\n`
+    $.message += `今日任务均已完成，无需执行\n`
   }
 
   for (let i = 0; i < taskList.length; i++) {
@@ -131,7 +131,7 @@ async function doTask(taskId, taskName, taskType) {
   }
 
   console.log(`已完成任务：${taskName}，进行抽奖`)
-  $.msg += `已完成任务：${taskName}，进行抽奖\n`
+  $.message += `已完成任务：${taskName}，进行抽奖\n`
   await $.wait(5000)
 
   await doLottery()
@@ -150,7 +150,7 @@ async function doLottery() {
   }
 
   console.log(`抽奖成功，获得奖励：${ret.awardName}`)
-  $.msg += `抽奖成功，获得奖励：${ret.awardName}\n`
+  $.message += `抽奖成功，获得奖励：${ret.awardName}\n`
 
   await $.wait(2000)
 }
@@ -168,7 +168,7 @@ async function doSuperLottery() {
   }
 
   console.log(`超级抽奖成功，获得奖励：${ret.awardName}`)
-  $.msg += `超级抽奖成功，获得奖励：${ret.awardName}\n`
+  $.message += `超级抽奖成功，获得奖励：${ret.awardName}\n`
 
   await $.wait(2000)
 }

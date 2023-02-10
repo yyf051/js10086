@@ -5,13 +5,13 @@ const {
   ua, options, enter, recall, getExtendCookie1, getExtendCookie2, getExtendCookie3, getCookie, setConstCookie
 } = $.isNode() ? require('./function/01js10086_common') : ''
 
-$.msg = ''
+$.message = ''
 $.setCookie = ''
 !(async () => {
   for (let i = 0; i < options.length; i++) {
     $.index = i
     const phone = `账号${options[i].headers['LC-PN']}`
-    $.msg += `${phone}: \n`
+    $.message += `${phone}: \n`
     console.log(`${phone}获取JSESSIONID......`)
     $.setCookie = await recall()
     console.log(`${phone}获取Cookie......`)
@@ -30,7 +30,7 @@ $.setCookie = ''
         if (task.taskType == 'BROWSE') {
           const billNo = await doTask(task)
           const billNo2 = await doneBrowseTask(task, billNo)
-          $.msg += `\n`
+          $.message += `\n`
           await $.wait(2000)
         }
       }
@@ -48,9 +48,9 @@ $.setCookie = ''
 
     
     console.log()
-    $.msg += `\n`
+    $.message += `\n`
   }
-  await $.sendNotify($.name, $.msg)
+  await $.sendNotify($.name, $.message)
 })().catch((e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
 }).finally(() => {
@@ -81,13 +81,13 @@ function answer () {
       if (err) throw new Error(err)
       data = JSON.parse(data)
       // if (!data.success && data.code == '2') {
-      //   $.msg += `${data.message};\n`
+      //   $.message += `${data.message};\n`
       // }
       let subTaskList = []
       if (data.success && data.code == '1' && data.data) {
         subTaskList = data.data.taskSubList.filter(e => e.currentDoneCount == 0)
         if (subTaskList.length > 0) {
-          $.msg += `查询可完成任务数：${subTaskList.length}\n`
+          $.message += `查询可完成任务数：${subTaskList.length}\n`
           console.log(`查询可完成任务数：${subTaskList.length}\n`)
         } else {
           subTaskList = data.data.entitleCount
@@ -126,7 +126,7 @@ function doTask (task) {
       let ret = ''
       if (data && data.success && data.code == '1' && data.data) {
         ret = data.data
-        $.msg += `开始执行任务: ${task.taskName}\n`
+        $.message += `开始执行任务: ${task.taskName}\n`
         console.log(`开始执行任务: ${task.taskName}\n`)
       }
       resolve(ret)
@@ -158,7 +158,7 @@ function doneBrowseTask (task, billNo) {
       data = JSON.parse(data)
       let ret = ''
       if (data && data.success && data.code == '1' && data.data) {
-        $.msg += `成功执行任务: ${task.taskName}\n`
+        $.message += `成功执行任务: ${task.taskName}\n`
         console.log(`成功执行任务: ${task.taskName}\n`)
         ret = data.data
       }
@@ -190,10 +190,10 @@ function lotteryStrengthen () {
       // console.log('lotteryStrengthen: ' + data)
       data = JSON.parse(data)
       if (data && data.success && data.code == '1' && data.data) {
-        $.msg += `获得${data.data.prize_name};\n`
+        $.message += `获得${data.data.prize_name};\n`
         console.log(`获得${data.data.prize_name};\n`)
       } else if (data && data.success) {
-        $.msg += `获得失败，${data.message};\n`
+        $.message += `获得失败，${data.message};\n`
         console.log(`获得失败，${data.message};\n`)
       } else {
         console.log('请求失败：', JSON.stringify(data))

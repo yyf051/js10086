@@ -15,16 +15,16 @@ Object.keys(js10086).forEach((item) => {
 })
 
 !(async () => {
-  $.msg = ''
+  $.message = ''
   for (let i = 0; i < cookiesArr.length; i++) {
     const cookie = cookiesArr[i]
     $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
     const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
     
-    $.msg += `<font size="5">${$.phone}</font>\n`
+    $.message += `<font size="5">${$.phone}</font>\n`
     // console.log(`env: ${$.phone}, ${bodyParam}`)
     if (!$.phone || !bodyParam) {
-      $.msg += `登陆参数配置不正确\n`
+      $.message += `登陆参数配置不正确\n`
       continue
     }
 
@@ -47,7 +47,7 @@ Object.keys(js10086).forEach((item) => {
     } else {
       const subTaskList = resultObj.taskSubList.filter(e => e.currentDoneCount == 0).slice(0, 6)
       if (subTaskList.length > 0) {
-        $.msg += `查询可完成任务数：${subTaskList.length}\n`
+        $.message += `查询可完成任务数：${subTaskList.length}\n`
         console.log(`${$.phone}查询可完成任务数：${subTaskList.length}\n`)
         for (let j = 0; j < subTaskList.length; j++) {
           const task = subTaskList[j]
@@ -55,7 +55,7 @@ Object.keys(js10086).forEach((item) => {
             const billNo = await doTask(task)
             await $.wait(1000)
             const billNo2 = await doneBrowseTask(task, billNo)
-            $.msg += `\n`
+            $.message += `\n`
             await $.wait(2000)
 
             if (j % 2 == 1) {
@@ -66,16 +66,16 @@ Object.keys(js10086).forEach((item) => {
           }
         }
       } else {
-        $.msg += `今日已完成，无任务可做\n`
+        $.message += `今日已完成，无任务可做\n`
         console.log(`${$.phone}今日已完成，无任务可做`)
       }
     } 
     
     console.log()
-    $.msg += `\n\n`
+    $.message += `\n\n`
   }
-  console.log(`通知内容：\n\n`, $.msg)
-  await $.sendNotify($.name, $.msg)
+  console.log(`通知内容：\n\n`, $.message)
+  await $.sendNotify($.name, $.message)
 })().catch((e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
 }).finally(() => {
@@ -107,7 +107,7 @@ async function doneBrowseTask (task, billNo) {
   console.log(`${$.phone}成功执行任务: ${task.taskName}......`)
   const actNum = `RWCJ00000080&billNum=${billNo}`
   const body = `actNum=RWCJ00000080&billNum=${billNo}`
-  $.msg += `成功执行任务: ${task.taskName}\n`
+  $.message += `成功执行任务: ${task.taskName}\n`
   return await mbactFunc($, 'doneBrowseTask', actNum, body)
 }
 
@@ -117,7 +117,7 @@ async function doneBrowseTask (task, billNo) {
 async function lotteryStrengthen () {
   const resultObj = await mbactFunc($, 'lotteryStrengthen', 'RWCJ00000080&sourcesNum=H5&featureCode=')
   if (resultObj && resultObj.prize_name) {
-    $.msg += `赢得${resultObj.prize_name}\n`
+    $.message += `赢得${resultObj.prize_name}\n`
     console.log(`${$.phone}赢得${resultObj.prize_name}`)
   }
 }

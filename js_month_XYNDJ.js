@@ -17,16 +17,16 @@ const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/6
 
 
 !(async () => {
-  $.msg = ''
+  $.message = ''
   for (let i = 0; i < cookiesArr.length; i++) {
     const cookie = cookiesArr[i]
     $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
     const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
     
-    $.msg += `<font size="5">${$.phone}</font>\n`
+    $.message += `<font size="5">${$.phone}</font>\n`
     // console.log(`env: ${$.phone}, ${bodyParam}`)
     if (!$.phone || !bodyParam) {
-      $.msg += `登陆参数配置不正确\n`
+      $.message += `登陆参数配置不正确\n`
       continue
     }
 
@@ -37,10 +37,10 @@ const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/6
     let r = await dispatch()
     await $.wait(10000)
 
-    $.msg += '\n'
+    $.message += '\n'
   }
-  console.log(`通知内容：\n\n`, $.msg)
-  await $.sendNotify($.name, $.msg)
+  console.log(`通知内容：\n\n`, $.message)
+  await $.sendNotify($.name, $.message)
 })().catch((e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
 }).finally(() => {
@@ -75,11 +75,11 @@ function dispatch() {
             if (data.success && data.resultCode == '0') {
                 console.log(`${JSON.stringify(data.resultObj)}`)
                 console.log(`抽奖成功, 获得${data.resultObj.luckyEggPojoTemp.bigTitle}: ${data.resultObj.luckyEggPojoTemp.smallTitle}`)
-                $.msg += `抽奖成功, 获得${data.resultObj.luckyEggPojoTemp.bigTitle}: ${data.resultObj.luckyEggPojoTemp.smallTitle}\n`
+                $.message += `抽奖成功, 获得${data.resultObj.luckyEggPojoTemp.bigTitle}: ${data.resultObj.luckyEggPojoTemp.smallTitle}\n`
                 resolve(true)
             } else {
                 console.log(`抽奖失败, 返回结果: ${JSON.stringify(data)}`)
-                $.msg += `抽奖失败, 返回结果: ${JSON.stringify(data)}\n`
+                $.message += `抽奖失败, 返回结果: ${JSON.stringify(data)}\n`
                 resolve(false)
             }
         })

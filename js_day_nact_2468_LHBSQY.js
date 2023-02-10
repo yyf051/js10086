@@ -25,7 +25,7 @@ Object.keys(js10086).forEach((item) => {
 let exec = true
 
 !(async () => {
-  $.msg = ''
+  $.message = ''
   for (let i = 0; i < cookiesArr.length; i++) {
     if (!exec) {
       // 不再执行
@@ -36,10 +36,10 @@ let exec = true
     $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
     const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
     
-    $.msg += `<font size="5">${$.phone}</font>\n`
+    $.message += `<font size="5">${$.phone}</font>\n`
     // console.log(`env: ${$.phone}, ${bodyParam}`)
     if (!$.phone || !bodyParam) {
-      $.msg += `登陆参数配置不正确\n`
+      $.message += `登陆参数配置不正确\n`
       continue
     }
 
@@ -50,13 +50,13 @@ let exec = true
     await initIndexPage()
     
     console.log()
-    $.msg += `\n`
+    $.message += `\n`
     console.log(`---------------------------------------------------------\n`)
     await $.wait(10000)
   }
 
-  console.log(`通知内容：\n\n`, $.msg)
-  await $.sendNotify($.name, $.msg)
+  console.log(`通知内容：\n\n`, $.message)
+  await $.sendNotify($.name, $.message)
 })().catch((e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
 }).finally(() => {
@@ -101,7 +101,7 @@ async function initIndexPage() {
     }
   } else if (resultObj.errorCode == '-2468006') {
     console.log(`当天已赠送了3次红包，明日再来～`)
-    $.msg += `当天已赠送了3次红包，明日再来～\n`
+    $.message += `当天已赠送了3次红包，明日再来～\n`
     return
   }
 
@@ -117,7 +117,7 @@ async function initIndexPage() {
     }
   } else {
     console.log(`无可拆红包，明日再来～`)
-    $.msg += `无可拆红包，明日再来～\n`
+    $.message += `无可拆红包，明日再来～\n`
   }
 
 }
@@ -204,13 +204,13 @@ async function receiveGift(shareId) {
   await $.wait(3000)
   if (ret.errorCode == '-2468011') {
     console.log(`${vmx.phone}今日已领取过红包`)
-    $.msg += `${vmx.phone}今日已领取过红包\n`
+    $.message += `${vmx.phone}今日已领取过红包\n`
     // 未能领取成功，重新领取
     console.log(`继续查找可领取的用户...`)
     return await receiveGift(shareId)
   } else {
     console.log(`领取成功，${vmx.phone}获得奖励：${ret.awardName}`)
-    $.msg += `领取成功，${vmx.phone}获得奖励：${ret.awardName}\n`
+    $.message += `领取成功，${vmx.phone}获得奖励：${ret.awardName}\n`
   }
   return true
 }
@@ -249,7 +249,7 @@ async function getReceiveAccount() {
     const currentPhoneCanReceive = await checkPhonePermission($.phone)
     if (!currentPhoneCanReceive) {
       // 记录不要继续执行了，每人可以领奖励了。
-      $.msg += `当日所有账号均已领取过，不再执行\n`
+      $.message += `当日所有账号均已领取过，不再执行\n`
       console.log(`当日所有账号均已领取过，不再执行`)
       exec = false  
     }
@@ -334,7 +334,7 @@ async function doLottery(taskId) {
   }
 
   console.log(`拆红包成功：${ret.awardName}`)
-  $.msg += `拆红包成功：${ret.awardName}\n`
+  $.message += `拆红包成功：${ret.awardName}\n`
 
   await $.wait(2000)
 

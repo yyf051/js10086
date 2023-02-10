@@ -86,16 +86,16 @@ Object.keys(js10086).forEach((item) => {
 })
 
 !(async () => {
-  $.msg = ''
+  $.message = ''
   for (let i = 0; i < cookiesArr.length; i++) {
     const cookie = cookiesArr[i]
     $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
     const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
     
-    $.msg += `<font size="5">${$.phone}</font>\n`
+    $.message += `<font size="5">${$.phone}</font>\n`
     // console.log(`env: ${$.phone}, ${bodyParam}`)
     if (!$.phone || !bodyParam) {
-      $.msg += `登陆参数配置不正确\n`
+      $.message += `登陆参数配置不正确\n`
       continue
     }
 
@@ -106,12 +106,12 @@ Object.keys(js10086).forEach((item) => {
     await initIndexPage()
     
     console.log()
-    $.msg += `\n\n`
+    $.message += `\n\n`
     await $.wait(10000)
   }
 
-  console.log(`通知内容：\n\n`, $.msg)
-  await $.sendNotify($.name, $.msg)
+  console.log(`通知内容：\n\n`, $.message)
+  await $.sendNotify($.name, $.message)
 })().catch((e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
 }).finally(() => {
@@ -143,7 +143,7 @@ async function initIndexPage() {
   const chance = ret.chance
   if (chance && chance == 1) {
     console.log(`存在答题机会，进行答题`)
-    $.msg += `存在答题机会，进行答题\n`
+    $.message += `存在答题机会，进行答题\n`
     for (let i = 0; i < 5; i++) {
       const a = await answer()
       if (!a) {
@@ -162,7 +162,7 @@ async function initIndexPage() {
   } else if (chance && chance == 3) {
     // 本月答题机会已用完
     console.log(`本月答题机会已用完`)
-    $.msg += `本月答题机会已用完\n`
+    $.message += `本月答题机会已用完\n`
   }
 
   await $.wait(2000)
@@ -180,7 +180,7 @@ async function answer() {
   }
 
   console.log(`抽奖成功，获得奖励：${ret.prizeName}`)
-  $.msg += `抽奖成功，获得奖励：${ret.prizeName}\n`
+  $.message += `抽奖成功，获得奖励：${ret.prizeName}\n`
 
   await $.wait(2000)
   return true
@@ -194,7 +194,7 @@ async function edExchange() {
     return
   }
   console.log(`30E豆换答题机会成功，进行答题`)
-  $.msg += `30E豆换答题机会成功，进行答题\n`
+  $.message += `30E豆换答题机会成功，进行答题\n`
   
   await $.wait(2000)
 }

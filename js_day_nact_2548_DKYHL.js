@@ -17,16 +17,16 @@ Object.keys(js10086).forEach((item) => {
 })
 
 !(async () => {
-  $.msg = ''
+  $.message = ''
   for (let i = 0; i < cookiesArr.length; i++) {
     const cookie = cookiesArr[i]
     $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
     const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
     
-    $.msg += `<font size="5">${$.phone}</font>\n`
+    $.message += `<font size="5">${$.phone}</font>\n`
     // console.log(`env: ${$.phone}, ${bodyParam}`)
     if (!$.phone || !bodyParam) {
-      $.msg += `登陆参数配置不正确\n`
+      $.message += `登陆参数配置不正确\n`
       continue
     }
 
@@ -38,12 +38,12 @@ Object.keys(js10086).forEach((item) => {
     await initIndexPage()
     
     console.log()
-    $.msg += `\n`
+    $.message += `\n`
     await $.wait(10000)
   }
 
-  console.log(`通知内容：\n\n`, $.msg)
-  await $.sendNotify($.name, $.msg)
+  console.log(`通知内容：\n\n`, $.message)
+  await $.sendNotify($.name, $.message)
 })().catch((e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
 }).finally(() => {
@@ -65,16 +65,16 @@ async function initIndexPage() {
     await rightAwayPunch()
   } else if (resultObj.awardName) {
     console.log(`打卡成功，获取${resultObj.awardName}`)
-    $.msg += `打卡成功，获取${resultObj.awardName}\n`
+    $.message += `打卡成功，获取${resultObj.awardName}\n`
     if (resultObj.signDays == 5) {
       await initIndexPage()
     }
   } else if (resultObj.signDays == 6) {
     console.log(`本月已全部打卡`)
-    $.msg += `本月已全部打卡\n`
+    $.message += `本月已全部打卡\n`
   } else {
     onsole.log(`今日已打卡`)
-    $.msg += `今日已打卡\n`
+    $.message += `今日已打卡\n`
   }
 
 
@@ -121,7 +121,7 @@ async function doSuperLottery() {
   }
 
   console.log(`超级抽奖成功，获得奖励：${ret.awardName}`)
-  $.msg += `超级抽奖成功，获得奖励：${ret.awardName}\n`
+  $.message += `超级抽奖成功，获得奖励：${ret.awardName}\n`
 
   await $.wait(2000)
 }

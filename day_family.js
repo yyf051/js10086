@@ -6,12 +6,12 @@ const Env = require('./function/Env')
 const $ = new Env('Fa米家签到')
 
 !(async () => {
-  $.msg = ''
+  $.message = ''
   console.log('执行Fa米家签到')
   await checkin()
   await $.wait(10000)
   await checkin2()
-  await $.sendNotify($.name, $.msg)
+  await $.sendNotify($.name, $.message)
 })().catch((e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
 }).finally(() => {
@@ -44,7 +44,7 @@ function checkin () {
       try {
         if (err) throw new Error(err)
         console.log('1执行结果：', data)
-        $.msg += `账号1执行结果：${data}\n\n`
+        $.message += `账号1执行结果：${data}\n\n`
       } catch (e) {
         console.log(e, resp)
       } finally {
@@ -80,7 +80,7 @@ function checkin2 () {
       try {
         if (err) throw new Error(err)
         console.log('2执行结果：', data)
-        $.msg += `账号2执行结果：${data}\n\n`
+        $.message += `账号2执行结果：${data}\n\n`
       } catch (e) {
         console.log(e, resp)
       } finally {

@@ -15,16 +15,16 @@ Object.keys(js10086).forEach((item) => {
 })
 
 !(async () => {
-  $.msg = ''
+  $.message = ''
   for (let i = 0; i < cookiesArr.length; i++) {
     const cookie = cookiesArr[i]
     $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
     const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
     
-    $.msg += `<font size="5">${$.phone}</font>\n`
+    $.message += `<font size="5">${$.phone}</font>\n`
     // console.log(`env: ${$.phone}, ${bodyParam}`)
     if (!$.phone || !bodyParam) {
-      $.msg += `登陆参数配置不正确\n`
+      $.message += `登陆参数配置不正确\n`
       continue
     }
 
@@ -34,11 +34,11 @@ Object.keys(js10086).forEach((item) => {
     await initIndexPage()
     
     console.log()
-    $.msg += `\n\n`
+    $.message += `\n\n`
     await $.wait(10000);
   }
-  console.log(`通知内容：\n\n`, $.msg)
-  await $.sendNotify($.name, $.msg)
+  console.log(`通知内容：\n\n`, $.message)
+  await $.sendNotify($.name, $.message)
 })().catch((e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
 }).finally(() => {
@@ -64,7 +64,7 @@ async function initIndexPage () {
   const validTasks = resultObj.allTaskList.filter(e => !e.hasOwnProperty('remark'))
 
   if (resultObj.status == 5 && validTasks.length == 0) {
-    $.msg += `今日任务已完成\n`
+    $.message += `今日任务已完成\n`
     console.log(`今日任务已完成`)
     return
   }
@@ -85,7 +85,7 @@ async function playTask (task) {
   console.log(`${$.phone}进行${task.taskName}......`)
   const params = `reqUrl=act2499&method=doTask&operType=1&actCode=2499&taskId=${task.taskId}&extendParams=&ywcheckcode=&mywaytoopen=`
   const resultObj = await nactFunc($, params)
-  $.msg += `进行${task.taskName}......${resultObj && resultObj.isApp ? '---成功\n' : '---失败\n'}`
+  $.message += `进行${task.taskName}......${resultObj && resultObj.isApp ? '---成功\n' : '---失败\n'}`
 
   await $.wait(5000)
   return true
@@ -96,10 +96,10 @@ async function signAndDraw () {
   const params = `reqUrl=act2499&method=signAndDraw&operType=1&actCode=2499&extendParams=&ywcheckcode=&mywaytoopen=`
   const resultObj = await nactFunc($, params)
   if (resultObj && resultObj.isApp) {
-    $.msg += `抽奖成功，获取：${resultObj.prizelog}\n`
+    $.message += `抽奖成功，获取：${resultObj.prizelog}\n`
     console.log(`抽奖成功，获取：${resultObj.prizelog}`)
   } else {
-    $.msg += `抽奖失败......\n`
+    $.message += `抽奖失败......\n`
     console.log(`抽奖失败......`)
   }
   await $.wait(2000)
