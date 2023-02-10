@@ -49,7 +49,7 @@ async function doActivity() {
   $.singleMessage += tips2
   $.msg += `${tips2}\n`
 
-  sendWX(`尊敬的${$.phone}用户，您的套餐详情如下：\n${$.singleMessage}`, [JS_WX_ID]) 
+  sendWX(`尊敬的${$.phone}用户，您的套餐详情如下：\n${$.singleMessage}`, [$.wxid])
 }
 
 async function login() {
@@ -59,6 +59,7 @@ async function login() {
   if (!userPhone || !JS_WX_ID) {
     throw Error('账号或微信为空')
   }
+  $.wxid = JS_WX_ID
 
   for (let i = 0; i < cookiesArr.length; i++) {
     const cookie = cookiesArr[i]
