@@ -3,12 +3,12 @@ http://wap.js.10086.cn/LuckyEgg.thtml?shareToken=dSyvvaQjcVPn9njBkUMiYg==&rm=ydc
 江苏移动_幸运扭蛋机
 cron:45 45 9 5 * *
 */
-const Env = require('./function/01Env')
-const { getMobieCK } = require('./function/01js10086_common')
+const Env = require('./function/Env')
+const { getMobieCK } = require('./app/appLogin')
 
 const $ = new Env('江苏移动_幸运扭蛋机')
 
-const js10086 = require('./function/js10086')
+const js10086 = require('./app/js10086')
 const cookiesArr = []
 Object.keys(js10086).forEach((item) => {
   cookiesArr.push(js10086[item])

@@ -1,4 +1,4 @@
-const notify = require('./01signInSendNotify')
+const notify = require('./SignInSendNotify')
 // prettier-ignore
 var Env = function Env(t, s) {
     return new(class {

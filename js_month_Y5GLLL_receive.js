@@ -3,13 +3,13 @@ http://wap.js.10086.cn/vw/navbar/market_summer5g_new?shareToken=dQEWCORLKHrkeV2Q
 江苏移动_用5G领流量_领取
 cron:45 55 9 6 * *
 */
-const Env = require('./function/01Env')
-const { getMobieCK } = require('./function/01js10086_common')
+const Env = require('./function/Env')
+const { getMobieCK } = require('./app/appLogin')
 const sendWX = require('./function/lcwx')
 
 const $ = new Env('江苏移动_用5G领流量_领取')
 
-const js10086 = require('./function/js10086')
+const js10086 = require('./app/js10086')
 const cookiesArr = []
 Object.keys(js10086).forEach((item) => {
   cookiesArr.push(js10086[item])

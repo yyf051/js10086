@@ -3,14 +3,14 @@ http://wap.js.10086.cn/nact/resource/2548/html/index.html?shareToken=dQEWCORLKHr
 江苏移动_打卡赢好礼
 cron:25 40 10 5-10 * *
 */
-const Env = require('./function/01Env')
-const { getMobieCK } = require('./function/01js10086_common')
-const { nactFunc, getNactParams } = require('./function/01js10086_nact')
+const Env = require('./function/Env')
+const { getMobieCK } = require('./app/appLogin')
+const { nactFunc, getNactParams } = require('./app/appNact')
 
 const $ = new Env('江苏移动_打卡赢好礼')
 const actCode = '2548'
 
-const js10086 = require('./function/js10086')
+const js10086 = require('./app/js10086')
 const cookiesArr = []
 Object.keys(js10086).forEach((item) => {
   cookiesArr.push(js10086[item])

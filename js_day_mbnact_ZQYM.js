@@ -2,13 +2,13 @@
 江苏移动_专区页面
 cron:0 50 8 * * *
 */
-const Env = require('./function/01Env')
-const { options, getMobieCK } = require('./function/01js10086_common')
-const { mbactFunc } = require('./function/01js10086_mbnact')
+const Env = require('./function/Env')
+const { options, getMobieCK } = require('./app/appLogin')
+const { mbactFunc } = require('./app/appMbnact')
 
 const $ = new Env('江苏移动_专区页面')
 
-const js10086 = require('./function/js10086')
+const js10086 = require('./app/js10086')
 const cookiesArr = []
 Object.keys(js10086).forEach((item) => {
   cookiesArr.push(js10086[item])

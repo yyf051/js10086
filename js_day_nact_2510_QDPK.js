@@ -2,13 +2,13 @@
 江苏移动_签到PK
 cron:25 20 10 * * *
 */
-const Env = require('./function/01Env')
-const { getMobieCK } = require('./function/01js10086_common')
-const { nactFunc } = require('./function/01js10086_nact')
+const Env = require('./function/Env')
+const { getMobieCK } = require('./app/appLogin')
+const { nactFunc } = require('./app/appNact')
 
 const $ = new Env('江苏移动_签到PK')
 
-const js10086 = require('./function/js10086')
+const js10086 = require('./app/js10086')
 const cookiesArr = []
 Object.keys(js10086).forEach((item) => {
   cookiesArr.push(js10086[item])

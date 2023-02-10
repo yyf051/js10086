@@ -2,15 +2,15 @@
 江苏移动_日统计
 cron:12 12 29 2 ?
 */
-const Env = require('../function/01Env')
-const sendWX = require('../function/lcwx')
-const { initCookie } = require('./webLogin')
-const WebApi = require('./webApi')
+const Env = require('./function/Env')
+const sendWX = require('./function/lcwx')
+const { initCookie } = require('./web/webLogin')
+const WebApi = require('./web/webApi')
 
 const $ = new Env('江苏移动_日统计')
 const webApi = new WebApi($)
 
-const js10086 = require('./js10086_chf')
+const js10086 = require('./web/js10086_chf')
 const cookiesArr = []
 Object.keys(js10086).forEach((item) => {
   cookiesArr.push(js10086[item])

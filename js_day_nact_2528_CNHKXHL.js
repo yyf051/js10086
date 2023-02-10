@@ -3,9 +3,9 @@ http://wap.js.10086.cn/nact/resource/2528/html/index.html?shareToken=dQEWCORLKHr
 江苏移动_春暖花开享好礼
 cron:25 43 7 * * *
 */
-const Env = require('./function/01Env')
-const { getMobieCK } = require('./function/01js10086_common')
-const { nactFunc, getNactParams } = require('./function/01js10086_nact')
+const Env = require('./function/Env')
+const { getMobieCK } = require('./app/appLogin')
+const { nactFunc, getNactParams } = require('./app/appNact')
 
 const $ = new Env('江苏移动_春暖花开享好礼')
 const actCode = '2528'
@@ -13,7 +13,7 @@ const MAX_SIGN_MONTH = 5 // 每月可签到天数
 const MAX_SHARE_MONTH = 3 // 每月可分享次数
 const WATER_NEED = 20 // 每次浇水所需水滴
 
-const js10086 = require('./function/js10086')
+const js10086 = require('./app/js10086')
 const cookiesArr = []
 Object.keys(js10086).forEach((item) => {
   cookiesArr.push(js10086[item])

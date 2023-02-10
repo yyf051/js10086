@@ -2,15 +2,13 @@
 江苏移动_查话费
 cron:12 12 29 2 ?
 */
-const Env = require('../function/01Env')
-const sendWX = require('../function/lcwx')
-const { initCookie } = require('./webLogin')
-const { getOptions, getData } = require('./webApiUtils')
-const BrowserFinger = require('./BrowserFinger')
+const Env = require('./function/Env')
+const sendWX = require('./function/lcwx')
+const { initCookie } = require('./web/webLogin')
 
 const $ = new Env('江苏移动_查话费_机器人版')
 
-const js10086 = require('./js10086_chf')
+const js10086 = require('./web/js10086_chf')
 const cookiesArr = []
 Object.keys(js10086).forEach((item) => {
   cookiesArr.push(js10086[item])
@@ -57,7 +55,7 @@ async function login() {
   const noticeConfig = JSON.parse(process.env.WX_NOTICE_CONFIG || {})
   const JS_WX_ID = noticeConfig[$.phone] || process.env.JS_WX_ID || ''
   if (!userPhone || !JS_WX_ID) {
-    return
+    throw Error('账号或微信为空')
   }
 
   for (let i = 0; i < cookiesArr.length; i++) {

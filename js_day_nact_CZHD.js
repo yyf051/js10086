@@ -3,7 +3,7 @@ http://wap.js.10086.cn/nact/resource/xxxx/html/index.html?shareToken=dQEWCORLKHr
 江苏移动_查找活动
 cron:1 1 1 1 1
 */
-const Env = require('./function/01Env')
+const Env = require('./function/Env')
 
 const $ = new Env('江苏移动_查找活动')
 !(async () => {
