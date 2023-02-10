@@ -72,7 +72,7 @@ async function login() {
   }
 
   $.msg += `<font size="5">${$.phone}</font>: \n`
-  const ck = await initCookie($)
+  const ck = await initCookie($.phone, $.password)
   if (!ck) {
     throw Error('登录失败')
   }
