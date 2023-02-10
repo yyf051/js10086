@@ -1,4 +1,4 @@
-export default class WebApi {
+class WebApi {
   constructor(vm) {
     this.vm = vm
   }
@@ -171,3 +171,5 @@ export default class WebApi {
     }
   }
 }
+
+module.exports = WebApi
