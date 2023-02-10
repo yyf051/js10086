@@ -8,7 +8,6 @@ function getSetCookie (resp) {
     c += `${ck.split(';')[0]};`
   }
   return c
-  // console.log('获取SET-COOKIE：', c)
 }
 
 /**
@@ -45,7 +44,7 @@ function getInitSessionID () {
       },
       body : JSON.stringify(data)
     }
-    $.post(options, async (err, resp, data) => {
+    $.post(options, (err, resp, data) => {
       if (err) throw new Error(err)
       resolve(getSetCookie(resp))
     })
@@ -66,7 +65,6 @@ function setConstCookie (ck = '') {
     $t += $x
   }
   $t = encodeURIComponent($t)
-  // return "WT_FPC=id=" + $t + ":lv=" + $u.getTime().toString() + ":ss=" + $w.getTime().toString() 
   ck += 'WT_FPC=id=' + $t + ':lv=' + $u.getTime().toString() + ':ss=' + $w.getTime().toString() + '; '
   return ck
 }
@@ -147,7 +145,7 @@ async function initCookie(phone, password) {
       console.log('登录失败', e)
       ck = false
     }
-    console.log(ck)
+    // console.log(ck)
     return ck
 }
 

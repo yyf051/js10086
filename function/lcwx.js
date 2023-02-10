@@ -7,8 +7,8 @@ const kam_token = process.env.KAM_TOKEN || ''
 
 
 const sendNotice = function(msg, to_wxids) {
-	// console.log(msg, kam_addr, kam_wxid, kam_token, JSON.stringify(to_wxids))
 	if (!msg || !kam_addr || !kam_wxid || !to_wxids || to_wxids.length == 0) {
+		console.log(msg, kam_addr, kam_wxid, kam_token, JSON.stringify(to_wxids))
 		console.log(`微信参数配置错误`)
 		return
 	}

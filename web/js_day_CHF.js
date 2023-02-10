@@ -2,14 +2,13 @@
 江苏移动_查话费
 cron:0 10 8-22 * * *
 */
-const Env = require('./function/01Env')
-const { initCookie } = require('./function/01js10086_common2')
-const BrowserFinger = require('./function/BrowserFinger')
-const sendWX = require('./function/lcwx')
-
+const Env = require('../function/01Env')
+const sendWX = require('../function/lcwx')
+const { initCookie } = require('./webLogin')
+const BrowserFinger = require('./BrowserFinger')
 const $ = new Env('江苏移动_查话费')
 
-const js10086 = require('./function/js10086_chf')
+const js10086 = require('./js10086_chf')
 const cookiesArr = []
 Object.keys(js10086).forEach((item) => {
   cookiesArr.push(js10086[item])
