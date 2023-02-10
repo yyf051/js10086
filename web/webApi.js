@@ -1,6 +1,7 @@
 class WebApi {
   constructor(vm) {
     this.vm = vm
+    this.BrowserFinger = require('./BrowserFinger')
   }
 
   // 首页
@@ -68,7 +69,7 @@ class WebApi {
     let gprs = `\t\t\t\t${ret.commonGPRSDashboard.bordTitle}: ${ret.commonGPRSDashboard.value}${ret.commonGPRSDashboard.unit}\n`
     let other = `\t\t\t\t${ret.otherGPRSDashboard.bordTitle}: ${ret.otherGPRSDashboard.value}${ret.otherGPRSDashboard.unit}\n\n`
 
-    const r = '[庆祝]\t套餐剩余: \n' + speech + gprs + other
+    let r = '[庆祝]\t套餐剩余: \n' + speech + gprs + other
     r = r.replaceAll(/<font size="3" color="red">/gi, '').replaceAll(/<\/font>/gi, '').replaceAll(/\t/gi, '  ')
 
     return r
@@ -155,7 +156,7 @@ class WebApi {
    */
   getData(phone, wapContext, others = {}) {
     const dateTime = (new Date()).getTime()
-    const mobile = BrowserFinger.encryptByDES(phone)
+    const mobile = this.BrowserFinger.encryptByDES(phone)
     return {
       "wapContext": {
         "channel": "",
