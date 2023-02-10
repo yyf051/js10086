@@ -11,9 +11,9 @@ class WebApi {
         bizCode: "INDEX",
         pageCode: "INDEX"
       }
-      const op = getOptions('indexTopBar', this.vm.setCookie, getData(this.vm.phone, wapContext))
+      const op = this.getOptions('indexTopBar', this.vm.setCookie, this.getData(this.vm.phone, wapContext))
 
-      post(op, resolve)
+      this.post(op, resolve)
     })
   }
 
@@ -35,10 +35,10 @@ class WebApi {
         phone: this.vm.phone,
         queryMonth
       }
-      const bodyParams = getData(this.vm.phone, wapContext, others)
-      const op = getOptions('billQuery/queryBillInfo', this.vm.setCookie, bodyParams)
+      const bodyParams = this.getData(this.vm.phone, wapContext, others)
+      const op = this.getOptions('billQuery/queryBillInfo', this.vm.setCookie, bodyParams)
 
-      post(op, resolve)
+      this.post(op, resolve)
     })
   }
 
@@ -50,10 +50,10 @@ class WebApi {
         bizCode: 'LLCZJL',
         subBizCode: 'initLLCZJL-init'
       }
-      const bodyParams = getData(this.vm.phone, wapContext)
-      const op = getOptions('LLCZJL/initLLCZJL', this.vm.setCookie, bodyParams)
+      const bodyParams = this.getData(this.vm.phone, wapContext)
+      const op = this.getOptions('LLCZJL/initLLCZJL', this.vm.setCookie, bodyParams)
 
-      post(op, resolve)
+      this.post(op, resolve)
     })
   }
 
@@ -123,7 +123,7 @@ class WebApi {
   getOptions(apiName, ck, bodyParams) {
     return {
       url: `https://wap.js.10086.cn/vw/gateway/biz/${apiName}`,
-      headers: getHeaders(ck),
+      headers: this.getHeaders(ck),
       body: JSON.stringify(bodyParams)
     }
   }
