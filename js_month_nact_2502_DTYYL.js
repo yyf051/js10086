@@ -171,15 +171,15 @@ async function initIndexPage() {
 
 async function answer() {
   const {questionIds, userAnswers} = getAnswer()
-  console.log(`问题ID=${questionIds}，问题答案=${userAnswers}`)
   const params = `reqUrl=act2502&method=guessRiddles&operType=3&actCode=2502&answerType=1&questionIds=${questionIds}&userAnswers=${userAnswers}&extendParams=&ywcheckcode=&mywaytoopen=`
   const ret = await nactFunc($, params)
   
   if (!ret) {
+    console.log(`问题ID=${questionIds}，问题答案=${userAnswers}\n答题错误\n`)
     return false
   }
 
-  console.log(`抽奖成功，获得奖励：${ret.prizeName}`)
+  console.log(`问题ID=${questionIds}，问题答案=${userAnswers}\n抽奖成功，获得奖励：${ret.prizeName}\n`)
   $.message += `抽奖成功，获得奖励：${ret.prizeName}\n`
 
   await $.wait(2000)
@@ -193,7 +193,7 @@ async function edExchange() {
   if (!ret) {
     return
   }
-  console.log(`30E豆换答题机会成功，进行答题`)
+  console.log(`30E豆换答题机会成功，进行答题\n`)
   $.message += `30E豆换答题机会成功，进行答题\n`
   
   await $.wait(2000)
