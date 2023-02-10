@@ -64,7 +64,7 @@ async function doActivity() {
   
   const m1 = await initLLCZJL()
   console.log(m1)
-  // sendWX(m1, [$.wxid])
+  sendWX(m1, [$.wxid])
 }
 
 /*
