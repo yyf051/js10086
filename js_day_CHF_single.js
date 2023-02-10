@@ -5,8 +5,10 @@ cron:12 12 29 2 ?
 const Env = require('./function/Env')
 const sendWX = require('./function/lcwx')
 const { initCookie } = require('./web/webLogin')
+const WebApi = require('./web/webApi')
 
 const $ = new Env('江苏移动_查话费_机器人版')
+const webApi = new WebApi($)
 
 const js10086 = require('./web/js10086_chf')
 const cookiesArr = []
