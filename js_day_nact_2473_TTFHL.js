@@ -3,7 +3,7 @@
 cron:40 50 9 1-3 * *
 */
 const Env = require('./function/Env')
-const { options, getMobieCK } = require('./app/appLogin')
+const { getMobieCK } = require('./app/appLogin')
 const { nactFunc } = require('./app/appNact')
 
 const $ = new Env('江苏移动_天天翻好礼')

@@ -5,7 +5,7 @@ cron:0 30 8 * * *
 enabled=false
 */
 const Env = require('./function/Env')
-const { options, getMobieCK } = require('./function/01js10086_common')
+const { getMobieCK } = require('./function/01js10086_common')
 const { mbactFunc } = require('./function/01js10086_mbnact')
 
 const $ = new Env('江苏移动_开宝箱赢流量')

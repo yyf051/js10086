@@ -3,7 +3,7 @@
 cron:40 40 9 * * *
 */
 const Env = require('./function/Env')
-const { options, getMobieCK } = require('./app/appLogin')
+const { getMobieCK } = require('./app/appLogin')
 const { nactFunc } = require('./app/appNact')
 
 const $ = new Env('江苏移动_掌厅5G视界')

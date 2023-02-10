@@ -4,7 +4,7 @@ https://wap.js.10086.cn/nact/resource/2269/html/index.html?rm=ydc
 cron:40 0 9 * * *
 */
 const Env = require('./function/Env')
-const { options, getMobieCK } = require('./app/appLogin')
+const { getMobieCK } = require('./app/appLogin')
 const { nactFunc } = require('./app/appNact')
 
 const $ = new Env('江苏移动_抽奖天天乐')
