@@ -1,4 +1,4 @@
-const Env = require('./function/01Env')
+const Env = require('./function/Env')
 const { options, initCookie } = require('./function/01js10086_common')
 const { mbactFunc } = require('./function/01js10086_mbnact')
 

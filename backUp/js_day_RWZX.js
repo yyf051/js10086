@@ -2,7 +2,7 @@
 江苏移动_任务中心
 cron:25 40 10 * * *
 */
-const Env = require('./function/01Env')
+const Env = require('./function/Env')
 let $ = new Env()
 
 function setConstCookie (ck = '') {

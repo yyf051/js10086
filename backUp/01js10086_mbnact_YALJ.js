@@ -1,4 +1,4 @@
-const Env = require('./function/01Env')
+const Env = require('./function/Env')
 const $ = new Env('江苏移动_用爱连接')
 
 const { options, initCookie } = require('./function/01js10086_common')

@@ -1,4 +1,4 @@
-const Env = require('./function/01Env')
+const Env = require('./function/Env')
 const $ = new Env('江苏移动_网络加速，守“虎”美好')
 
 const {

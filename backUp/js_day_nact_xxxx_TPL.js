@@ -3,7 +3,7 @@ http://wap.js.10086.cn/nact/resource/xxxx/html/index.html?shareToken=dQEWCORLKHr
 江苏移动_xxxx
 cron:25 43 10 5 * *
 */
-const Env = require('./function/01Env')
+const Env = require('./function/Env')
 const { getMobieCK } = require('./function/01js10086_common')
 const { nactFunc, getNactParams } = require('./function/01js10086_nact')
 

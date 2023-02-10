@@ -4,7 +4,7 @@ http://wap.js.10086.cn/mb_nact/new/act-front/cj/cj015/main.html?actNum=700002203
 cron:0 30 8 * * *
 enabled=false
 */
-const Env = require('./function/01Env')
+const Env = require('./function/Env')
 const { options, getMobieCK } = require('./function/01js10086_common')
 const { mbactFunc } = require('./function/01js10086_mbnact')
 

@@ -1,5 +1,5 @@
 const BrowserFinger = require('./BrowserFinger')
-const Env = require('./01Env')
+const Env = require('./function/Env')
 let $ = new Env()
 
 function getSetCookie (resp) {

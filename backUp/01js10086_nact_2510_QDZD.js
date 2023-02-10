@@ -1,4 +1,4 @@
-const Env = require('./function/01Env')
+const Env = require('./function/Env')
 const { options, encryptedPhone, initCookie } = require('./function/01js10086_common')
 const { nactFunc } = require('./function/01js10086_nact')
 
