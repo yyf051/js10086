@@ -5,9 +5,10 @@ cron:12 12 29 2 ?
 const Env = require('../function/01Env')
 const sendWX = require('../function/lcwx')
 const { initCookie } = require('./webLogin')
-const BrowserFinger = require('./BrowserFinger')
+const WebApi = require('./webApi')
 
 const $ = new Env('江苏移动_日统计')
+const webApi = new WebApi($)
 
 const js10086 = require('./js10086_chf')
 const cookiesArr = []
@@ -18,22 +19,13 @@ const noticeConfig = JSON.parse(process.env.WX_NOTICE_CONFIG || {})
 
 
 !(async () => {
-  $.msg = ''
   for (let i = 0; i < cookiesArr.length; i++) {
     const cookie = cookiesArr[i]
-    $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
-    $.password = cookie.match(/passwd=([^; ]+)(?=;?)/) && cookie.match(/passwd=([^; ]+)(?=;?)/)[1]
-    $.wxid = noticeConfig[$.phone]
-
-    const ck = await initCookie($.phone, $.password)
-    if (!ck) {
-      $.msg += `${$.phone}登录失败......\n\n`
+    const success = await login(cookie)
+    if (!success) {
       continue
     }
-    $.setCookie = ck
 
-    $.msg += `<font size="5">${$.phone}</font>: \n`
-    
     await doActivity()
     console.log('-------------------------------------------------')
 
@@ -48,11 +40,31 @@ const noticeConfig = JSON.parse(process.env.WX_NOTICE_CONFIG || {})
   $.done()
 })
 
+function appendMsg(msg) {
+  $.msg = $.msg || ''
+  $.msg += msg
+}
+
+async function login(cookie) {
+  $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
+  $.password = cookie.match(/passwd=([^; ]+)(?=;?)/) && cookie.match(/passwd=([^; ]+)(?=;?)/)[1]
+  $.wxid = noticeConfig[$.phone]
+  appendMsg(`<font size="5">${$.phone}</font>: \n`)
+
+  const ck = await initCookie($.phone, $.password)
+  if (!ck) {
+    appendMsg(`登录失败，结束当前账号运行......\n\n`)
+    return false
+  }
+  $.setCookie = ck
+  return true
+}
+
 async function doActivity() {
   
   const m1 = await initLLCZJL()
   console.log(m1)
-  sendWX(m1, [$.wxid])
+  // sendWX(m1, [$.wxid])
 }
 
 /*
@@ -85,25 +97,12 @@ async function doActivity() {
 }
 */
 async function initLLCZJL() {
-  const op = getOptions($.setCookie, $.phone, 'LLCZJL', 'LLCZJL', 'initLLCZJL-init', 'LLCZJL/initLLCZJL')
-  console.log(1, JSON.stringify(op))
-  const func = new Promise(resolve => {
-    $.post(op, (err, resp, data) => {
-      if (err) throw Error(err)
-
-      data = JSON.parse(data)
-      console.log(2, JSON.stringify(Object.keys(data)))
-      resolve(data)
-    })
-  })
-  const data = await func.then((d) => d)
-  console.log(3, JSON.stringify(Object.keys(data.data)))
+  const data = await webApi.initLLCZJL()
   if (data.success != '0' || data.code != '0') {
     console.log(`查询失败，状态不对${data.success}, ${data.code}`)
     return
   }
   const flowPaySeqInfos = data.data.lists[0].flowPaySeqInfos
-  // const yearMm = data.data.lists[0].yearMm
 
   return combineLLJL(flowPaySeqInfos)
 

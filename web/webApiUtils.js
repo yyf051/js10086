@@ -1,8 +1,8 @@
-function getOptions(ck, phone, bizCode, pageCode, subBizCode, apiName) {
+function getOptions(apiName, ck, bodyParams) {
   return {
     url: `https://wap.js.10086.cn/vw/gateway/biz/${apiName}`,
     headers: getHeaders(ck),
-    body: JSON.stringify(getData(phone, bizCode, pageCode, subBizCode))
+    body: JSON.stringify(bodyParams)
   }
 }
 
@@ -24,25 +24,31 @@ function getHeaders(ck) {
   }
 }
 
-function getData(phone, bizCode, pageCode, subBizCode) {
-  const date = new Date()
+/**
+ * wapContext: {
+ *  bizCode: required
+ *  pageCode: required
+ *  suBizCode: optional
+ * }
+ */
+function getData(phone, wapContext, others = {}) {
+  const dateTime = (new Date()).getTime()
   const mobile = BrowserFinger.encryptByDES(phone)
-  pageCode = pageCode || bizCode
   return {
     "wapContext": {
       "channel": "",
       "netType": "",
       "optType": "3",
-      "bizCode": bizCode,
-      "pageCode": pageCode,
-      "markCdeo": `${mobile}-${pageCode}-${bizCode}-${date.getTime()}`,
-      "subBizCode": subBizCode || "",
       "effect": "",
-      "verifyCode": ""
-    }
+      "verifyCode": "",
+      "markCdeo": `${mobile}-${wapContext.pageCode}-${wapContext.bizCode}-${dateTime}`,
+      "subBizCode": wapContext.subBizCode || "",
+      ...wapContext
+    },
+    ...others
   }
 }
 
 module.exports = {
-	getOptions
+	getOptions, getData
 }
