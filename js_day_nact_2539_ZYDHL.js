@@ -49,7 +49,6 @@ Object.keys(js10086).forEach((item) => {
   $.done()
 })
 
-// TODO 每月月初兑换1500M/500ml
 
 /**
  * 初始化页面
