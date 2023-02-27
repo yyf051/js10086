@@ -62,7 +62,7 @@ function nactFunc (vm, params, isDirectReturnResultObj = false, isLog = false) {
       // if (vm.isLog || isLog) console.log('执行参数', options)
       vm.post(options, async (err, resp, data) => {
         console.log()
-        if (vm.isLog || isLog) console.log(`${params.actCode}_${params.method}返回结果：${data}`)
+        if (vm.isLog || isLog) console.log(`${params.actCode}_${params.method}:\n请求参数:${JSON.stringify(params)}\n返回结果：${data}\n`)
         if (err) throw new Error(err)
         data = JSON.parse(data)
         if (data && data.success) {

@@ -113,6 +113,7 @@ async function execActivity() {
 
         const vmx = Object.assign(new Env('好友邀请'), {phone})
         vmx.isLog = true
+        vmx.isDirectReturnResultObj = true
         vmx.setCookie = await getMobieCK(phone, bodyParam)
         const ret = await initIndexFunny(vmx)
         if (ret.isInTeam) {
@@ -131,6 +132,7 @@ async function execActivity() {
 
         const vmx = Object.assign(new Env('领取奖励'), {phone})
         vmx.isLog = true
+        vmx.isDirectReturnResultObj = true
         vmx.setCookie = await getMobieCK(phone, bodyParam)
         const ret = await initIndexFunny(vmx)
         if (ret.funnyTeamInfo && ret.funnyTeamInfo.status === 2) {
