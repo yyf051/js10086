@@ -118,7 +118,7 @@ async function execActivity() {
         if (ret.isInTeam) {
             continue
         }
-        await teamDealInvitation(vmx, ret.funnyTeamInfo.teamId)
+        ret.funnyTeamInfo && await teamDealInvitation(vmx, ret.funnyTeamInfo.teamId)
     }
 
     // 检查否是已达到50天
@@ -139,7 +139,7 @@ async function execActivity() {
         vmx.setCookie = await getMobieCK(phone, bodyParam)
         const ret = await initIndexFunny(vmx)
         if (ret.funnyTeamInfo.status === 2) {
-            await teamReceiveAward(vmx, ret.funnyTeamInfo.teamId)
+            ret.funnyTeamInfo && await teamReceiveAward(vmx, ret.funnyTeamInfo.teamId)
         }
     }
     // special logic
