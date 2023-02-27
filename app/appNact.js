@@ -37,7 +37,7 @@ function serialize(params) {
 /**
  * 拼接参数
  */
-function getNactParams(actCode, method) {
+function getNactParams(actCode, method, params = {}) {
   return {
     reqUrl: `act${actCode}`,
     method: `${method}`,
@@ -45,7 +45,8 @@ function getNactParams(actCode, method) {
     actCode: `${actCode}`,
     extendParams: `ch%3D03e5`,
     ywcheckcode: ``,
-    mywaytoopen: ``
+    mywaytoopen: ``,
+    ...params
   }
 }
 
