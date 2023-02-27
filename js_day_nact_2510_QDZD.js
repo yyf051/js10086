@@ -91,7 +91,7 @@ async function execActivity() {
             const phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
             if (phone === $.phone) continue
             const ret = await initIndexFunny(vmx)
-            if (ret.funnyTeamInfo.isInTeam) {
+            if (ret.isInTeam) {
                 continue
             }
             const invitation = await teamSendInvitation(teamId, phone)
@@ -115,7 +115,7 @@ async function execActivity() {
         vmx.isLog = true
         vmx.setCookie = await getMobieCK(phone, bodyParam)
         const ret = await initIndexFunny(vmx)
-        if (ret.funnyTeamInfo.isInTeam) {
+        if (ret.isInTeam) {
             continue
         }
         await teamDealInvitation(vmx, ret.funnyTeamInfo.teamId)
