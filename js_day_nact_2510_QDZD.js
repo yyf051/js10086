@@ -72,7 +72,7 @@ async function execActivity() {
     if (resultObj.isInTeam) {
         teamId = resultObj.funnyTeamInfo.teamId
     } else {
-        const teamInfo = await createTeam()
+        const teamInfo = await teamCreate()
         teamId = teamInfo.funnyTeamInfo.teamId
     }
     if (!teamId) {
@@ -144,7 +144,7 @@ async function initIndexFunny() {
 /**
  * 创建或加入team
  */
-async function createTeam() {
+async function teamCreate() {
     await $.wait($.randomWaitTime(2, 3))
     const params = getNactParams(actCode, arguments.callee.name)
     return await nactFunc($, params)
