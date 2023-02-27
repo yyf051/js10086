@@ -83,6 +83,7 @@ async function execActivity() {
     console.log(`开始邀请好友加入队伍...`)
     // 邀请非自己
     for (let i = 0; i < cookiesArr.length; i++) {
+        const cookie = cookiesArr[i]
         const phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
         if (phone === $.phone) continue
         const invitation = await teamSendInvitation(teamId, phone)
@@ -95,6 +96,7 @@ async function execActivity() {
     console.log(`开始处理好友邀请`)
     let canReceived = false
     for (let i = 0; i < cookiesArr.length; i++) {
+        const cookie = cookiesArr[i]
         const phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
         const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
         if (phone === $.phone) continue
@@ -118,11 +120,11 @@ async function execActivity() {
     }
     console.log(`开始领取组队奖励`)
     for (let i = 0; i < cookiesArr.length; i++) {
+        const cookie = cookiesArr[i]
         const phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
         const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
-        if (phone === $.phone) continue
 
-        const vmx = Object.assign(new Env('好友邀请'), {phone})
+        const vmx = Object.assign(new Env('领取奖励'), {phone})
         vmx.isLog = true
         vmx.setCookie = await getMobieCK(phone, bodyParam)
         await teamReceiveAward(vmx, teamId)
