@@ -135,7 +135,7 @@ async function execActivity() {
  * 趣味签到-组团签到
  */
 async function initIndexFunny() {
-    $.await($.randomWaitTime(2, 3))
+    $.wait($.randomWaitTime(2, 3))
     const params = getNactParams(actCode, arguments.callee.name)
     return await nactFunc($, params)
 }
