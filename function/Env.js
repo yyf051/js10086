@@ -273,6 +273,13 @@ var Env = function Env(t, s) {
         sendNotify(t, s) {
         	return new Promise((r) => r(notify.sendNotify(t, s)));
         }
+
+        randomWaitTime(min = 4, max = 8) {
+            if (min >= max) {
+                return min * 1000;
+            }
+            return Math.floor(1000 * (min + Math.random() * (max - min)))
+        }
     })(t, s);
 }
 
