@@ -102,7 +102,7 @@ async function execActivity() {
         await $.wait($.randomWaitTime(2, 3))
     }
 
-
+    console.log('\n')
     // 被邀请人逐个接受邀请
     console.log(`开始处理好友邀请`)
     for (let i = 0; i < cookiesArr.length; i++) {
@@ -118,15 +118,10 @@ async function execActivity() {
         if (ret.isInTeam) {
             continue
         }
-        ret.funnyTeamInfo && await teamDealInvitation(vmx, ret.funnyTeamInfo.teamId)
+        ret.funnyInvitedInfo && await teamDealInvitation(vmx, ret.funnyInvitedInfo.teamId)
     }
 
-    // 检查否是已达到50天
-    resultObj = await initIndexFunny()
-    const canReceived = resultObj.funnyTeamInfo.teamSignCnt >= 50
-    if (!canReceived) {
-        return
-    }
+    console.log('\n')
     await $.wait($.randomWaitTime(2, 3))
     console.log(`开始领取组队奖励`)
     for (let i = 0; i < cookiesArr.length; i++) {
@@ -138,8 +133,8 @@ async function execActivity() {
         vmx.isLog = true
         vmx.setCookie = await getMobieCK(phone, bodyParam)
         const ret = await initIndexFunny(vmx)
-        if (ret.funnyTeamInfo.status === 2) {
-            ret.funnyTeamInfo && await teamReceiveAward(vmx, ret.funnyTeamInfo.teamId)
+        if (ret.funnyTeamInfo && ret.funnyTeamInfo.status === 2) {
+            await teamReceiveAward(vmx, ret.funnyTeamInfo.teamId)
         }
     }
     // special logic
