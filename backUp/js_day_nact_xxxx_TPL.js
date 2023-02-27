@@ -5,7 +5,7 @@ cron:25 43 10 5 * *
 */
 const Env = require('./function/Env')
 const { getMobieCK } = require('./app/appLogin')
-const { nactFunc } = require('./app/appNact')
+const { nactFunc, getNactParams } = require('./app/appNact')
 
 const $ = new Env('江苏移动_xxx')
 const actCode = 'xxxx'
