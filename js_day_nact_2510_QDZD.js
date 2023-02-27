@@ -24,11 +24,11 @@ const phone4CreateTeam = process.env.JS_10086_TEAM_PHONE || cookiesArr[0]
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i]
         $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
-        const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
-        if ($.phone === phone4CreateTeam) {
+        if (phone4CreateTeam.indexOf($.phone) > -1) {
             break
         }
     }
+    if (!cookie) return
     const success = await login(cookie)
     if (!success) return
 
@@ -91,6 +91,7 @@ async function execActivity() {
           console.log(`邀请${phone}成功~`)
         }
     }
+    await $.wait($.randomWaitTime(2, 3))
 
     // 被邀请人逐个接受邀请
     console.log(`开始处理好友邀请`)
@@ -104,6 +105,7 @@ async function execActivity() {
         const vmx = Object.assign(new Env('好友邀请'), {phone})
         vmx.isLog = true
         vmx.setCookie = await getMobieCK(phone, bodyParam)
+        await initIndexFunny(vmx)
         const invitation = await teamDealInvitation(vmx, teamId)
 
         // 检查否是已达到50天
@@ -118,6 +120,7 @@ async function execActivity() {
     if (!canReceived) {
         return
     }
+    await $.wait($.randomWaitTime(2, 3))
     console.log(`开始领取组队奖励`)
     for (let i = 0; i < cookiesArr.length; i++) {
         const cookie = cookiesArr[i]
@@ -136,10 +139,11 @@ async function execActivity() {
 /**
  * 趣味签到-组团签到
  */
-async function initIndexFunny() {
-    $.wait($.randomWaitTime(2, 3))
+async function initIndexFunny(vm) {
+    vm = vm || $
+    vm.wait(vm.randomWaitTime(2, 3))
     const params = getNactParams(actCode, arguments.callee.name)
-    return await nactFunc($, params)
+    return await nactFunc(vm, params)
 }
 
 
