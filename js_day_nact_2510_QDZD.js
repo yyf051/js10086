@@ -68,19 +68,21 @@ async function execActivity() {
     $.isDirectReturnResultObj = true
 
     let teamId
+    let teamStatus
     let resultObj = await initIndexFunny()
     if (resultObj.isInTeam) {
         teamId = resultObj.funnyTeamInfo.teamId
+        teamStatus = resultObj.funnyTeamInfo.status
     } else {
         const teamInfo = await teamCreate()
         teamId = teamInfo.funnyTeamInfo.teamId
+        teamStatus = teamInfo.funnyTeamInfo.teamId
     }
     if (!teamId) {
         console.log(`不存在队伍信息，结束`)
         return
     }
 
-    const teamStatus = resultObj.funnyTeamInfo.status
     if (teamStatus === 1) {
         console.log(`开始邀请好友加入队伍...`)
         // 邀请非自己
@@ -136,7 +138,7 @@ async function execActivity() {
         vmx.isLog = true
         vmx.setCookie = await getMobieCK(phone, bodyParam)
         const ret = await initIndexFunny(vmx)
-        if (ret.funnyTeamInfo.teamStatus === 2) {
+        if (ret.funnyTeamInfo.status === 2) {
             await teamReceiveAward(vmx, ret.funnyTeamInfo.teamId)
         }
     }
