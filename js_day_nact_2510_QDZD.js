@@ -80,22 +80,29 @@ async function execActivity() {
         return
     }
 
-    console.log(`开始邀请好友加入队伍...`)
-    // 邀请非自己
-    for (let i = 0; i < cookiesArr.length; i++) {
-        const cookie = cookiesArr[i]
-        const phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
-        if (phone === $.phone) continue
-        const invitation = await teamSendInvitation(teamId, phone)
-        if (invitation.errorCode == "-251090000") {
-          console.log(`邀请${phone}成功~`)
+    const teamStatus = resultObj.funnyTeamInfo.status
+    if (teamStatus === 1) {
+        console.log(`开始邀请好友加入队伍...`)
+        // 邀请非自己
+        for (let i = 0; i < cookiesArr.length; i++) {
+            const cookie = cookiesArr[i]
+            const phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
+            if (phone === $.phone) continue
+            const ret = await initIndexFunny(vmx)
+            if (ret.funnyTeamInfo.isInTeam) {
+                continue
+            }
+            const invitation = await teamSendInvitation(teamId, phone)
+            if (invitation.errorCode == "-251090000") {
+              console.log(`邀请${phone}成功~`)
+            }
         }
+        await $.wait($.randomWaitTime(2, 3))
     }
-    await $.wait($.randomWaitTime(2, 3))
+
 
     // 被邀请人逐个接受邀请
     console.log(`开始处理好友邀请`)
-    let canReceived = false
     for (let i = 0; i < cookiesArr.length; i++) {
         const cookie = cookiesArr[i]
         const phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
@@ -105,18 +112,16 @@ async function execActivity() {
         const vmx = Object.assign(new Env('好友邀请'), {phone})
         vmx.isLog = true
         vmx.setCookie = await getMobieCK(phone, bodyParam)
-        await initIndexFunny(vmx)
-        const invitation = await teamDealInvitation(vmx, teamId)
-
-        // 检查否是已达到50天
-        resultObj = await initIndexFunny()
-        if (resultObj.funnyTeamInfo.teamSignCnt >= 50) {
-            canReceived = true
-            break
+        const ret = await initIndexFunny(vmx)
+        if (ret.funnyTeamInfo.isInTeam) {
+            continue
         }
+        await teamDealInvitation(vmx, ret.funnyTeamInfo.teamId)
     }
 
-
+    // 检查否是已达到50天
+    resultObj = await initIndexFunny()
+    const canReceived = resultObj.funnyTeamInfo.teamSignCnt >= 50
     if (!canReceived) {
         return
     }
@@ -130,7 +135,10 @@ async function execActivity() {
         const vmx = Object.assign(new Env('领取奖励'), {phone})
         vmx.isLog = true
         vmx.setCookie = await getMobieCK(phone, bodyParam)
-        await teamReceiveAward(vmx, teamId)
+        const ret = await initIndexFunny(vmx)
+        if (ret.funnyTeamInfo.teamStatus === 2) {
+            await teamReceiveAward(vmx, ret.funnyTeamInfo.teamId)
+        }
     }
     // special logic
 
@@ -184,12 +192,13 @@ async function teamSendInvitation(teamId, friendMobile) {
 
 /**
  * 领奖
+ * {"continue":true,"errorCode":"","resultCode":"1","resultCom":{"cityNo":"20","webtrendsCityNo":"0513","ch":"03e5","webmobile":"18259-38658-5007-33084","appmobile":"CB03BA4E2D1DF5CC2B69ABC3C9F51306","touchmobile":"0A5B99BFB7FB26214A146094942D4D91","mobile":"","bdmobile":"3375d2766","webtrendsMobile":"5971-18178-5081-33072"},"resultObj":{"isLogin":true,"blackTarget":false,"isApp":true,"isFreeMember":true,"memberType":"2"},"success":true}
  */
 async function teamReceiveAward(vm, teamId) {
     await vm.wait(vm.randomWaitTime(1, 2))
     // const params = `reqUrl=act2510&method=teamReceiveAward&operType=1&actCode=2510&teamId=${teamId}&extendParams=&ywcheckcode=&mywaytoopen=`
     const params = getNactParams(actCode, arguments.callee.name, {teamId})
-    return await nactFunc(vm || $, params)
+    return await nactFunc(vm, params)
 }
 
 
