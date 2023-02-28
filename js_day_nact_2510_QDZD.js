@@ -135,6 +135,7 @@ async function execActivity() {
             continue
         }
         await teamDealInvitation(vmx, ret.funnyInvitedInfo.teamId)
+        console.log(`邀请${phone}成功`)
     }
 
     console.log('\n')
@@ -152,6 +153,9 @@ async function execActivity() {
         const ret = await initIndexFunny(vmx)
         if (ret.funnyTeamInfo && ret.funnyTeamInfo.status === '2') {
             await teamReceiveAward(vmx, ret.funnyTeamInfo.teamId)
+            console.log(`${phone}领取成功`)
+        } else {
+            console.log(`${phone}不可领取`)
         }
     }
     // special logic
