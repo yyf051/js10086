@@ -71,12 +71,14 @@ async function execActivity() {
     let teamStatus
     let resultObj = await initIndexFunny()
     if (resultObj.isInTeam) {
+        console.log(`当前已在队伍中，不再创建队伍`)
         teamId = resultObj.funnyTeamInfo.teamId
         teamStatus = resultObj.funnyTeamInfo.status
     } else {
         const teamInfo = await teamCreate()
+        console.log(`创建队伍成功`)
         teamId = teamInfo.funnyTeamInfo.teamId
-        teamStatus = teamInfo.funnyTeamInfo.teamId
+        teamStatus = teamInfo.funnyTeamInfo.status
     }
     if (!teamId) {
         console.log(`不存在队伍信息，结束`)
@@ -91,7 +93,9 @@ async function execActivity() {
             const phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
             if (phone === $.phone) continue
             const ret = await initIndexFunny(vmx)
-            if (ret.isInTeam) {
+            if (ret.isInTeam || !!ret.funnyInvitedInfo) {
+                // 已在队伍中，或已有邀请信息，则不再邀请
+                console.log(`${phone}已在队伍中，或已有邀请信息，不再邀请`)
                 continue
             }
             const invitation = await teamSendInvitation(teamId, phone)
@@ -116,10 +120,11 @@ async function execActivity() {
         vmx.isDirectReturnResultObj = true
         vmx.setCookie = await getMobieCK(phone, bodyParam)
         const ret = await initIndexFunny(vmx)
-        if (ret.isInTeam) {
+        if (ret.isInTeam || !ret.funnyInvitedInfo) {
+            console.log(`${phone}已在队伍中，或没有邀请信息，不处理邀请`)
             continue
         }
-        ret.funnyInvitedInfo && await teamDealInvitation(vmx, ret.funnyInvitedInfo.teamId)
+        await teamDealInvitation(vmx, ret.funnyInvitedInfo.teamId)
     }
 
     console.log('\n')
