@@ -217,20 +217,20 @@ async function getMobieCK(phone, loginBody) {
   const client = redis.createClient(config)
   try {
     // const phone = opt.headers['LC-PN']
-    console.log(`Current phone: ${phone}`)
+    // console.log(`Current phone: ${phone}`)
 
     const cache = initCache(client)
     let setCookie = await cache.hget(cacheKey, phone)
     if (!setCookie) {
       setCookie = await initCookie(opt)
 
-      console.log('请求成功并缓存ck')
+      // console.log('请求成功并缓存ck')
       await cache.hset(cacheKey, phone, setCookie)
       const seconds = 20 * 60 // 20 min expire
       // console.log('超时秒数：', seconds)
       await cache.expire(cacheKey, seconds)
     } else{
-      console.log(`从缓存中获取ck`)
+      // console.log(`从缓存中获取ck`)
     }
     return setCookie
   } catch (x) {
@@ -245,14 +245,14 @@ function initCookie(opt) {
   return new Promise(async (resolve) => {
     try {
       const phone = `${opt.headers['LC-PN']}`
-      console.log(`${phone}获取JSESSIONID......`)
+      // console.log(`${phone}获取JSESSIONID......`)
 
       let setCookie = await recall()
       if (!setCookie) {
-        console.log(`${phone}第二次获取JSESSIONID......`)
+        // console.log(`${phone}第二次获取JSESSIONID......`)
         setCookie = await recall()
       }
-      console.log(`${phone}获取Cookie......`)
+      // console.log(`${phone}获取Cookie......`)
       const cks = await Promise.all([
         getCookie(opt, setCookie),
         getExtendCookie3(setCookie)
