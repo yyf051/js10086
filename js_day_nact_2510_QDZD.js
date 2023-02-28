@@ -104,6 +104,10 @@ async function execActivity() {
                 console.log(`${phone}已在队伍中，或已有邀请信息，不再邀请`)
                 continue
             }
+            if (_checkIsJoin(ret)) {
+                console.log(`${phone}当月应参与过其他队伍，不再邀请`)
+                continue
+            }
             const invitation = await teamSendInvitation(teamId, phone)
             if (invitation.errorCode == "-251090000") {
               console.log(`邀请${phone}成功~`)
@@ -154,6 +158,18 @@ async function execActivity() {
 
 }
 
+function _checkIsJoin(resultObj, phone) {
+    let funnyTeamJoin
+    if (!resultObj || !(funnyTeamJoin = resultObj.funnyTeamJoin)) {
+        return false
+    }
+    if (funnyTeamJoin.length === 0) {
+        return false
+    }
+    return funnyTeamJoin.filter(e => e.mobile === phone && e.isLeader === '0').length >= 1
+
+}       
+
 /**
  * 趣味签到-组团签到
  */
@@ -182,7 +198,7 @@ async function teamDealInvitation(vm, teamId) {
     // 加入队伍  
     await vm.wait(vm.randomWaitTime(1, 2))
     // const params = `reqUrl=act2510&method=teamDealInvitation&operType=1&actCode=2510&teamId=${teamId}&oprType=1&extendParams=&ywcheckcode=&mywaytoopen=`
-    const params = getNactParams(actCode, arguments.callee.name, {teamId})
+    const params = getNactParams(actCode, arguments.callee.name, {teamId, oprType: 1})
     return await nactFunc(vm, params)
 
     // console.log(`${vm.phone}加入队伍${teamId}成功......`)
