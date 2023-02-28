@@ -85,7 +85,7 @@ async function execActivity() {
         return
     }
 
-    if (teamStatus === 1) {
+    if (teamStatus === '1') {
         console.log(`开始邀请好友加入队伍...`)
         // 邀请非自己
         for (let i = 0; i < cookiesArr.length; i++) {
@@ -150,7 +150,7 @@ async function execActivity() {
         vmx.isDirectReturnResultObj = true
         vmx.setCookie = await getMobieCK(phone, bodyParam)
         const ret = await initIndexFunny(vmx)
-        if (ret.funnyTeamInfo && ret.funnyTeamInfo.status === 2) {
+        if (ret.funnyTeamInfo && ret.funnyTeamInfo.status === '2') {
             await teamReceiveAward(vmx, ret.funnyTeamInfo.teamId)
         }
     }
