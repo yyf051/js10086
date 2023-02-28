@@ -64,7 +64,7 @@ async function login(cookie) {
  * 开始处理
  */
 async function execActivity() {
-    $.isLog = true
+    $.isLog = false
     $.isDirectReturnResultObj = true
 
     let teamId
@@ -95,7 +95,7 @@ async function execActivity() {
             if (phone === $.phone) continue
 
             const vmx = Object.assign(new Env('好友邀请'), {phone})
-            vmx.isLog = true
+            vmx.isLog = false
             vmx.isDirectReturnResultObj = true
             vmx.setCookie = await getMobieCK(phone, bodyParam)
             const ret = await initIndexFunny(vmx)
@@ -126,7 +126,7 @@ async function execActivity() {
         if (phone === $.phone) continue
 
         const vmx = Object.assign(new Env('处理邀请'), {phone})
-        vmx.isLog = true
+        vmx.isLog = false
         vmx.isDirectReturnResultObj = true
         vmx.setCookie = await getMobieCK(phone, bodyParam)
         const ret = await initIndexFunny(vmx)
@@ -147,7 +147,7 @@ async function execActivity() {
         const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
 
         const vmx = Object.assign(new Env('领取奖励'), {phone})
-        vmx.isLog = true
+        vmx.isLog = false
         vmx.isDirectReturnResultObj = true
         vmx.setCookie = await getMobieCK(phone, bodyParam)
         const ret = await initIndexFunny(vmx)
