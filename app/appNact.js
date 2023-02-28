@@ -43,7 +43,7 @@ function getNactParams(actCode, method, params = {}) {
     method: `${method}`,
     operType: 1,
     actCode: `${actCode}`,
-    extendParams: `ch%3D03e5`,
+    extendParams: ``,
     ywcheckcode: ``,
     mywaytoopen: ``,
     ...params
@@ -62,7 +62,7 @@ function nactFunc (vm, params, isDirectReturnResultObj = false, isLog = false) {
       // if (vm.isLog || isLog) console.log('执行参数', options)
       vm.post(options, async (err, resp, data) => {
         console.log()
-        if (vm.isLog || isLog) console.log(`${params.actCode}_${params.method}:\n请求参数:${JSON.stringify(params)}\n返回结果：${data}\n`)
+        if (vm.isLog || isLog) console.log(`${params.actCode}_${params.method}:\n请求参数:${JSON.stringify(options.body)}\n返回结果：${data}\n`)
         if (err) throw new Error(err)
         data = JSON.parse(data)
         if (data && data.success) {

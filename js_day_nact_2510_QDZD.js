@@ -91,7 +91,13 @@ async function execActivity() {
         for (let i = 0; i < cookiesArr.length; i++) {
             const cookie = cookiesArr[i]
             const phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
+            const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
             if (phone === $.phone) continue
+
+            const vmx = Object.assign(new Env('好友邀请'), {phone})
+            vmx.isLog = true
+            vmx.isDirectReturnResultObj = true
+            vmx.setCookie = await getMobieCK(phone, bodyParam)
             const ret = await initIndexFunny(vmx)
             if (ret.isInTeam || !!ret.funnyInvitedInfo) {
                 // 已在队伍中，或已有邀请信息，则不再邀请
@@ -115,7 +121,7 @@ async function execActivity() {
         const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
         if (phone === $.phone) continue
 
-        const vmx = Object.assign(new Env('好友邀请'), {phone})
+        const vmx = Object.assign(new Env('处理邀请'), {phone})
         vmx.isLog = true
         vmx.isDirectReturnResultObj = true
         vmx.setCookie = await getMobieCK(phone, bodyParam)
