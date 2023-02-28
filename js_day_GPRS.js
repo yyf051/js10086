@@ -27,9 +27,9 @@ const noticeConfig = JSON.parse(process.env.WX_NOTICE_CONFIG || {})
     }
 
     await doActivity()
-    console.log('-------------------------------------------------')
+    $.log('-------------------------------------------------\n\n')
 
-    await $.wait(10000)
+    await $.wait(50000)
   }
 
   $.sendNotify($.name, $.message)
@@ -64,6 +64,7 @@ async function doActivity() {
   
   const m1 = await initLLCZJL()
   appendMsg(m1)
+  appendMsg('\n\n')
   $.log(m1)
   sendWX(m1, [$.wxid])
 }
