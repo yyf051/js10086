@@ -27,7 +27,7 @@ const noticeConfig = JSON.parse(process.env.WX_NOTICE_CONFIG || {})
     }
 
     await doActivity()
-    $.log('-------------------------------------------------\n\n')
+    console.log('-------------------------------------------------\n\n')
 
     await $.wait(50000)
   }
@@ -63,10 +63,9 @@ async function login(cookie) {
 async function doActivity() {
   
   const m1 = await initLLCZJL()
-  appendMsg(m1)
-  appendMsg('\n\n')
-  $.log(m1)
-  //sendWX(m1, [$.wxid])
+  appendMsg(`${m1}\n\n`)
+  console.log(`${$.phone}:\n${m1}`)
+  sendWX(m1, [$.wxid])
 }
 
 /*
