@@ -138,6 +138,6 @@ function combineLLJL(flowPaySeqInfos) {
   monthSum = (monthSum / 1024) >= 1024 ? (monthSum / 1024 / 1024).toFixed(2) + 'G' : (monthSum / 1024) + 'M'
 
   const today = daySum[Object.keys(daySum).pop()]
-  const yesterday = daySum[Object.keys(daySum).slice(-2)[0]]
+  const yesterday = Object.keys(daySum).length >= 2 ? daySum[Object.keys(daySum).slice(-2)[0]] : '无'
   return `获取流量统计：\n今日获取流量总数：${today}\n昨日获取流量总数：${yesterday}\n本月获取流量总数：${monthSum}`
 }
