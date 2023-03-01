@@ -18,6 +18,7 @@ const sleep = async (mills) => {
 
 const sendNotice = async (msg, to_wxids) => {
 	if (!OPEN_WX_NOTICE) {
+		return
 	}
 
 	if (!msg || !kam_addr || !kam_wxid || !to_wxids || to_wxids.length == 0) {
