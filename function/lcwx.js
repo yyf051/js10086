@@ -6,6 +6,9 @@ const kam_wxid = process.env.KAM_BOT_ID || ''
 const kam_token = process.env.KAM_TOKEN || ''
 const OPEN_WX_NOTICE = process.env.OPEN_WX_NOTICE || false
 
+if (!OPEN_WX_NOTICE) {
+	console.log(`export OPEN_WX_NOTICE="true"开启微信通知`)
+}
 
 const sleep = async (mills) => {
 	return new Promise((resolve) => {
@@ -15,8 +18,6 @@ const sleep = async (mills) => {
 
 const sendNotice = async (msg, to_wxids) => {
 	if (!OPEN_WX_NOTICE) {
-		console.log(`export OPEN_WX_NOTICE="true"开启微信通知`)
-		return
 	}
 
 	if (!msg || !kam_addr || !kam_wxid || !to_wxids || to_wxids.length == 0) {

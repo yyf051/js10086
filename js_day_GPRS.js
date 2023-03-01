@@ -29,7 +29,7 @@ const noticeConfig = JSON.parse(process.env.WX_NOTICE_CONFIG || {})
     await doActivity()
     console.log('-------------------------------------------------\n\n')
 
-    await $.wait(50000)
+    await $.wait(5000)
   }
 
   $.sendNotify($.name, $.message)
