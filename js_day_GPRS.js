@@ -66,7 +66,7 @@ async function doActivity() {
   appendMsg(m1)
   appendMsg('\n\n')
   $.log(m1)
-  sendWX(m1, [$.wxid])
+  //sendWX(m1, [$.wxid])
 }
 
 /*
