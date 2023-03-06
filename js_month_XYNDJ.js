@@ -4,7 +4,7 @@ http://wap.js.10086.cn/LuckyEgg.thtml?shareToken=dSyvvaQjcVPn9njBkUMiYg==&rm=ydc
 cron:45 45 9 5 * *
 */
 const Env = require('./function/Env')
-const { getMobieCK } = require('./app/appLogin')
+const { getMobileCK } = require('./app/appLogin')
 
 const $ = new Env('江苏移动_幸运扭蛋机')
 
@@ -31,7 +31,7 @@ const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/6
     }
 
     console.log(`${$.phone}获取Cookie：`)
-    $.setCookie = await getMobieCK($.phone, bodyParam)
+    $.setCookie = await getMobileCK($.phone, bodyParam)
     
     await $.wait(10000)
     let r = await dispatch()

@@ -4,7 +4,7 @@ http://wap.js.10086.cn/vw/navbar/market_summer5g_new?shareToken=dQEWCORLKHrkeV2Q
 cron:45 55 9 6 * *
 */
 const Env = require('./function/Env')
-const { getMobieCK } = require('./app/appLogin')
+const { getMobileCK } = require('./app/appLogin')
 const sendWX = require('./function/lcwx')
 
 const $ = new Env('江苏移动_用5G领流量_领取')
@@ -59,7 +59,7 @@ let wxid
   }
 
   console.log(`${$.phone}获取Cookie：`)
-  $.setCookie = await getMobieCK($.phone, $.bodyParam)
+  $.setCookie = await getMobileCK($.phone, $.bodyParam)
 
   $.message += `\n\n`
   await receive(smsCode)

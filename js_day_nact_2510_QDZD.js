@@ -6,7 +6,7 @@
  * cron:25 15 12 10 * * js_day_nact_2510_QDZD.js
  */
 const Env = require('./function/Env')
-const { getMobieCK } = require('./app/appLogin')
+const { getMobileCK } = require('./app/appLogin')
 const { nactFunc, getNactParams } = require('./app/appNact')
 
 const $ = new Env('江苏移动_签到组队')
@@ -56,7 +56,7 @@ async function login(cookie) {
         return false
     }
 
-    $.setCookie = await getMobieCK($.phone, bodyParam)
+    $.setCookie = await getMobileCK($.phone, bodyParam)
     return true
 }
 
@@ -97,7 +97,7 @@ async function execActivity() {
             const vmx = Object.assign(new Env('好友邀请'), {phone})
             vmx.isLog = false
             vmx.isDirectReturnResultObj = true
-            vmx.setCookie = await getMobieCK(phone, bodyParam)
+            vmx.setCookie = await getMobileCK(phone, bodyParam)
             const ret = await initIndexFunny(vmx)
             if (ret.isInTeam || !!ret.funnyInvitedInfo) {
                 // 已在队伍中，或已有邀请信息，则不再邀请
@@ -128,7 +128,7 @@ async function execActivity() {
         const vmx = Object.assign(new Env('处理邀请'), {phone})
         vmx.isLog = false
         vmx.isDirectReturnResultObj = true
-        vmx.setCookie = await getMobieCK(phone, bodyParam)
+        vmx.setCookie = await getMobileCK(phone, bodyParam)
         const ret = await initIndexFunny(vmx)
         if (ret.isInTeam || !ret.funnyInvitedInfo) {
             console.log(`${phone}已在队伍中，或没有邀请信息，不处理邀请`)
@@ -149,7 +149,7 @@ async function execActivity() {
         const vmx = Object.assign(new Env('领取奖励'), {phone})
         vmx.isLog = false
         vmx.isDirectReturnResultObj = true
-        vmx.setCookie = await getMobieCK(phone, bodyParam)
+        vmx.setCookie = await getMobileCK(phone, bodyParam)
         const ret = await initIndexFunny(vmx)
         if (ret.funnyTeamInfo && ret.funnyTeamInfo.status === '2') {
             await teamReceiveAward(vmx, ret.funnyTeamInfo.teamId)

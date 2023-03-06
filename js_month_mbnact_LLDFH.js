@@ -3,7 +3,7 @@
 cron:45 55 8 5 * *
 */
 const Env = require('./function/Env')
-const { getMobieCK } = require('./app/appLogin')
+const { getMobileCK } = require('./app/appLogin')
 const { mbactFunc } = require('./app/appMbnact')
 
 const $ = new Env('江苏移动_流量大富豪')
@@ -30,7 +30,7 @@ Object.keys(js10086).forEach((item) => {
     }
 
     console.log(`${$.phone}获取Cookie：`)
-    $.setCookie = await getMobieCK($.phone, bodyParam)
+    $.setCookie = await getMobileCK($.phone, bodyParam)
     
     // 1. 查询资格条件
     const preRet = await mbactFunc($, 'entitle/preconditions', actionNum)

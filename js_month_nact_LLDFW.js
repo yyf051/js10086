@@ -4,7 +4,7 @@ http://wap.js.10086.cn/nact/resource/2335/html/index.html?shareToken=dQEWCORLKHr
 cron:45 35 7 3-12 * *
 */
 const Env = require('./function/Env')
-const { getMobieCK } = require('./app/appLogin')
+const { getMobileCK } = require('./app/appLogin')
 const { nactFunc } = require('./app/appNact')
 
 const $ = new Env('江苏移动_流量大富翁')
@@ -30,7 +30,7 @@ Object.keys(js10086).forEach((item) => {
     }
 
     console.log(`${$.phone}获取Cookie：`)
-    $.setCookie = await getMobieCK($.phone, bodyParam)
+    $.setCookie = await getMobileCK($.phone, bodyParam)
     
     $.isLog = true
     const ret = await doActivity()

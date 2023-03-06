@@ -4,7 +4,7 @@ http://wap.js.10086.cn/nact/resource/2468/html/index.html?shareToken=dQEWCORLKHr
 cron:25 1 12 1-10 * *
 */
 const Env = require('./function/Env')
-const { getMobieCK } = require('./app/appLogin')
+const { getMobileCK } = require('./app/appLogin')
 const { nactFunc, getNactParams } = require('./app/appNact')
 
 const redis = require("ioredis")
@@ -44,7 +44,7 @@ let exec = true
     }
 
     console.log(`${$.phone}获取Cookie：`)
-    $.setCookie = await getMobieCK($.phone, bodyParam)
+    $.setCookie = await getMobileCK($.phone, bodyParam)
 
     $.isLog = true
     await initIndexPage()
@@ -237,7 +237,7 @@ async function getReceiveAccount() {
     }
 
     const bodyParam = decodeURIComponent(ck.match(/body=([^; ]+)(?=;?)/) && ck.match(/body=([^; ]+)(?=;?)/)[1])
-    const setCookie = await getMobieCK(phone, bodyParam)
+    const setCookie = await getMobileCK(phone, bodyParam)
     ret.phone = phone
     ret.setCookie = setCookie
     break

@@ -3,7 +3,7 @@
 cron:0 50 8 * * *
 */
 const Env = require('./function/Env')
-const { getMobieCK } = require('./app/appLogin')
+const { getMobileCK } = require('./app/appLogin')
 const { mbactFunc } = require('./app/appMbnact')
 
 const $ = new Env('江苏移动_专区页面')
@@ -29,7 +29,7 @@ Object.keys(js10086).forEach((item) => {
     }
 
     console.log(`${$.phone}获取Cookie：`)
-    $.setCookie = await getMobieCK($.phone, bodyParam)
+    $.setCookie = await getMobileCK($.phone, bodyParam)
     
     let resultObj = await queryTaskMain()
     if (!resultObj) {

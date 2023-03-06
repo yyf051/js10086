@@ -4,7 +4,7 @@ http://wap.js.10086.cn/nact/resource/2548/html/index.html?shareToken=dQEWCORLKHr
 cron:25 40 10 5-10 * *
 */
 const Env = require('./function/Env')
-const { getMobieCK } = require('./app/appLogin')
+const { getMobileCK } = require('./app/appLogin')
 const { nactFunc, getNactParams } = require('./app/appNact')
 
 const $ = new Env('江苏移动_打卡赢好礼')
@@ -31,12 +31,13 @@ Object.keys(js10086).forEach((item) => {
     }
 
     console.log(`${$.phone}获取Cookie：`)
-    $.setCookie = await getMobieCK($.phone, bodyParam)
+    $.setCookie = await getMobileCK($.phone, bodyParam)
     
     $.isLog = true
     $.isDirectReturnResultObj = true
     await initIndexPage()
-    
+    await initIndexPage()
+
     console.log()
     $.message += `\n`
     await $.wait(10000)
@@ -64,30 +65,22 @@ async function initIndexPage() {
   if (!isPunch && resultObj.signDays < 6) {
     await rightAwayPunch()
   } else if (resultObj.awardName) {
-    console.log(`打卡成功，获取${resultObj.awardName}`)
-    $.message += `打卡成功，获取${resultObj.awardName}\n`
-    if (resultObj.signDays == 5) {
-      await initIndexPage()
-    }
-  } else if (resultObj.signDays == 6) {
+    console.log(`今日打卡成功，获取${resultObj.awardName}`)
+    $.message += `今日打卡成功，获取${resultObj.awardName}\n`
+    // if (resultObj.signDays === 5) {
+    //   await initIndexPage()
+    // }
+  } else if (resultObj.signDays === 6) {
     console.log(`本月已全部打卡`)
     $.message += `本月已全部打卡\n`
   } else {
     onsole.log(`今日已打卡`)
     $.message += `今日已打卡\n`
   }
-
-
-
-  // 打卡6天超级抽奖
-  /*resultObj = await nactFunc($, params, true)
-  if (!resultObj) {
-    return
-  }*/
   // const isContinuousPunch = resultObj.isContinuousPunch
   const conPchAndNotDrawn = resultObj.conPchAndNotDrawn
   if (conPchAndNotDrawn) {
-    console.log(`已连续打卡，可进行抽奖`)
+    console.log(`已连续打卡，可进行超级抽奖`)
     await doSuperLottery()
   }
 }
@@ -106,7 +99,7 @@ async function rightAwayPunch() {
   console.log(`打卡成功`)
   await $.wait(5000)
 
-  await initIndexPage()
+  // await initIndexPage()
 }
 
 

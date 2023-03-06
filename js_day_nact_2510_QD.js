@@ -3,7 +3,7 @@
 cron:25 15 10 * * *
 */
 const Env = require('./function/Env')
-const { getMobieCK } = require('./app/appLogin')
+const { getMobileCK } = require('./app/appLogin')
 const { nactFunc } = require('./app/appNact')
 
 const $ = new Env('江苏移动_每日签到')
@@ -30,7 +30,7 @@ Object.keys(js10086).forEach((item) => {
     }
 
     console.log(`${$.phone}获取Cookie：`)
-    $.setCookie = await getMobieCK($.phone, bodyParam)
+    $.setCookie = await getMobileCK($.phone, bodyParam)
     
     const resultObj = await initIndexPage()
     if (resultObj && !resultObj.isSignToday) {

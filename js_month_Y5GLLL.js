@@ -4,7 +4,7 @@ http://wap.js.10086.cn/vw/navbar/market_summer5g_new?shareToken=dQEWCORLKHrkeV2Q
 cron:12 12 29 2 ?
 */
 const Env = require('./function/Env')
-const { getMobieCK } = require('./app/appLogin')
+const { getMobileCK } = require('./app/appLogin')
 const sendWX = require('./function/lcwx')
 
 const $ = new Env('江苏移动_用5G领流量')
@@ -20,7 +20,7 @@ const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/6
 !(async () => {
   $.message = ''
   const Y5GLLLConfig = (process.env.Y5GLLLConfig || '').split('&')
-  if (Y5GLLLConfig.length != 2) {
+  if (Y5GLLLConfig.length !== 2) {
     console.log(`参数配置错误: ${process.env.Y5GLLLConfig}, ${JSON.stringify(Y5GLLLConfig)}`)
     return
   }
@@ -35,7 +35,7 @@ const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/6
     const cookie = cookiesArr[i]
     $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
     $.bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
-    if (userPhone == $.phone) {
+    if (userPhone === $.phone) {
       break
     }
   }
@@ -52,18 +52,18 @@ const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/6
   }
 
   console.log(`${$.phone}获取Cookie：`)
-  $.setCookie = await getMobieCK($.phone, $.bodyParam)
+  $.setCookie = await getMobileCK($.phone, $.bodyParam)
     
   let r = await initPage()
   if (r.isGet != '1') {
     console.log(`领取奖励...`)
     r = await lottery()
-    if (r && r.checkCode == 'E10003') {
+    if (r && r.checkCode === 'E10003') {
       console.log(`发送验证码...`)
       await sendSms()
     }
   } else {
-    if (r.checkCode == 'E10003') {
+    if (r.checkCode === 'E10003') {
       // 查询列表，是否已经激活
       const isHandled = await summer5gRecords()
       if (isHandled) {

@@ -4,7 +4,7 @@ http://wap.js.10086.cn/rec/iGKs?shareToken=dQEWCORLKHrkeV2QtW/TUg==&rm=ydc
 cron:45 15 9 5 * *
 */
 const Env = require('./function/Env')
-const { getMobieCK } = require('./app/appLogin')
+const { getMobileCK } = require('./app/appLogin')
 const { mbactFunc } = require('./app/appMbnact')
 
 const $ = new Env('江苏移动_砸金蛋')
@@ -31,7 +31,7 @@ Object.keys(js10086).forEach((item) => {
     }
 
     console.log(`${$.phone}获取Cookie：`)
-    $.setCookie = await getMobieCK($.phone, bodyParam)
+    $.setCookie = await getMobileCK($.phone, bodyParam)
     
     console.log(`${$.phone}获取活动资格......`)
     const initRet0 = await mbactFunc($, 'entitle/preconditions', actNum)

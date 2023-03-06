@@ -208,7 +208,7 @@ const getOption = (phone, body) => {
   }
 }
 
-async function getMobieCK(phone, loginBody) {
+async function getMobileCK(phone, loginBody) {
 
   // 获取登陆参数
   const opt = getOption(phone, loginBody)
@@ -268,5 +268,5 @@ function initCookie(opt) {
 }
 
 module.exports = {
-  options, getMobieCK
+  options, getMobileCK
 }

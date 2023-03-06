@@ -3,7 +3,7 @@
 cron:45 45 12 1 * *
 */
 const Env = require('./function/Env')
-const { getMobieCK}  = require('./app/appLogin')
+const { getMobileCK}  = require('./app/appLogin')
 const { mbactFunc } = require('./app/appMbnact')
 
 // https://wap.js.10086.cn/mb_nact/new/act-front/cj/cj016/main.html?actNum=700001296
@@ -32,7 +32,7 @@ Object.keys(js10086).forEach((item) => {
     }
 
     console.log(`${$.phone}获取Cookie：`)
-    $.setCookie = await getMobieCK($.phone, bodyParam)
+    $.setCookie = await getMobileCK($.phone, bodyParam)
     
     const preRet = await mbactFunc($, 'entitle/preconditions', actionNum)
     if (!preRet) {

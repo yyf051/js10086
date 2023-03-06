@@ -4,7 +4,7 @@ http://wap.js.10086.cn/mb_nact/new/act-front/cj/cj015/main.html?actNum=700002915
 cron:0 40 8 * * *
 */
 const Env = require('./function/Env')
-const { getMobieCK } = require('./app/appLogin')
+const { getMobileCK } = require('./app/appLogin')
 const { mbactFunc } = require('./app/appMbnact')
 
 const $ = new Env('江苏移动_刷视频赢福利')
@@ -30,7 +30,7 @@ Object.keys(js10086).forEach((item) => {
     }
 
     console.log(`${$.phone}获取Cookie：`)
-    $.setCookie = await getMobieCK($.phone, bodyParam)
+    $.setCookie = await getMobileCK($.phone, bodyParam)
     
     console.log(`${$.phone}检查参与资格......`)
     const conditionRet = await mbactFunc($, 'entitle/preconditions', '700002915')

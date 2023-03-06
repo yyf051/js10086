@@ -4,7 +4,7 @@ http://wap.js.10086.cn/nact/resource/2574/html/index.html?shareToken=dQEWCORLKHr
 cron:25 43 12 1 * *
 */
 const Env = require('./function/Env')
-const { getMobieCK } = require('./app/appLogin')
+const { getMobileCK } = require('./app/appLogin')
 const { nactFunc, getNactParams } = require('./app/appNact')
 
 const $ = new Env('江苏移动_点亮兔子灯')
@@ -31,7 +31,7 @@ Object.keys(js10086).forEach((item) => {
     }
 
     console.log(`${$.phone}获取Cookie：`)
-    $.setCookie = await getMobieCK($.phone, bodyParam)
+    $.setCookie = await getMobileCK($.phone, bodyParam)
     
     $.isLog = false
     $.isDirectReturnResultObj = true

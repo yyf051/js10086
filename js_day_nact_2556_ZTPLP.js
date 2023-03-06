@@ -4,7 +4,7 @@ http://wap.js.10086.cn/nact/resource/2556/html/index.html?shareToken=dQEWCORLKHr
 cron:25 43 10 5 * *
 */
 const Env = require('./function/Env')
-const { getMobieCK } = require('./app/appLogin')
+const { getMobileCK } = require('./app/appLogin')
 const { nactFunc, getNactParams } = require('./app/appNact')
 
 const $ = new Env('江苏移动_拆漂流瓶')
@@ -32,7 +32,7 @@ Object.keys(js10086).forEach((item) => {
         }
 
         console.log(`${$.phone}获取Cookie：`)
-        $.setCookie = await getMobieCK($.phone, bodyParam)
+        $.setCookie = await getMobileCK($.phone, bodyParam)
 
         await execActivity()
 

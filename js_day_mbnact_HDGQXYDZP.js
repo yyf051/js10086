@@ -4,7 +4,7 @@ http://wap.js.10086.cn/mb_nact/new/act-front/cj/cj020/main.html?actNum=700015204
 cron:10 20 10 1-7 10 ?
 */
 const Env = require('./function/Env')
-const { getMobieCK } = require('./app/appLogin')
+const { getMobileCK } = require('./app/appLogin')
 const { mbactFunc } = require('./app/appMbnact')
 
 const $ = new Env('江苏移动_欢度佳节幸运大转盘')
@@ -30,7 +30,7 @@ Object.keys(js10086).forEach((item) => {
     }
 
     console.log(`${$.phone}获取Cookie：`)
-    $.setCookie = await getMobieCK($.phone, bodyParam)
+    $.setCookie = await getMobileCK($.phone, bodyParam)
     
     console.log(`${$.phone}检查参与状态......`)
     const initRet = await mbactFunc($, 'checkEntitleAccount', '7000152043gnqwc8')
