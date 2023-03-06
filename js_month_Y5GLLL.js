@@ -15,7 +15,7 @@ Object.keys(js10086).forEach((item) => {
   cookiesArr.push(js10086[item])
 })
 const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/16A366  Jsmcc/1.0 ua=jsmcc&loginmobile=0a5b99bfb7fb26214a146094942d4d91&deviceid=891DDB4F-ED63-4EF0-AF49-8F6EE6005F89&platform=iphone&channel=sd&ch=03&version=8.4.9&netmode=WiFi&time=20220308151203&lng=7effded641d49c4f&lat=7effded641d49c4f&poi=(null)&cityCode=(null)&JType=0&platformExpland=iPhone%208&idfaMd5=CB272611-A585-4786-9DE1-23BC50B73007&cmtokenid=E0157A381A2741979E9AB324F2370CC3@js.ac.10086.cn'
-
+let JS_WX_ID
 
 !(async () => {
   $.message = ''
@@ -24,7 +24,7 @@ const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/6
     console.log(`参数配置错误: ${process.env.Y5GLLLConfig}, ${JSON.stringify(Y5GLLLConfig)}`)
     return
   }
-  const JS_WX_ID = Y5GLLLConfig[1]
+  JS_WX_ID = Y5GLLLConfig[1]
   const userPhone = Y5GLLLConfig[0]
   if (!userPhone || !JS_WX_ID) {
     console.log(`手机号或微信号为空，不执行`)
@@ -53,28 +53,8 @@ const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/6
 
   console.log(`${$.phone}获取Cookie：`)
   $.setCookie = await getMobileCK($.phone, $.bodyParam)
-    
-  let r = await initPage()
-  if (r.isGet != '1') {
-    console.log(`领取奖励...`)
-    r = await lottery()
-    if (r && r.checkCode === 'E10003') {
-      console.log(`发送验证码...`)
-      await sendSms()
-    }
-  } else {
-    if (r.checkCode === 'E10003') {
-      // 查询列表，是否已经激活
-      const isHandled = await summer5gRecords()
-      if (isHandled) {
-        sendWX(`【${$.name}】\n本月已领取，下个月6号之后再来`, [JS_WX_ID])
-      } else {
-        // 已经领取，需要短信验证码
-        console.log(`发送验证码...`)
-        await sendSms()
-      }
-    }
-  }
+
+  await doActivity();
   console.log()
   $.message += `\n\n`
 
@@ -85,6 +65,27 @@ const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/6
 }).finally(() => {
   $.done()
 })
+
+async function doActivity() {
+  let r = await initPage()
+  if (r.isGet !== '1') {
+    console.log(`领取奖励...`)
+    await lottery()
+    await doActivity()
+  } else {
+    if (r.checkCode === 'E10003') {
+      // 查询列表，是否已经激活
+      const isHandled = await summer5gRecords()
+      if (isHandled) {
+        await sendWX(`【${$.name}】\n本月已领取，下个月6号之后再来`, [JS_WX_ID])
+      } else {
+        // 已经领取，需要短信验证码
+        console.log(`发送验证码...`)
+        await sendSms()
+      }
+    }
+  }
+}
 
 /**
  * 查询活动信息
