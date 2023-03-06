@@ -293,7 +293,7 @@ async function logReceiveCount(phone) {
       // 设置key及过期时间
       const monthKeyExists = await cache.exists(MONTH_KEY)
       if (!monthKeyExists) {
-        await cache.expire(MONTH_KEY, 30 * 24 * 60 * 60)          
+        await cache.expire(MONTH_KEY, 27 * 24 * 60 * 60)
       }
       const dayKeyExists = await cache.exists(DAY_KEY)
       if (!dayKeyExists) {
