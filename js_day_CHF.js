@@ -2,8 +2,8 @@
 江苏移动_查话费
 cron:0 10 8-22 * * *
 */
-const Env = require('./function/Env')
-const sendWX = require('./function/lcwx')
+const Env = require('./common/Env')
+const sendWX = require('./notice/WXLovelyCat_Notify')
 const { initCookie } = require('./web/webLogin')
 const WebApi = require('./web/webApi')
 const $ = new Env('江苏移动_查话费')

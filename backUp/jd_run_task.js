@@ -7,7 +7,7 @@ const axios = require('axios')
 const domain = require('./conf/globalConfig').qingLongHost
 const runTaskUrl = `${domain}/open/crons/run?t=${(new Date()).getTime()}`
 
-const { getAuthorization } = require('./function/qinglong')
+const { getAuthorization } = require('./common/qinglong')
 let authorization
 
 let taskName = process.env.jd_repo_pull || ''

@@ -3,7 +3,7 @@ http://wap.js.10086.cn/LuckyEgg.thtml?shareToken=dSyvvaQjcVPn9njBkUMiYg==&rm=ydc
 江苏移动_幸运扭蛋机
 cron:45 45 9 5 * *
 */
-const Env = require('./function/Env')
+const Env = require('./common/Env')
 const { getMobileCK } = require('./app/appLogin')
 
 const $ = new Env('江苏移动_幸运扭蛋机')

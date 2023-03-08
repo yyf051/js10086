@@ -4,13 +4,13 @@ http://wap.js.10086.cn/mb_nact/new/act-front/cj/cj015/main.html?actNum=700002203
 cron:0 30 8 * * *
 enabled=false
 */
-const Env = require('./function/Env')
-const { getMobieCK } = require('./function/01js10086_common')
-const { mbactFunc } = require('./function/01js10086_mbnact')
+const Env = require('./common/Env')
+const { getMobieCK } = require('./common/01js10086_common')
+const { mbactFunc } = require('./common/01js10086_mbnact')
 
 const $ = new Env('江苏移动_开宝箱赢流量')
 
-const js10086 = require('./function/js10086')
+const js10086 = require('./common/js10086')
 const cookiesArr = []
 Object.keys(js10086).forEach((item) => {
   cookiesArr.push(js10086[item])

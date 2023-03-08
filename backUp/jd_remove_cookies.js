@@ -8,7 +8,7 @@ const domain = require('./conf/globalConfig').qingLongHost
 const getJdCookiesUrl = `${domain}/open/envs?searchValue=app_open&t=${(new Date()).getTime()}`
 const deleteJdCookiesUrl = `${domain}/open/envs?t=${(new Date()).getTime()}`
 
-const { getAuthorization } = require('./function/qinglong')
+const { getAuthorization } = require('./common/qinglong')
 let authorization 
 
 !(async () => {

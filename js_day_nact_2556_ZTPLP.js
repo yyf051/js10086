@@ -3,7 +3,7 @@ http://wap.js.10086.cn/nact/resource/2556/html/index.html?shareToken=dQEWCORLKHr
 江苏移动_拆漂流瓶
 cron:25 43 10 5 * *
 */
-const Env = require('./function/Env')
+const Env = require('./common/Env')
 const { getMobileCK } = require('./app/appLogin')
 const { nactFunc, getNactParams } = require('./app/appNact')
 

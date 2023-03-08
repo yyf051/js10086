@@ -2,7 +2,7 @@
 江苏移动_幸运大转盘
 cron:45 5 12 1 * *
 */
-const Env = require('./function/Env')
+const Env = require('./common/Env')
 const { getMobileCK } = require('./app/appLogin')
 const { mbactFunc } = require('./app/appMbnact')
 

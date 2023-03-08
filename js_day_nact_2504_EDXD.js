@@ -2,7 +2,7 @@
 江苏移动_E豆小店
 cron:40 30 9 * * *
 */
-const Env = require('./function/Env')
+const Env = require('./common/Env')
 const { getMobileCK } = require('./app/appLogin')
 const { nactFunc } = require('./app/appNact')
 

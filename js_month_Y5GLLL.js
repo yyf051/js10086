@@ -3,9 +3,9 @@ http://wap.js.10086.cn/vw/navbar/market_summer5g_new?shareToken=dQEWCORLKHrkeV2Q
 江苏移动_用5G领流量
 cron:12 12 29 2 ?
 */
-const Env = require('./function/Env')
+const Env = require('./common/Env')
 const { getMobileCK } = require('./app/appLogin')
-const sendWX = require('./function/lcwx')
+const sendWX = require('./notice/WXLovelyCat_Notify')
 
 const $ = new Env('江苏移动_用5G领流量')
 

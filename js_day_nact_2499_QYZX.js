@@ -2,7 +2,7 @@
 江苏移动_权益中心
 cron:25 5 10 * * *
 */
-const Env = require('./function/Env')
+const Env = require('./common/Env')
 const { getMobileCK } = require('./app/appLogin')
 const { nactFunc } = require('./app/appNact')
 

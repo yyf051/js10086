@@ -2,7 +2,7 @@
 江苏移动_掌厅5G视界
 cron:40 40 9 * * *
 */
-const Env = require('./function/Env')
+const Env = require('./common/Env')
 const { getMobileCK } = require('./app/appLogin')
 const { nactFunc } = require('./app/appNact')
 

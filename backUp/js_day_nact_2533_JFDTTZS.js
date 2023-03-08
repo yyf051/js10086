@@ -1,6 +1,6 @@
-const Env = require('./function/Env')
-const { options, initCookie } = require('./function/01js10086_common')
-const { nactFunc } = require('./function/01js10086_nact')
+const Env = require('./common/Env')
+const { options, initCookie } = require('./common/01js10086_common')
+const { nactFunc } = require('./common/01js10086_nact')
 
 const $ = new Env('江苏移动_积分答题挑战赛')
 !(async () => {

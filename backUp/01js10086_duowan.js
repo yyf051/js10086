@@ -1,10 +1,10 @@
-const Env = require('./function/Env')
+const Env = require('./common/Env')
 
 const $ = new Env('江苏移动-萌鹿乐园')
 
 const {
   setConstCookie
-} = require('./function/01js10086_common')
+} = require('./common/01js10086_common')
 
 const UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/16A366;dovan_hybrid;dw_osVersion=12.0&dw_osCode=12.0&dw_manufacturer=apple&dw_model=iPhone10,1&dw_density=2&dw_deviceHeight=667&dw_deviceWidth=375&dw_appName=ecmc&dw_pkgName=com.jsmcc.ZP7267A6ES&dw_appVersion=8.4.9&dw_networkType=1&dw_carrier=0&dw_gdt=1&dw_tt=0;ua=jsmcc&platform=iphone&channel=sd&ch=03&version=8.4.9&netmode=WiFi&cityCode=(null)&JType=0&platformExpland=iPhone%208&audit=0&deviceid=891DDB4F-ED63-4EF0-AF49-8F6EE6005F89&dw_openUDID=28a4540430c5833595de218154df4cc7fb26c511&dw_idfa=AB6D498D-DBC2-AC0B-A23B-1CCE754861AE&loginmobile=66ae93344d4a4662ca90b97b80905170&cmtokenid=C97197B84C5345CC817915C772C6F46E@js.ac.10086.cn&time=20220310174557'
 

@@ -5,7 +5,7 @@
  * 总共5个账号，每月10创建1次队伍或者每月17号创建2次队伍
  * cron:25 15 12 10 * * js_day_nact_2510_QDZD.js
  */
-const Env = require('./function/Env')
+const Env = require('./common/Env')
 const { getMobileCK } = require('./app/appLogin')
 const { nactFunc, getNactParams } = require('./app/appNact')
 

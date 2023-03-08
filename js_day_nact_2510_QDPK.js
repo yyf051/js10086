@@ -2,7 +2,7 @@
 江苏移动_签到PK
 cron:25 20 10 * * *
 */
-const Env = require('./function/Env')
+const Env = require('./common/Env')
 const { getMobileCK } = require('./app/appLogin')
 const { nactFunc } = require('./app/appNact')
 

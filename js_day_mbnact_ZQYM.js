@@ -2,7 +2,7 @@
 江苏移动_专区页面
 cron:0 50 8 * * *
 */
-const Env = require('./function/Env')
+const Env = require('./common/Env')
 const { getMobileCK } = require('./app/appLogin')
 const { mbactFunc } = require('./app/appMbnact')
 

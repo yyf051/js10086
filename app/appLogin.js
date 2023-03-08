@@ -1,6 +1,6 @@
 const { options } = require('../conf/config')
 
-const Env = require('../function/Env')
+const Env = require('../common/Env')
 let $ = new Env()
 
 
@@ -175,7 +175,7 @@ function setConstCookie (ck = '') {
 const redis = require("ioredis")
 const config = require('../conf/globalConfig').redisConfig
 const cacheKey = 'ChinaMobileCK'
-const initCache = require('../function/cache')
+const initCache = require('../common/Cache')
 
 const loginUrl = 'https://wap.js.10086.cn/jsmccClient/action.dox'
 

@@ -3,7 +3,7 @@ http://wap.js.10086.cn/nact/resource/2335/html/index.html?shareToken=dQEWCORLKHr
 江苏移动_流量大富翁
 cron:45 35 7 3-12 * *
 */
-const Env = require('./function/Env')
+const Env = require('./common/Env')
 const { getMobileCK } = require('./app/appLogin')
 const { nactFunc } = require('./app/appNact')
 

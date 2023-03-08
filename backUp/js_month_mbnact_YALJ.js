@@ -1,8 +1,8 @@
-const Env = require('./function/Env')
+const Env = require('./common/Env')
 const $ = new Env('江苏移动_用爱连接')
 
-const { options, initCookie } = require('./function/01js10086_common')
-const { mbactFunc } = require('./function/01js10086_mbnact')
+const { options, initCookie } = require('./common/01js10086_common')
+const { mbactFunc } = require('./common/01js10086_mbnact')
 
 !(async () => {
   $.message = ''

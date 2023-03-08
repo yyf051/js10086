@@ -3,7 +3,7 @@ http://wap.js.10086.cn/mb_nact/new/act-front/cj/cj010/main.html?actNum=700015545
 江苏移动_新春嘉年华
 cron:23 10 * * *
 */
-const Env = require('../function/Env')
+const Env = require('../common/Env')
 const { getMobileCK } = require('../app/appLogin')
 const { mbactFunc } = require('../app/appMbnact')
 

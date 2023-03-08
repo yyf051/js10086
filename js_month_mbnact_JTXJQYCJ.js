@@ -2,7 +2,7 @@
 江苏移动_家庭星级权益抽奖
 cron:45 45 12 1 * *
 */
-const Env = require('./function/Env')
+const Env = require('./common/Env')
 const { getMobileCK}  = require('./app/appLogin')
 const { mbactFunc } = require('./app/appMbnact')
 

@@ -1,6 +1,6 @@
-const Env = require('./function/Env')
-const { options, initCookie } = require('./function/01js10086_common')
-const { mbactFunc } = require('./function/01js10086_mbnact')
+const Env = require('./common/Env')
+const { options, initCookie } = require('./common/01js10086_common')
+const { mbactFunc } = require('./common/01js10086_mbnact')
 
 const $ = new Env('江苏移动_暖暖春日')
 

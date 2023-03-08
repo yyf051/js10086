@@ -2,7 +2,7 @@
 江苏移动_集团专区打卡赢好礼
 cron:40 20 9 * * *
 */
-const Env = require('./function/Env')
+const Env = require('./common/Env')
 const { getMobileCK } = require('./app/appLogin')
 const { nactFunc } = require('./app/appNact')
 

@@ -2,7 +2,7 @@
 江苏移动_满签奖励
 cron:25 55 7 2,3 * *
 */
-const Env = require('./function/Env')
+const Env = require('./common/Env')
 const { getMobileCK } = require('./app/appLogin')
 const { nactFunc } = require('./app/appNact')
 

@@ -1,9 +1,9 @@
-const Env = require('./function/Env')
+const Env = require('./common/Env')
 const $ = new Env('江苏移动_网络加速，守“虎”美好')
 
 const {
   ua, options, enter, recall, getExtendCookie1, getExtendCookie2, getExtendCookie3, getCookie, setConstCookie
-} = $.isNode() ? require('./function/01js10086_common') : ''
+} = $.isNode() ? require('./common/01js10086_common') : ''
 
 $.message = ''
 $.setCookie = ''

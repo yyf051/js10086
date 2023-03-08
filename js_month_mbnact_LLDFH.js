@@ -2,7 +2,7 @@
 江苏移动_流量大富豪
 cron:45 55 8 5 * *
 */
-const Env = require('./function/Env')
+const Env = require('./common/Env')
 const { getMobileCK } = require('./app/appLogin')
 const { mbactFunc } = require('./app/appMbnact')
 

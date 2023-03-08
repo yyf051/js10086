@@ -3,7 +3,7 @@ http://wap.js.10086.cn/nact/resource/2574/html/index.html?shareToken=dQEWCORLKHr
 江苏移动_点亮兔子灯
 cron:25 43 12 1 * *
 */
-const Env = require('./function/Env')
+const Env = require('./common/Env')
 const { getMobileCK } = require('./app/appLogin')
 const { nactFunc, getNactParams } = require('./app/appNact')
 

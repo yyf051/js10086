@@ -2,7 +2,7 @@
 Fa米家签到
 cron:0 10 14 * * *
 */
-const Env = require('./function/Env')
+const Env = require('./common/Env')
 const $ = new Env('Fa米家签到')
 
 !(async () => {

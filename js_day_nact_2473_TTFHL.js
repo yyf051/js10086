@@ -2,7 +2,7 @@
 江苏移动_天天翻好礼
 cron:40 50 9 1-3 * *
 */
-const Env = require('./function/Env')
+const Env = require('./common/Env')
 const { getMobileCK } = require('./app/appLogin')
 const { nactFunc } = require('./app/appNact')
 

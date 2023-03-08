@@ -3,14 +3,14 @@ http://wap.js.10086.cn/nact/resource/xxxx/html/index.html?shareToken=dQEWCORLKHr
 江苏移动_xxxx
 cron:25 43 10 5 * *
 */
-const Env = require('./function/Env')
+const Env = require('./common/Env')
 const { getMobieCK } = require('./app/appLogin')
 const { nactFunc, getNactParams } = require('./app/appNact')
 
 const $ = new Env('江苏移动_xxx')
 const actCode = 'xxxx'
 
-const js10086 = require('./function/js10086')
+const js10086 = require('./common/js10086')
 const cookiesArr = []
 Object.keys(js10086).forEach((item) => {
     cookiesArr.push(js10086[item])

@@ -3,7 +3,7 @@ http://wap.js.10086.cn/rec/iGKs?shareToken=dQEWCORLKHrkeV2QtW/TUg==&rm=ydc
 江苏移动_砸金蛋
 cron:45 15 9 5 * *
 */
-const Env = require('./function/Env')
+const Env = require('./common/Env')
 const { getMobileCK } = require('./app/appLogin')
 const { mbactFunc } = require('./app/appMbnact')
 
