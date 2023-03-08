@@ -21,7 +21,7 @@ const sendNotice = async (msg, to_wxids) => {
 		return
 	}
 
-	if (!msg || !kam_addr || !kam_wxid || !to_wxids || to_wxids.length == 0) {
+	if (!msg || !kam_addr || !kam_wxid || !to_wxids || to_wxids.length === 0) {
 		console.log(msg, kam_addr, kam_wxid, kam_token, JSON.stringify(to_wxids))
 		console.log(`微信参数配置错误`)
 		return
