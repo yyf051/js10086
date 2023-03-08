@@ -4,7 +4,8 @@ cron:12 12 29 2 ?
 */
 const Env = require('./common/Env')
 const sendWX = require('./notice/WXLovelyCat_Notify')
-const { initCookie } = require('./web/webLogin')
+const {sendNotify} = require('./notice/SendNotify')
+const {initCookie} = require('./web/webLogin')
 const WebApi = require('./web/webApi')
 
 const $ = new Env('江苏移动_日统计')
@@ -13,59 +14,59 @@ const webApi = new WebApi($)
 const js10086 = require('./web/js10086_chf')
 const cookiesArr = []
 Object.keys(js10086).forEach((item) => {
-  cookiesArr.push(js10086[item])
+    cookiesArr.push(js10086[item])
 })
 const noticeConfig = JSON.parse(process.env.WX_NOTICE_CONFIG || {})
 
 
 !(async () => {
-  for (let i = 0; i < cookiesArr.length; i++) {
-    const cookie = cookiesArr[i]
-    const success = await login(cookie)
-    if (!success) {
-      continue
+    for (let i = 0; i < cookiesArr.length; i++) {
+        const cookie = cookiesArr[i]
+        const success = await login(cookie)
+        if (!success) {
+            continue
+        }
+
+        await doActivity()
+        console.log('-------------------------------------------------\n\n')
+
+        await $.wait(5000)
     }
 
-    await doActivity()
-    console.log('-------------------------------------------------\n\n')
-
-    await $.wait(5000)
-  }
-
-  $.sendNotify($.name, $.message)
+    await sendNotify($.name, $.message)
 
 })().catch((e) => {
-  $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
+    $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
 }).finally(() => {
-  $.done()
+    $.done()
 })
 
 function appendMsg(msg) {
-  $.message = $.message || ''
-  $.message += msg
+    $.message = $.message || ''
+    $.message += msg
 }
 
 async function login(cookie) {
-  $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
-  $.password = cookie.match(/passwd=([^; ]+)(?=;?)/) && cookie.match(/passwd=([^; ]+)(?=;?)/)[1]
-  $.wxid = noticeConfig[$.phone]
-  appendMsg(`<font size="5">${$.phone}</font>: \n`)
+    $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
+    $.password = cookie.match(/passwd=([^; ]+)(?=;?)/) && cookie.match(/passwd=([^; ]+)(?=;?)/)[1]
+    $.wxid = noticeConfig[$.phone]
+    appendMsg(`<font size="5">${$.phone}</font>: \n`)
 
-  const ck = await initCookie($.phone, $.password)
-  if (!ck) {
-    appendMsg(`登录失败，结束当前账号运行......\n\n`)
-    return false
-  }
-  $.setCookie = ck
-  return true
+    const ck = await initCookie($.phone, $.password)
+    if (!ck) {
+        appendMsg(`登录失败，结束当前账号运行......\n\n`)
+        return false
+    }
+    $.setCookie = ck
+    return true
 }
 
 async function doActivity() {
-  
-  const m1 = await initLLCZJL()
-  appendMsg(`${m1}\n\n`)
-  console.log(`${$.phone}:\n${m1}`)
-  sendWX(m1, [$.wxid])
+
+    const m1 = await initLLCZJL()
+    appendMsg(`${m1}\n\n`)
+    console.log(`${$.phone}:\n${m1}`)
+    sendWX(m1, [$.wxid])
 }
 
 /*
@@ -98,46 +99,47 @@ async function doActivity() {
 }
 */
 async function initLLCZJL() {
-  const data = await webApi.initLLCZJL()
-  if (data.success != '0' || data.code != '0') {
-    console.log(`查询失败，状态不对${data.success}, ${data.code}`)
-    return
-  }
-  const flowPaySeqInfos = data.data.lists[0].flowPaySeqInfos
+    const data = await webApi.initLLCZJL()
+    if (data.success != '0' || data.code != '0') {
+        console.log(`查询失败，状态不对${data.success}, ${data.code}`)
+        return
+    }
+    const flowPaySeqInfos = data.data.lists[0].flowPaySeqInfos
 
-  return combineLLJL(flowPaySeqInfos)
+    return combineLLJL(flowPaySeqInfos)
 
 }
+
 function combineLLJL(flowPaySeqInfos) {
-  
-  // 按天分组
-  const dayGroup = flowPaySeqInfos.reduce((group, element) => {
-    const key = element.dealDate.substring(0, 8)
-    group[key] = group[key] || []
-    group[key].push(element)
 
-    return group
-  }, {})
+    // 按天分组
+    const dayGroup = flowPaySeqInfos.reduce((group, element) => {
+        const key = element.dealDate.substring(0, 8)
+        group[key] = group[key] || []
+        group[key].push(element)
 
-  // 按天合计
-  const daySum = {}
-  let monthSum = 0
-  for(const els in dayGroup) {
-    const dayTotal = dayGroup[els].reduce((total, element) => {
-      total += element.flowValue - 0
-      return total
-    }, 0)
-    const m = dayTotal / 1024
-    const t = m >= 1024 ? (m / 1024).toFixed(2) + 'G' : m + 'M'
+        return group
+    }, {})
 
-    const k = els.substring(0, 4) + '/' + els.substring(4, 6) + '/' + els.substring(6, 8)
-    daySum[k] = t
+    // 按天合计
+    const daySum = {}
+    let monthSum = 0
+    for (const els in dayGroup) {
+        const dayTotal = dayGroup[els].reduce((total, element) => {
+            total += element.flowValue - 0
+            return total
+        }, 0)
+        const m = dayTotal / 1024
+        const t = m >= 1024 ? (m / 1024).toFixed(2) + 'G' : m + 'M'
 
-    monthSum += dayTotal
-  }
-  monthSum = (monthSum / 1024) >= 1024 ? (monthSum / 1024 / 1024).toFixed(2) + 'G' : (monthSum / 1024) + 'M'
+        const k = els.substring(0, 4) + '/' + els.substring(4, 6) + '/' + els.substring(6, 8)
+        daySum[k] = t
 
-  const today = daySum[Object.keys(daySum).pop()]
-  const yesterday = Object.keys(daySum).length >= 2 ? daySum[Object.keys(daySum).slice(-2)[0]] : '无'
-  return `获取流量统计：\n今日获取流量总数：${today}\n昨日获取流量总数：${yesterday}\n本月获取流量总数：${monthSum}`
+        monthSum += dayTotal
+    }
+    monthSum = (monthSum / 1024) >= 1024 ? (monthSum / 1024 / 1024).toFixed(2) + 'G' : (monthSum / 1024) + 'M'
+
+    const today = daySum[Object.keys(daySum).pop()]
+    const yesterday = Object.keys(daySum).length >= 2 ? daySum[Object.keys(daySum).slice(-2)[0]] : '无'
+    return `获取流量统计：\n今日获取流量总数：${today}\n昨日获取流量总数：${yesterday}\n本月获取流量总数：${monthSum}`
 }

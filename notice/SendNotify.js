@@ -34,7 +34,7 @@ function qywxamNotify (text, desp, strsummary = '') {
         html = desp.replace(/\n/g, '<br/>')
         html = html.replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;')
         // html = `<font size="3">${html}</font>`
-        if (strsummary == '') {
+        if (!strsummary) {
           strsummary = desp
         }
         var json = JSON.parse(data)

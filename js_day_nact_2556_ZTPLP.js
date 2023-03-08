@@ -4,8 +4,9 @@ http://wap.js.10086.cn/nact/resource/2556/html/index.html?shareToken=dQEWCORLKHr
 cron:25 43 10 5 * *
 */
 const Env = require('./common/Env')
-const { getMobileCK } = require('./app/appLogin')
-const { nactFunc, getNactParams } = require('./app/appNact')
+const {sendNotify} = require('./notice/SendNotify')
+const {getMobileCK} = require('./app/appLogin')
+const {nactFunc, getNactParams} = require('./app/appNact')
 
 const $ = new Env('江苏移动_拆漂流瓶')
 const actCode = '2556'
@@ -42,7 +43,7 @@ Object.keys(js10086).forEach((item) => {
     }
 
     console.log(`通知内容：\n\n`, $.message)
-    await $.sendNotify($.name, $.message)
+    await sendNotify($.name, $.message)
 })().catch((e) => {
     $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
 }).finally(() => {
@@ -57,7 +58,7 @@ async function execActivity() {
     $.isDirectReturnResultObj = true
     let resultObj = await initIndexPage()
     // await throwBottle(resultObj)
-    
+
     // resultObj = await initIndexPage()
     await flashingBottle(resultObj)
 }
@@ -84,7 +85,7 @@ async function flashingBottle(resultObj) {
     console.log(`当前剩余${left}次机会, 进行捞瓶子...`)
 
     const params = getNactParams(actCode, 'flashingBottle')
-    
+
     for (let index = 0; index < left; index++) {
         console.log(`开始捞瓶子...`)
         const ret = await nactFunc($, params)
@@ -113,7 +114,7 @@ async function openBottle(bottleUUID) {
     const params = getNactParams(actCode, 'openBottle')
     params.bottleUUID = bottleUUID
     const ret = await nactFunc($, params)
-    
+
     console.log(`开瓶成功，奖励: ${ret.userBottleGift}`)
     $.message += `开瓶成功，奖励: ${ret.userBottleGift}\n`
     await $.wait(5000)
@@ -121,16 +122,16 @@ async function openBottle(bottleUUID) {
 
 /**
  * 扔瓶子
- * @param {} resultObj 
+ * @param {} resultObj
  */
 async function throwBottle(resultObj) {
     const userDayChance = resultObj.userDayChance || {}
-    
+
     const params = getNactParams(actCode, 'throwBottle')
     params.bottleType = 1
     params.bottleMsg = encodeURIComponent(`团团圆圆新年到,欢欢喜喜迎新年,开开心心好运来。`)
     params.bottleGift = null
-    
+
     const throwChance = userDayChance.throwChance || 0
     const left = MAX_THROW_COUNT - throwChance
 

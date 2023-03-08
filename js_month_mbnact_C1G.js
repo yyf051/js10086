@@ -72,7 +72,7 @@ Object.keys(js10086).forEach((item) => {
     await $.wait(10000)
   }
   console.log(`通知内容：\n\n`, $.message)
-  await $.sendNotify($.name, $.message)
+  await sendNotify($.name, $.message)
 })().catch((e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
 }).finally(() => {

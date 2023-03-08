@@ -4,8 +4,9 @@ http://wap.js.10086.cn/nact/resource/xxxx/html/index.html?shareToken=dQEWCORLKHr
 cron:25 43 10 5 * *
 */
 const Env = require('./common/Env')
-const { getMobieCK } = require('./app/appLogin')
-const { nactFunc, getNactParams } = require('./app/appNact')
+const {sendNotify} = require('./notice/SendNotify')
+const {getMobieCK} = require('./app/appLogin')
+const {nactFunc, getNactParams} = require('./app/appNact')
 
 const $ = new Env('江苏移动_xxx')
 const actCode = 'xxxx'
@@ -29,7 +30,7 @@ Object.keys(js10086).forEach((item) => {
     }
 
     console.log(`通知内容：\n\n`, $.message)
-    await $.sendNotify($.name, $.message)
+    await sendNotify($.name, $.message)
 })().catch((e) => {
     $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
 }).finally(() => {
