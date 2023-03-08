@@ -6,7 +6,7 @@ const TG_PROXY_PORT = process.env.TG_PROXY_PORT
 const TG_PROXY_AUTH = process.env.TG_PROXY_AUTH
 const callAPI = require('../common/ApiCaller')
 
-async function tgBotNotify(text, desp, notifyBy = 'Notify By HermanWu') {
+async function tgBotNotify(text, desp, notifyBy = 'Notify By Herman Wu') {
 
     if (!TG_BOT_TOKEN || !TG_USER_ID) {
         console.log('Telegram配置错误。\n')
