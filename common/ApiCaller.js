@@ -1,6 +1,7 @@
 /* eslint-disable eqeqeq */
 const Env = require('./Env')
 const $ = new Env()
+const IS_DEBUG = process.env.IS_DEBUG === 'true' || false
 
 function callback(resolve) {
     return (err, resp, data) => {
@@ -22,13 +23,14 @@ function callback(resolve) {
         } else {
             ret.data = $.jsonParse(data)
         }
-        // console.log(JSON.stringify(ret) + '\n\n\n')
+        IS_DEBUG && console.log(JSON.stringify(ret), '\n\n')
         resolve(ret)
     }
 }
 
 function callAPI(options) {
     options.timeout = options.timeout || process.env.API_TIMEOUT || 15000
+    IS_DEBUG && console.log(JSON.stringify(options), '\n\n')
     return options.method === 'post' ?
         new Promise(resolve => {
             $.post(options, callback(resolve))
