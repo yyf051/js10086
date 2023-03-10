@@ -102,7 +102,7 @@ async function checkSign() {
  * 执行任务
  */
 async function execTasks(taskList, finishTaskIds) {
-    if (finishTaskIds.length == taskList.length) {
+    if (finishTaskIds.length === taskList.length) {
         console.log(`今日任务均已完成，无需执行`)
         $.message += `今日任务均已完成，无需执行\n`
     }
@@ -132,7 +132,7 @@ async function doTask(taskId, taskName, taskType) {
     }
 
     console.log(`已完成任务：${taskName}，进行抽奖`)
-    $.message += `已完成任务：${taskName}，进行抽奖\n`
+    // $.message += `已完成任务：${taskName}，进行抽奖\n`
     await $.wait(5000)
 
     await doLottery()
