@@ -39,9 +39,9 @@ Object.keys(js10086).forEach((item) => {
         await initIndexPage()
         // await initIndexPage()
 
-        console.log()
-        $.message += `\n\n`
-        await $.wait(10000)
+        $.message += `\n`
+        console.log(`-------------------------------------\n`)
+        await $.wait($.randomWaitTime(9, 10))
     }
 
     console.log(`通知内容：\n\n`, $.message)

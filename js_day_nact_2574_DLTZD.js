@@ -38,10 +38,9 @@ Object.keys(js10086).forEach((item) => {
         $.isDirectReturnResultObj = true
         await initIndexPage()
 
-        console.log()
         $.message += `\n`
         console.log(`-------------------------------------\n`)
-        await $.wait(10000)
+        await $.wait($.randomWaitTime(9, 10))
     }
 
     console.log(`通知内容：\n\n`, $.message)
