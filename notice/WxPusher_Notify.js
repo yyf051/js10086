@@ -1,7 +1,7 @@
 const WP_APP_TOKEN_ONE = process.env.WP_APP_TOKEN_ONE
 const WP_APP_COMBINE_NOTIFY = process.env.WP_APP_COMBINE_NOTIFY === 'true'
 const WP_APP_TOPICS = (process.env.WP_APP_TOPICS || '').split(';')
-const WP_APP_NOTICE_URL = process.env.WP_APP_NOTICE_URL || 'https://fastrabbit.20220727.xyz'``````````````````````````````````````````````
+const WP_APP_NOTICE_URL = process.env.WP_APP_NOTICE_URL || 'https://fastrabbit.20220727.xyz'
 
 const isPushWxPusher = WP_APP_TOKEN_ONE && process.env.PUSH_WX_PUSHER
 
