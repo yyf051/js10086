@@ -37,7 +37,7 @@ Object.keys(js10086).forEach((item) => {
         // $.isLog = true
         $.isDirectReturnResultObj = true
         await initIndexPage()
-        await initIndexPage()
+        // await initIndexPage()
 
         console.log()
         $.message += `\n\n`
