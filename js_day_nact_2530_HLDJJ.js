@@ -37,6 +37,7 @@ Object.keys(js10086).forEach((item) => {
         // $.isLog = true
         $.isDirectReturnResultObj = true
         await initIndexPage()
+        await initIndexPage()
 
         console.log()
         $.message += `\n\n`
@@ -71,7 +72,7 @@ async function initIndexPage() {
     const chance = ret.chance
     if (chance && chance > 0) {
         console.log(`存在抽奖${chance}机会，进行抽奖`)
-        $.message += `存在抽奖${chance}机会，进行抽奖\n`
+        // $.message += `存在抽奖${chance}机会，进行抽奖\n`
         for (let i = 0; i < chance; i++) {
             await doLottery()
         }
@@ -129,6 +130,11 @@ async function doTask(taskId, taskName, taskType) {
 
     if (!ret) {
         return
+    }
+    if (ret.unReceiveSignRecord) {
+        await doSuperLottery()
+        await $.wait($.randomWaitTime(2, 3))
+        await doTask(taskId, taskName, taskType)
     }
 
     console.log(`已完成任务：${taskName}，进行抽奖`)
