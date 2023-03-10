@@ -45,11 +45,11 @@ Object.keys(js10086).forEach((item) => {
             if (resultObj.today - resultObj.monthSignCnt > 1) {
                 await doSignSupply()
             } else {
-                $.message += `1无需补签monthSignCnt=${resultObj.monthSignCnt}，today=${resultObj.today}\n`
+                // $.message += `1无需补签monthSignCnt=${resultObj.monthSignCnt}，today=${resultObj.today}\n`
                 console.log(`1无需补签monthSignCnt=${resultObj.monthSignCnt}，today=${resultObj.today}`)
             }
         } else {
-            $.message += `无法领取补签卡isGetFreeChance=${resultObj.isGetFreeChance}，totalFreeChance=${resultObj.totalFreeChance}\n`
+            // $.message += `无法领取补签卡isGetFreeChance=${resultObj.isGetFreeChance}，totalFreeChance=${resultObj.totalFreeChance}\n`
             console.log(`${$.phone}无法领取补签卡isGetFreeChance=${resultObj.isGetFreeChance}，totalFreeChance=${resultObj.totalFreeChance}`)
         }
 
@@ -58,7 +58,7 @@ Object.keys(js10086).forEach((item) => {
         if (!resultObj.isSignSupplu && resultObj.currentFreeChance > 0 && resultObj.today - resultObj.monthSignCnt > 1) {
             await doSignSupply()
         } else {
-            $.message += `无需补签isSignSupplu=${resultObj.isSignSupplu}，currentFreeChance=${resultObj.currentFreeChance}，monthSignCnt=${resultObj.monthSignCnt}，today=${resultObj.today}\n`
+            // $.message += `无需补签isSignSupplu=${resultObj.isSignSupplu}，currentFreeChance=${resultObj.currentFreeChance}，monthSignCnt=${resultObj.monthSignCnt}，today=${resultObj.today}\n`
             console.log(`${$.phone}无需补签isSignSupplu=${resultObj.isSignSupplu}，currentFreeChance=${resultObj.currentFreeChance}，monthSignCnt=${resultObj.monthSignCnt}，today=${resultObj.today}`)
         }
 

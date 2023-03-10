@@ -86,7 +86,7 @@ async function playTask(task) {
     console.log(`${$.phone}进行${task.taskName}......`)
     const params = `reqUrl=act2499&method=doTask&operType=1&actCode=2499&taskId=${task.taskId}&extendParams=&ywcheckcode=&mywaytoopen=`
     const resultObj = await nactFunc($, params)
-    $.message += `进行${task.taskName}......${resultObj && resultObj.isApp ? '---成功\n' : '---失败\n'}`
+    // $.message += `进行${task.taskName}......${resultObj && resultObj.isApp ? '---成功\n' : '---失败\n'}`
 
     await $.wait(5000)
     return true

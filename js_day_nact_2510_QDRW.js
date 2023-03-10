@@ -203,7 +203,7 @@ async function turntable(taskId, taskName, actNo, methodName = 'turntable') {
     await $.wait(2000)
     $.isDirectReturnResultObj = true
     console.log(`${$.phone}执行E豆任务：${taskName}......`)
-    $.message += `执行E豆任务：${taskName}......\n`
+    // $.message += `执行E豆任务：${taskName}......\n`
     const params = `reqUrl=act${actNo}&method=${methodName}&actCode=${actNo}&extendParams=thass%3D1%26task2510Id%3D${taskId}%26task2510Status%3D0&ywcheckcode=&mywaytoopen=`
     const resultObj = await nactFunc($, params)
 
@@ -224,7 +224,7 @@ async function newCompleteEBeanTask(taskId, taskName, actNo) {
     // console.log('newCompleteEBeanTask', resultObj)
     if (resultObj && resultObj.liulan == 1) {
         console.log(`${$.phone}成功完成E豆任务：${taskName}......`)
-        $.message += `成功完成E豆任务：${taskName}......\n`
+        // $.message += `成功完成E豆任务：${taskName}......\n`
         await receiveTaskAward(taskId)
     }
 }

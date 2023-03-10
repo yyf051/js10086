@@ -79,14 +79,13 @@ async function obtainVideo(shipin) {
             const params = `reqUrl=act2504&method=obtainVideo&actCode=2504&extendParams=&ywcheckcode=&mywaytoopen=`
             await nactFunc($, params)
             console.log(`看视频${i + 1} 已完成`)
-            $.message += `看视频${i + 1} 已完成\n`
+            // $.message += `看视频${i + 1} 已完成\n`
 
             await $.wait(30000)
         }
     } else {
         console.log(`看视频得E豆 今日已完成`)
         $.message += `看视频得E豆 今日已完成\n`
-        return
     }
 }
 

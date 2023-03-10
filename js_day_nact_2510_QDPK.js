@@ -57,7 +57,7 @@ async function initIndexFunny() {
 
         // 进行PK
         if (!resultObj.pkIsPkToday) {
-            $.message += '尚未PK，进行PK~\n'
+            // $.message += '尚未PK，进行PK~\n'
             console.log(`${$.phone}尚未PK，进行PK~`)
             await pkSign()
         } else if (resultObj.pkTodayInfo.status == 1) {
