@@ -148,7 +148,7 @@ async function doSignMulti() {
     console.log(`${$.phone}开始抽奖......`)
     const params = 'reqUrl=act2510&method=doSignMulti&operType=1&actCode=2510&extendParams=&ywcheckcode=&mywaytoopen='
     const resultObj = await nactFunc($, params)
-    console.log(`doSignMulti: `, resultObj)
+    // console.log(`doSignMulti: `, resultObj)
     if (!resultObj) {
         return false
     }
@@ -161,8 +161,8 @@ async function doSignMulti() {
         console.log(`${$.phone}签到抽奖成功，奖励: ${prize.awardName}\n`)
     } else if (supplyPrize && supplyPrize.awardNum) {
         // 直接下发奖励
-        $.message += `补签抽奖成功，奖励: ${prize.awardName}\n`
-        console.log(`${$.phone}补签抽奖成功，奖励: ${prize.awardName}\n`)
+        $.message += `补签抽奖成功，奖励: ${supplyPrize.awardName}\n`
+        console.log(`${$.phone}补签抽奖成功，奖励: ${supplyPrize.awardName}\n`)
     } else {
         $.message += '领奖貌似没成功，手动检查吧\n'
         console.log(`${$.phone}领奖貌似没成功，手动检查吧\n`)
