@@ -32,20 +32,21 @@ function getUserInfo(vm) {
 /**
  * 活动通用查询接口
  */
-function mbactFunc(vm, funcName, actNum, body) {
-  return new Promise((resolve, reject) => {
+function mbactFunc(vm, funcName, actNum, body, isLog = false) {
+  return new Promise((resolve) => {
     try {
+      isLog = isLog || process.env.isLog
       const url = `${hostPath}/${funcName}?actNum=${actNum}`
       const options = { url, headers: getHeaders(vm) }
-      // console.log(`mbactFunc options: `, options)
+      isLog && console.log(`mbactFunc options: `, options)
       if (body) {
         options.body = JSON.stringify(body)
         vm.post(options, async (err, resp, data) => {
           if (err) throw new Error(err)
-          // console.log(`${funcName}_${actNum}: ${data}`)
+          isLog && console.log(`${funcName}_${actNum}: ${data}`)
           data = data && JSON.parse(data)
           let ret = false
-          if (data.success && data.code == '1') {
+          if (data.success && data.code === '1') {
             ret = data.data || true
           }
           resolve(ret)
@@ -53,14 +54,14 @@ function mbactFunc(vm, funcName, actNum, body) {
       } else {
         vm.get(options, async (err, resp, data) => {
           if (err) throw new Error(err)
-          // console.log(`${funcName}_${actNum}: ${data}`)
+          isLog && console.log(`${funcName}_${actNum}: ${data}`)
           if(!data) {
             console.log(`${vm.name} 活动查询失败，数据为空\n`)
             vm.msg += `${vm.name} 活动查询失败，数据为空\n`
           }
           data = data && JSON.parse(data)
           let ret = false
-          if (data.success && data.code == '1') {
+          if (data.success && data.code === '1') {
             ret = data.data || true
           } else if (!data.success && data.message) {
             console.log(`${vm.name} 执行失败：${data.message}\n`)
@@ -94,5 +95,5 @@ function getHeaders(vm) {
 
 
 module.exports = {
-  mbactFunc, getUserInfo
+  mbactFunc
 }
