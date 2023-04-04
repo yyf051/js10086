@@ -1,7 +1,8 @@
-/**
- * https://wap.js.10086.cn/mb_nact/new/act-front/rwcj/rwcj002/main.html?actNum=RWCJ00015049&rm=ydc&shareToken=dQEWCORLKHrkeV2QtW/TUg==
- * cron:
- */
+/*
+https://wap.js.10086.cn/mb_nact/new/act-front/rwcj/rwcj002/main.html?actNum=RWCJ00015049&rm=ydc&shareToken=dQEWCORLKHrkeV2QtW/TUg==
+江苏移动_幸运大转盘
+cron:45 23 8 1-15 4 *
+*/
 const Env = require('./common/Env')
 const {sendNotify} = require('./notice/SendNotify')
 const {getMobileCK} = require('./app/appLogin')
@@ -10,9 +11,15 @@ const {mbactFunc} = require('./app/appMbnact')
 const $ = new Env('江苏移动_暖暖春日')
 const actionNum = 'RWCJ00015049'
 
+const js10086 = require('./app/js10086')
+const cookiesArr = []
+Object.keys(js10086).forEach((item) => {
+    cookiesArr.push(js10086[item])
+})
+
 !(async () => {
     $.message = ''
-    for (let i = 0; i < options.length; i++) {
+    for (let i = 0; i < cookiesArr.length; i++) {
         const cookie = cookiesArr[i]
         $.phone = decodeURIComponent(cookie.match(/phone=([^; ]+)(?=;?)/) && cookie.match(/phone=([^; ]+)(?=;?)/)[1])
         const bodyParam = decodeURIComponent(cookie.match(/body=([^; ]+)(?=;?)/) && cookie.match(/body=([^; ]+)(?=;?)/)[1])
