@@ -224,7 +224,7 @@ async function getReceiveAccount() {
     for (let i = 0; i < cookiesArr.length; i++) {
         const ck = cookiesArr[i]
         const phone = decodeURIComponent(ck.match(/phone=([^; ]+)(?=;?)/) && ck.match(/phone=([^; ]+)(?=;?)/)[1])
-        if (phone == $.phone) {
+        if (phone === $.phone) {
             // 自己，跳过
             console.log(`当前查找到的是自己：${phone}，跳过`)
             continue
@@ -294,7 +294,11 @@ async function logReceiveCount(phone) {
         // 设置key及过期时间
         const monthKeyExists = await cache.exists(MONTH_KEY)
         if (!monthKeyExists) {
-            await cache.expire(MONTH_KEY, 27 * 24 * 60 * 60)
+            // 用当月天数-今天得到失效时间，解决月底执行导致有效期一直存在的问题
+            const days = $.getDays();
+            const today = (new Date()).getDate()
+            const d = days - today - 3
+            d > 0 ? await cache.expire(MONTH_KEY, d * 24 * 60 * 60) : console.log('')
         }
         const dayKeyExists = await cache.exists(DAY_KEY)
         if (!dayKeyExists) {
@@ -304,7 +308,7 @@ async function logReceiveCount(phone) {
         // 获取key
         const receiveCountMonth = await cache.hget(MONTH_KEY, phone)
         const receiveCountToday = await cache.hget(DAY_KEY, phone)
-        // 设置reids
+        // 设置redis
         if (receiveCountToday < 1) {
             // 今日未记录过，则记录
             await cache.hset(MONTH_KEY, phone, receiveCountMonth + 1)

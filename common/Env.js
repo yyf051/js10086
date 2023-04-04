@@ -411,7 +411,7 @@ function Env(t, e) {
 
         serializeQueryParams = (obj, escape = true) => {
             const arr = [];
-            for(let i in obj) {
+            for (let i in obj) {
                 if (obj.hasOwnProperty(i)) {
                     if (escape) {
                         arr.push(encodeURIComponent(i) + "=" + encodeURIComponent(obj[i]))
@@ -421,6 +421,16 @@ function Env(t, e) {
                 }
             }
             return arr.join("&")
+        }
+
+        getDaysOfMonth = (year, month) => {
+            const date = new Date(year, month, 0);
+            return date.getDate();
+        }
+
+        getDays = () => {
+            const date = new Date();
+            return this.getDaysOfMonth(date.getFullYear(), date.getMonth() + 1)
         }
     }(t, e)
 }
